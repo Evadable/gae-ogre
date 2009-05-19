@@ -121,7 +121,7 @@ public class ClientConnectionThread extends AbstractConnectionThread {
 	 * @param message
 	 */
 	public void send (CommGameMessage message) {
-		super.send (message);
+		getMessageBus().send(message);
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class ClientConnectionThread extends AbstractConnectionThread {
 	 * Stop the thread.
 	 */
 	protected void disconnect () {
-	  stopLoop();
+	  getMessageBus().stopLoop();
 	}
 
 	/**

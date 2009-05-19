@@ -69,7 +69,7 @@ public class TestConnectionThread extends AbstractConnectionThread {
      * @param message
      */
     public void send (ITransmittable message) {
-        super.send(message);
+        super.getMessageBus().send(message);
     }
 
     /**

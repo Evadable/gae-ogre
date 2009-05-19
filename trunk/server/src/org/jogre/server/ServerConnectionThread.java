@@ -158,7 +158,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @param sendCopyToAdmin   If this is true then a copy is sent to the administrator.
 	 */
 	protected void send (ITransmittable transObject, boolean sendCopyToAdmin) {
-		super.send (transObject);
+		getMessageBus().send (transObject);
 		
 		// Send to administrator if the administrator is listening.
 		if (sendCopyToAdmin) 			
