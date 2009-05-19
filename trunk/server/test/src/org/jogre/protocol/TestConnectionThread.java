@@ -59,8 +59,7 @@ public class TestConnectionThread extends AbstractConnectionThread {
      * @param username
      */
     public TestConnectionThread () throws UnknownHostException, IOException {
-        super(null);
-        setSocket (new Socket (SERVER, PORT));
+        super(new Socket (SERVER, PORT));
         messageQueue = Collections.synchronizedList(new LinkedList());
     }
 

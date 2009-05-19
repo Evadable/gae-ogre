@@ -19,15 +19,10 @@
  */
 package org.jogre.common;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.Socket;
-import java.net.SocketException;
 
 import nanoxml.XMLElement;
-import nanoxml.XMLParseException;
 
 import org.jogre.common.comm.ITransmittable;
 import org.jogre.common.util.JogreLogger;
@@ -46,24 +41,11 @@ public abstract class AbstractConnectionThread extends Thread {
 	/** Logging */
 	JogreLogger logger = new JogreLogger (this.getClass());
 
-	/** Socket between the server and the user. */
-	protected Socket socket;
-
-	/** Buffered input. */
-	protected BufferedReader in;
-
-	/** PrintStream for the output. */
-	private PrintStream out;
+	/** Communication between the server and the user. */
+	private SocketBasedMessageBus messageBus;
 
 	/** Username of the client. */
 	protected String username;
-
-	/** When the boolean loop becomes false the Thread finishes. */
-	protected boolean loop = true;
-
-	/** All clients start initially with "connected" equal to false
-	 *  (although they can still recieve/transfer logon information). */
-	protected boolean connected = false;
 
 	/**
 	 * This abstract method must be overwritten by a child which extends this
@@ -88,25 +70,11 @@ public abstract class AbstractConnectionThread extends Thread {
 	public AbstractConnectionThread (Socket socket) {
 		try {
 			logger.debug ("AbstractConnectionThread", "Creating new in/out streams.");
-
-			setSocket (socket);
+			this.messageBus = new SocketBasedMessageBus(socket);
 		}
 		catch (IOException ioEx) {
 			logger.error ("AbstractConnectionThread", "IO Exception.");
 			logger.stacktrace (ioEx);
-		}
-	}
-
-	/**
-	 * @param socket
-	 * @throws IOException
-	 */
-	protected void setSocket (Socket socket) throws IOException {
-	    this.socket = socket;
-
-	    if (socket != null) {
-		    in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
-		    out = new PrintStream (socket.getOutputStream());
 		}
 	}
 
@@ -117,80 +85,21 @@ public abstract class AbstractConnectionThread extends Thread {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run () {
-		logger.debug("run", "Staring thread.");
-
-		try {
-			while (loop) {
-				// listen for input from the user
-				String inString = "";
-
-				while (loop && inString!=null && inString.equals("")) {
-					if (in == null) {
-						cleanup ();
-						return;
-					}
-					inString = in.readLine();
-				}
-
-				// Check input.
-				if (in == null) {
-					cleanup ();
-					return;
-				}
-
-				// Ensure that the communication is XML (starts with a '<' character)
-				// as any sort of client could send communication to the server.
-				if (inString != null) {
-					if (inString.startsWith("<")) {
-	
-						// Starts with an '<' so try and parse this XML
-						XMLElement message = new XMLElement ();
-	
-						try {
-						    message.parseString (inString);
-	
-						    // parse this element
-							if (message != null)
-							    parse (message);
-						}
-						catch (XMLParseException xmlParseEx) {
-							logger.error ("run", "problem parsing: " + inString);
-							logger.stacktrace (xmlParseEx);
-						}
-					}
-				}
-			}
-		}
-		catch (SocketException sEx) {
-			logger.debug ("run", "Connection lost");
-			logger.stacktrace (sEx);
-		}
-		catch (IOException ioEx) {
-			logger.error ("run", "IO Exception: ");
-			logger.stacktrace (ioEx);
-		}
-		catch (Exception genEx) {
-			genEx.printStackTrace();
-			logger.error ("run", "General Exception: ");
-			logger.stacktrace (genEx);			
-		}
-
-		connected = false;
-		cleanup ();
+    messageBus.run(this);
 	}
 
 	/**
 	 * Stop the loop.
 	 */
 	public void stopLoop () {
-		this.loop = false;
+		messageBus.stopLoop();
 	}
 
 	/**
 	 * Set boolean to specify that this client has connected sucessfully.
 	 */
 	public void connect () {
-		this.connected = true;
+	  messageBus.connect();
 	}
 
 	/**
@@ -200,11 +109,7 @@ public abstract class AbstractConnectionThread extends Thread {
 	 * @param transObject
 	 */
 	protected void send (ITransmittable transObject) {
-		// Retrieve XMLElement from the object and flatten to a String.
-		String message = transObject.flatten().toString();
-
-		// Send down the socket to the receiving end
-		out.println (message);
+	  messageBus.send(transObject);
 	}
 
 	/**
