@@ -196,7 +196,7 @@ public class ClientConnectionThread extends AbstractConnectionThread {
 	 * Stop the thread.
 	 */
 	protected void disconnect () {
-		super.loop = false;			// End thread
+	  stopLoop();
 	}
 
 	/**
