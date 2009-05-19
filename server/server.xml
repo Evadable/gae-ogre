@@ -31,6 +31,7 @@
     ============================================================================= 
     -->
     <supported_games>
+<!--
         <game id="abstrac" host="true" minPlayers="2" maxPlayers="2"/>
         <game id="battleship" host="true" minPlayers="2" maxPlayers="2"/>
         <game id="camelot" host="true" minPlayers="2" maxPlayers="2"/>
@@ -44,7 +45,9 @@
             <elo startRating="1200" kFactor="0-2099=32,2100-2399=24,2490-3000=16"/>
         </game>
         <game id="chineseCheckers" host="true" minPlayers="2" maxPlayers="6"/>
+-->
         <game id="connect4" host="true" minPlayers="2" maxPlayers="2"/>
+<!--
         <game id="dots" host="true" minPlayers="2" maxPlayers="4"/>
         <game id="go" host="true" minPlayers="2" maxPlayers="2"/>
         <game id="grandPrixJumping" host="true" minPlayers="2" maxPlayers="2"/>
@@ -61,6 +64,7 @@
         <game id="tictactoe" host="true" minPlayers="2" maxPlayers="2"/>
         <game id="triangulum" host="true" minPlayers="2" maxPlayers="4"/>
         <game id="warwick" host="true" minPlayers="3" maxPlayers="5"/>
+-->
     </supported_games>
     
     <!-- 
