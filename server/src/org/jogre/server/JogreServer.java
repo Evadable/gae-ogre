@@ -250,7 +250,7 @@ public class JogreServer {
 				// Try to connect client to this server
 				ServerConnectionThread conn = new ServerConnectionThread (clientSocket);
 
-                conn.start();
+                conn.getMessageBus().startLoop();
 			}
 		}
 		catch (BindException bindEx) {

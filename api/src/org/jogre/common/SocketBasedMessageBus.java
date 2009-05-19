@@ -30,17 +30,29 @@ public class SocketBasedMessageBus {
    *  (although they can still recieve/transfer logon information). */
   protected boolean connected = false;
 
-  private BufferedReader in;
-  private PrintStream out;
+  private final BufferedReader in;
+  private final PrintStream out;
   
-  public SocketBasedMessageBus(final Socket socket) throws IOException {
+  private final AbstractConnectionThread thread;
+  
+  private Thread executingThread;
+  
+  public SocketBasedMessageBus(
+      final AbstractConnectionThread thread, final Socket socket) throws IOException {
+    if (thread != null) {
+      this.thread = thread;
+    } else {
+      throw new NullPointerException("thread must not be null");
+    }
     if (socket != null) {
       in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
       out = new PrintStream (socket.getOutputStream());
+    } else {
+      throw new NullPointerException("thread must not be null");
     }
   }
   
-  public void run(final AbstractConnectionThread thread) {
+  private void run() {
     logger.debug("run", "Staring thread.");
 
     try {
@@ -131,5 +143,21 @@ public class SocketBasedMessageBus {
   public void stopLoop () {
     //TODO: shouldn't we close the streams (or even better, the socket) here?
     this.loop = false;
+  }
+  
+  /**
+   * Starts the loop. Mar not be called more than once.
+   */
+  public void startLoop() {
+    if (executingThread != null) {
+      throw new AssertionError("Cannot call startLoop more than once!");
+    }
+    executingThread = new Thread() {
+      @Override
+      public void run() {
+        SocketBasedMessageBus.this.run();
+      }
+    };
+    executingThread.start();
   }
 }

@@ -27,8 +27,8 @@ import nanoxml.XMLElement;
 import org.jogre.common.util.JogreLogger;
 
 /**
- * Abstract connection thread which is spawned with each client.  This extends a
- * thread and stores a way to communicate (read/write) Strings to the user/server.
+ * Represents a connection which is spawned with each client.  This
+ * stores a way to communicate (read/write) Strings to the user/server.
  * Also the username of the client is stored in the username String.
  *
  * @author  Bob Marks
@@ -68,7 +68,7 @@ public abstract class AbstractConnectionThread {
 	public AbstractConnectionThread (Socket socket) {
 		try {
 			logger.debug ("AbstractConnectionThread", "Creating new in/out streams.");
-			this.messageBus = new SocketBasedMessageBus(socket);
+			this.messageBus = new SocketBasedMessageBus(this, socket);
 		}
 		catch (IOException ioEx) {
 			logger.error ("AbstractConnectionThread", "IO Exception.");
@@ -82,18 +82,6 @@ public abstract class AbstractConnectionThread {
 	 */
 	public SocketBasedMessageBus getMessageBus() {
 	  return messageBus;
-	}
-
-	/**
-	 * Starts a new thread that executes the content.
-	 */
-	public void start() {
-	  new Thread() {
-	    @Override
-	    public void run() {
-	      messageBus.run(AbstractConnectionThread.this);
-	    }
-	  }.start();
 	}
 
 	/**

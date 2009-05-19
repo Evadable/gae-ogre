@@ -88,7 +88,7 @@ public class GameConnectionPanel extends ConnectionPanel {
 	{
 		// Create a new connection thread to handle communication
         this.conn = new ClientConnectionThread (socket, username, this);
-        conn.start();       // Start the thread
+        conn.getMessageBus().startLoop();       // Start the thread
 
         // Create a connect message.
         CommGameConnect commConnect;
