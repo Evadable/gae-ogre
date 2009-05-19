@@ -21,17 +21,14 @@ import org.jogre.common.util.JogreLogger;
 public class SocketBasedMessageBus {
   
   /** Logging */
-  JogreLogger logger = new JogreLogger (this.getClass());
+  private final JogreLogger logger = new JogreLogger (this.getClass());
   
   /** When the boolean loop becomes false the Thread finishes. */
   protected boolean loop = true;
 
-  /** All clients start initially with "connected" equal to false
-   *  (although they can still recieve/transfer logon information). */
-  protected boolean connected = false;
-
   private final BufferedReader in;
   private final PrintStream out;
+  private final Socket socket;
   
   private final AbstractConnectionThread thread;
   
@@ -45,6 +42,7 @@ public class SocketBasedMessageBus {
       throw new NullPointerException("thread must not be null");
     }
     if (socket != null) {
+      this.socket = socket;
       in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
       out = new PrintStream (socket.getOutputStream());
     } else {
@@ -52,7 +50,7 @@ public class SocketBasedMessageBus {
     }
   }
   
-  private void run() {
+  private void doLoop() {
     logger.debug("run", "Staring thread.");
 
     try {
@@ -105,15 +103,22 @@ public class SocketBasedMessageBus {
       logger.error ("run", "IO Exception: ");
       logger.stacktrace (ioEx);
     }
-    catch (Exception genEx) {
+    catch (Throwable genEx) {
       genEx.printStackTrace();
       logger.error ("run", "General Exception: ");
       logger.stacktrace (genEx);      
     }
-
-    connected = false;
-    thread.cleanup ();
-    
+    try {
+      thread.cleanup ();
+    } finally {
+      try {
+        socket.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+        logger.error ("run", "Could not close socket: ");
+        logger.stacktrace (e);      
+      }
+    }
   }
 
   /**
@@ -131,22 +136,14 @@ public class SocketBasedMessageBus {
   }
   
   /**
-   * Set boolean to specify that this client has connected sucessfully.
-   */
-  public void connect () {
-    this.connected = true;
-  }
-  
-  /**
    * Stop the loop.
    */
   public void stopLoop () {
-    //TODO: shouldn't we close the streams (or even better, the socket) here?
     this.loop = false;
   }
   
   /**
-   * Starts the loop. Mar not be called more than once.
+   * Starts the loop. May not be called more than once.
    */
   public void startLoop() {
     if (executingThread != null) {
@@ -155,7 +152,7 @@ public class SocketBasedMessageBus {
     executingThread = new Thread() {
       @Override
       public void run() {
-        SocketBasedMessageBus.this.run();
+        doLoop();
       }
     };
     executingThread.start();
