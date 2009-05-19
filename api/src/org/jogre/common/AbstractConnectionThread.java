@@ -28,17 +28,16 @@ import org.jogre.common.util.JogreLogger;
 
 /**
  * Abstract connection thread which is spawned with each client.  This extends a
- * thread and stores a Socket to the client, and a BufferedReader and PrintStream
- * which can read/write Strings to the user/server.  Also the username of the
- * client is stored in the username String.
+ * thread and stores a way to communicate (read/write) Strings to the user/server.
+ * Also the username of the client is stored in the username String.
  *
  * @author  Bob Marks
  * @version Alpha 0.2.3
  */
-public abstract class AbstractConnectionThread extends Thread {
+public abstract class AbstractConnectionThread {
 
 	/** Logging */
-	protected JogreLogger logger = new JogreLogger (this.getClass());
+	private JogreLogger logger = new JogreLogger (this.getClass());
 
 	/** Communication between the server and the user. */
 	private SocketBasedMessageBus messageBus;
@@ -86,13 +85,15 @@ public abstract class AbstractConnectionThread extends Thread {
 	}
 
 	/**
-	 * Run method - runs until an exception has occured or the loop variable
-	 * becomes false.
-	 *
-	 * @see java.lang.Runnable#run()
+	 * Starts a new thread that executes the content.
 	 */
-	public void run() {
-    messageBus.run(this);
+	public void start() {
+	  new Thread() {
+	    @Override
+	    public void run() {
+	      messageBus.run(AbstractConnectionThread.this);
+	    }
+	  }.start();
 	}
 
 	/**
