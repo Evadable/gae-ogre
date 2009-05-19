@@ -24,7 +24,6 @@ import java.net.Socket;
 
 import nanoxml.XMLElement;
 
-import org.jogre.common.comm.ITransmittable;
 import org.jogre.common.util.JogreLogger;
 
 /**
@@ -39,7 +38,7 @@ import org.jogre.common.util.JogreLogger;
 public abstract class AbstractConnectionThread extends Thread {
 
 	/** Logging */
-	JogreLogger logger = new JogreLogger (this.getClass());
+	protected JogreLogger logger = new JogreLogger (this.getClass());
 
 	/** Communication between the server and the user. */
 	private SocketBasedMessageBus messageBus;
@@ -77,6 +76,14 @@ public abstract class AbstractConnectionThread extends Thread {
 			logger.stacktrace (ioEx);
 		}
 	}
+	
+	/**
+	 * TODO: extract interface
+	 * @return the messaging bus that this thread uses
+	 */
+	public SocketBasedMessageBus getMessageBus() {
+	  return messageBus;
+	}
 
 	/**
 	 * Run method - runs until an exception has occured or the loop variable
@@ -84,32 +91,8 @@ public abstract class AbstractConnectionThread extends Thread {
 	 *
 	 * @see java.lang.Runnable#run()
 	 */
-	public void run () {
+	public void run() {
     messageBus.run(this);
-	}
-
-	/**
-	 * Stop the loop.
-	 */
-	public void stopLoop () {
-		messageBus.stopLoop();
-	}
-
-	/**
-	 * Set boolean to specify that this client has connected sucessfully.
-	 */
-	public void connect () {
-	  messageBus.connect();
-	}
-
-	/**
-	 * Send a ITransmittable object to the output stream (could be server or
-	 * client).
-	 *
-	 * @param transObject
-	 */
-	protected void send (ITransmittable transObject) {
-	  messageBus.send(transObject);
 	}
 
 	/**

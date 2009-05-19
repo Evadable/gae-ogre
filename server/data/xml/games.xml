@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<games/>
+<games>
+  <game id="connect4">
+    <gameinfo players="john dave" results="2 1" st="18/05/2009-08:06:21" et="18/05/2009-08:06:52"/>
+  </game>
+</games>
