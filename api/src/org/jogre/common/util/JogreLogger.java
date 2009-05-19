@@ -167,7 +167,7 @@ public class JogreLogger implements IJogreLog {
 	 *
 	 * @param e  Exception object.
 	 */
-	public void stacktrace (Exception e) {
+	public void stacktrace (Throwable e) {
 	    error ("Exception", e.getMessage());
 	}
 
