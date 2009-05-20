@@ -19,12 +19,7 @@
  */
 package org.jogre.common;
 
-import java.io.IOException;
-import java.net.Socket;
-
 import nanoxml.XMLElement;
-
-import org.jogre.common.util.JogreLogger;
 
 /**
  * Represents a connection which is spawned with each client.  This
@@ -36,11 +31,8 @@ import org.jogre.common.util.JogreLogger;
  */
 public abstract class AbstractConnectionThread {
 
-	/** Logging */
-	private JogreLogger logger = new JogreLogger (this.getClass());
-
 	/** Communication between the server and the user. */
-	private MessageBus messageBus;
+	private final MessageBus messageBus;
 
 	/** Username of the client. */
 	protected String username;
@@ -63,17 +55,13 @@ public abstract class AbstractConnectionThread {
 	 * Constructor for a connection which takes a Socket and sends up the input
 	 * and output stream.
 	 *
-	 * @param socket   Socket connection to client / server.
+	 * @param messageBus   connection to client / server.
 	 */
-	public AbstractConnectionThread (Socket socket) {
-		try {
-			logger.debug ("AbstractConnectionThread", "Creating new in/out streams.");
-			this.messageBus = new SocketBasedMessageBus(socket);
-		}
-		catch (IOException ioEx) {
-			logger.error ("AbstractConnectionThread", "IO Exception.");
-			logger.stacktrace (ioEx);
-		}
+	public AbstractConnectionThread (MessageBus messageBus) {
+    this.messageBus = messageBus;
+    if (messageBus == null) {
+      throw new NullPointerException("messageBus must not be null");
+    }
 	}
 	
 	/**

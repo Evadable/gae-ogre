@@ -33,13 +33,17 @@ public class SocketBasedMessageBus implements MessageBus {
   
   private Thread executingThread;
   
-  public SocketBasedMessageBus(final Socket socket) throws IOException {
-    if (socket != null) {
-      this.socket = socket;
-      in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
-      out = new PrintStream (socket.getOutputStream());
-    } else {
-      throw new NullPointerException("thread must not be null");
+  public SocketBasedMessageBus(final Socket socket) {
+    try {
+      if (socket != null) {
+        this.socket = socket;
+        in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
+        out = new PrintStream (socket.getOutputStream());
+      } else {
+        throw new NullPointerException("thread must not be null");
+      }
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Could not connect to socket", e);
     }
   }
   

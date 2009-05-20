@@ -31,6 +31,7 @@ import java.util.List;
 import nanoxml.XMLElement;
 
 import org.jogre.common.AbstractConnectionThread;
+import org.jogre.common.SocketBasedMessageBus;
 import org.jogre.common.TransmissionException;
 import org.jogre.common.comm.ITransmittable;
 
@@ -59,7 +60,7 @@ public class TestConnectionThread extends AbstractConnectionThread {
      * @param username
      */
     public TestConnectionThread () throws UnknownHostException, IOException {
-        super(new Socket (SERVER, PORT));
+        super(new SocketBasedMessageBus(new Socket (SERVER, PORT)));
         messageQueue = Collections.synchronizedList(new LinkedList());
     }
 
