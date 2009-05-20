@@ -196,7 +196,7 @@ public class ClientConnectionThread extends AbstractConnectionThread {
 	 * Stop the thread.
 	 */
 	protected void disconnect () {
-	  getMessageBus().stopLoop();
+	  getMessageBus().close();
 	}
 
 	/**

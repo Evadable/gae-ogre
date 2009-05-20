@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ConcurrentModificationException;
 
 import nanoxml.XMLElement;
 import nanoxml.XMLParseException;
@@ -114,10 +115,11 @@ public class SocketBasedMessageBus {
   }
 
   /**
-   * Send a ITransmittable object to the output stream (could be server or
-   * client).
+   * Send a ITransmittable object to the outgoing channel of this
+   * communication. Depending on the concrete implementation, this can
+   * be synchronous or asynchronous.
    *
-   * @param transObject
+   * @param transObject the object that should be sent out.
    */
   public void send (ITransmittable transObject) {
     // Retrieve XMLElement from the object and flatten to a String.
@@ -128,21 +130,27 @@ public class SocketBasedMessageBus {
   }
   
   /**
-   * Stop the loop.
+   * Signals that the communication via this channel is over.
+   * Initiates any cleanup that might be necessary. Once this has happened,
+   * the object becomes unusable -- it is undefined how calls to it would
+   * behave!
    */
-  public void stopLoop () {
+  public void close () {
     this.loop = false;
   }
   
   /**
-   * Starts the loop. May not be called more than once.
+   * Connects the message bus with an AbstractConnectionThread.
+   * If the MessageBus implementation requires to start any internal
+   * threading, this is where that action is kicked off.
+   * @exception ConcurrentModificationException if the method is called more than once
    */
-  public void startLoop(final AbstractConnectionThread thread) {
+  public void open(final AbstractConnectionThread thread) {
     if (thread == null) {
       throw new NullPointerException("thread must not be null");
     }
     if (executingThread != null) {
-      throw new AssertionError("Cannot call startLoop more than once!");
+      throw new ConcurrentModificationException("Cannot call startLoop more than once!");
     }
     executingThread = new Thread() {
       @Override
