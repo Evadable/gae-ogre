@@ -19,8 +19,6 @@
  */
 package org.jogre.common;
 
-import nanoxml.XMLElement;
-
 /**
  * Represents a connection which is spawned with each client.  This
  * stores a way to communicate (read/write) Strings to the user/server.
@@ -29,27 +27,13 @@ import nanoxml.XMLElement;
  * @author  Bob Marks
  * @version Alpha 0.2.3
  */
-public abstract class AbstractConnectionThread {
+public abstract class AbstractConnectionThread implements MessageBus.MessageParser {
 
 	/** Communication between the server and the user. */
 	private final MessageBus messageBus;
 
 	/** Username of the client. */
 	protected String username;
-
-	/**
-	 * This abstract method must be overwritten by a child which extends this
-	 * class.
-	 *
-	 * @param message       Communication as an XML object.
-	 * @throws TransmissionException  This is thrown if there is a problem parsing the String.
-	 */
-	public abstract void parse (XMLElement message) throws TransmissionException;
-
-	/**
-	 * This method is called to properly clean up after a client.
-	 */
-	public abstract void cleanup ();
 
 	/**
 	 * Constructor for a connection which takes a Socket and sends up the input

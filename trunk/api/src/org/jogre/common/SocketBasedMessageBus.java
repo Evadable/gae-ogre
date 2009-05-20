@@ -47,7 +47,7 @@ public class SocketBasedMessageBus implements MessageBus {
     }
   }
   
-  private void doLoop(final AbstractConnectionThread thread) {
+  private void doLoop(final MessageParser parser) {
     logger.debug("run", "Staring thread.");
 
     try {
@@ -57,7 +57,7 @@ public class SocketBasedMessageBus implements MessageBus {
 
         while (loop && inString!=null && inString.equals("")) {
           if (in == null) {
-            thread.cleanup ();
+            parser.cleanup ();
             return;
           }
           inString = in.readLine();
@@ -65,7 +65,7 @@ public class SocketBasedMessageBus implements MessageBus {
 
         // Check input.
         if (in == null) {
-          thread.cleanup ();
+          parser.cleanup ();
           return;
         }
 
@@ -82,7 +82,7 @@ public class SocketBasedMessageBus implements MessageBus {
   
                 // parse this element
               if (message != null)
-                  thread.parse(message);
+                parser.parse(message);
             }
             catch (XMLParseException xmlParseEx) {
               logger.error ("run", "problem parsing: " + inString);
@@ -106,7 +106,7 @@ public class SocketBasedMessageBus implements MessageBus {
       logger.stacktrace (genEx);      
     }
     try {
-      thread.cleanup ();
+      parser.cleanup ();
     } finally {
       try {
         socket.close();
@@ -139,9 +139,9 @@ public class SocketBasedMessageBus implements MessageBus {
   /* (non-Javadoc)
    * @see org.jogre.common.MessageBus#open(org.jogre.common.AbstractConnectionThread)
    */
-  public void open(final AbstractConnectionThread thread) {
-    if (thread == null) {
-      throw new NullPointerException("thread must not be null");
+  public void open(final MessageParser parser) {
+    if (parser == null) {
+      throw new NullPointerException("parser must not be null");
     }
     if (executingThread != null) {
       throw new ConcurrentModificationException("Cannot call startLoop more than once!");
@@ -149,7 +149,7 @@ public class SocketBasedMessageBus implements MessageBus {
     executingThread = new Thread() {
       @Override
       public void run() {
-        doLoop(thread);
+        doLoop(parser);
       }
     };
     executingThread.start();
