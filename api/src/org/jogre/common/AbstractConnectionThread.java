@@ -40,7 +40,7 @@ public abstract class AbstractConnectionThread {
 	private JogreLogger logger = new JogreLogger (this.getClass());
 
 	/** Communication between the server and the user. */
-	private SocketBasedMessageBus messageBus;
+	private MessageBus messageBus;
 
 	/** Username of the client. */
 	protected String username;
@@ -77,10 +77,9 @@ public abstract class AbstractConnectionThread {
 	}
 	
 	/**
-	 * TODO: extract interface
 	 * @return the messaging bus that this thread uses
 	 */
-	public SocketBasedMessageBus getMessageBus() {
+	public MessageBus getMessageBus() {
 	  return messageBus;
 	}
 

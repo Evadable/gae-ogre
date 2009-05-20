@@ -19,13 +19,13 @@ import org.jogre.common.util.JogreLogger;
  * @author jens
  *
  */
-public class SocketBasedMessageBus {
+public class SocketBasedMessageBus implements MessageBus {
   
   /** Logging */
   private final JogreLogger logger = new JogreLogger (this.getClass());
   
   /** When the boolean loop becomes false the Thread finishes. */
-  protected boolean loop = true;
+  private boolean loop = true;
 
   private final BufferedReader in;
   private final PrintStream out;
@@ -114,12 +114,8 @@ public class SocketBasedMessageBus {
     }
   }
 
-  /**
-   * Send a ITransmittable object to the outgoing channel of this
-   * communication. Depending on the concrete implementation, this can
-   * be synchronous or asynchronous.
-   *
-   * @param transObject the object that should be sent out.
+  /* (non-Javadoc)
+   * @see org.jogre.common.MessageBus#send(org.jogre.common.comm.ITransmittable)
    */
   public void send (ITransmittable transObject) {
     // Retrieve XMLElement from the object and flatten to a String.
@@ -129,21 +125,15 @@ public class SocketBasedMessageBus {
     out.println (message);
   }
   
-  /**
-   * Signals that the communication via this channel is over.
-   * Initiates any cleanup that might be necessary. Once this has happened,
-   * the object becomes unusable -- it is undefined how calls to it would
-   * behave!
+  /* (non-Javadoc)
+   * @see org.jogre.common.MessageBus#close()
    */
   public void close () {
     this.loop = false;
   }
   
-  /**
-   * Connects the message bus with an AbstractConnectionThread.
-   * If the MessageBus implementation requires to start any internal
-   * threading, this is where that action is kicked off.
-   * @exception ConcurrentModificationException if the method is called more than once
+  /* (non-Javadoc)
+   * @see org.jogre.common.MessageBus#open(org.jogre.common.AbstractConnectionThread)
    */
   public void open(final AbstractConnectionThread thread) {
     if (thread == null) {
