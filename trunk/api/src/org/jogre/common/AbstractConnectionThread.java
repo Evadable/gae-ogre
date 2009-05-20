@@ -68,7 +68,7 @@ public abstract class AbstractConnectionThread {
 	public AbstractConnectionThread (Socket socket) {
 		try {
 			logger.debug ("AbstractConnectionThread", "Creating new in/out streams.");
-			this.messageBus = new SocketBasedMessageBus(this, socket);
+			this.messageBus = new SocketBasedMessageBus(socket);
 		}
 		catch (IOException ioEx) {
 			logger.error ("AbstractConnectionThread", "IO Exception.");

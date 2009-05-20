@@ -68,7 +68,7 @@ public class AdminConnectionPanel extends ConnectionPanel {
 	{
 		// Create a new connection thread to handle communication
         this.conn = new AdminClientConnectionThread (socket, username, this);
-        conn.getMessageBus().startLoop();       // Start the thread
+        conn.getMessageBus().startLoop(conn);       // Start the thread
 
         // Create a connect message.
         CommAdminConnect commConnect = new CommAdminConnect (username, password);

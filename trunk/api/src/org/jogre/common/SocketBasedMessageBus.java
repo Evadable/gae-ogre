@@ -30,17 +30,9 @@ public class SocketBasedMessageBus {
   private final PrintStream out;
   private final Socket socket;
   
-  private final AbstractConnectionThread thread;
-  
   private Thread executingThread;
   
-  public SocketBasedMessageBus(
-      final AbstractConnectionThread thread, final Socket socket) throws IOException {
-    if (thread != null) {
-      this.thread = thread;
-    } else {
-      throw new NullPointerException("thread must not be null");
-    }
+  public SocketBasedMessageBus(final Socket socket) throws IOException {
     if (socket != null) {
       this.socket = socket;
       in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
@@ -50,7 +42,7 @@ public class SocketBasedMessageBus {
     }
   }
   
-  private void doLoop() {
+  private void doLoop(final AbstractConnectionThread thread) {
     logger.debug("run", "Staring thread.");
 
     try {
@@ -145,14 +137,17 @@ public class SocketBasedMessageBus {
   /**
    * Starts the loop. May not be called more than once.
    */
-  public void startLoop() {
+  public void startLoop(final AbstractConnectionThread thread) {
+    if (thread == null) {
+      throw new NullPointerException("thread must not be null");
+    }
     if (executingThread != null) {
       throw new AssertionError("Cannot call startLoop more than once!");
     }
     executingThread = new Thread() {
       @Override
       public void run() {
-        doLoop();
+        doLoop(thread);
       }
     };
     executingThread.start();
