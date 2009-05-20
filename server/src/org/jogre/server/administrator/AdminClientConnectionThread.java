@@ -135,7 +135,7 @@ public class AdminClientConnectionThread extends AbstractConnectionThread {
 	 * Stop the thread.
 	 */
 	protected void disconnect () {
-	  getMessageBus().stopLoop();	// End thread
+	  getMessageBus().close();	// End thread
 	}
 
 	/**

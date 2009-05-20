@@ -104,7 +104,7 @@ public class ServerGameController {
 				// an error message back to the client and quit.
 				if (conn.getUsername() == null || conn.getGameID() == null) {
 					conn.send (new CommError (CommError.USER_NOT_CONNECTED));
-					conn.getMessageBus().stopLoop();
+					conn.getMessageBus().close();
 				}
 
 				// Check if message for administrator thread.
@@ -174,7 +174,7 @@ public class ServerGameController {
 
 			// Send "game not supported" error to client and kill thread
 			conn.send (new CommError (CommError.GAME_NOT_SUPPORTED));
-			conn.getMessageBus().stopLoop();
+			conn.getMessageBus().close();
 		}
 		else {		// game is supported so continue
 			// Try and retrieve game and its user list
@@ -215,19 +215,19 @@ public class ServerGameController {
 						else
 							conn.send (new CommError (CommError.USER_LOGON_INCORRECT));
 
-						conn.getMessageBus().stopLoop();
+						conn.getMessageBus().close();
 					}
 				}
 				else {
 					// Send "user already connected" error to client and kill thread
 					conn.send (new CommError (CommError.USER_ALREADY_CONNECTED));
-					conn.getMessageBus().stopLoop();
+					conn.getMessageBus().close();
 				}
 			}
 			else {
 				// Send "server full" error to client and kill thread
 				conn.send (new CommError (CommError.SERVER_FULL));
-				conn.getMessageBus().stopLoop ();
+				conn.getMessageBus().close ();
 			}
 		}
 	}
@@ -250,7 +250,7 @@ public class ServerGameController {
 
 			// Send "game not supported" error to client and kill thread
 			conn.send (new CommError (CommError.USER_ALREADY_CONNECTED));
-			conn.getMessageBus().stopLoop ();
+			conn.getMessageBus().close ();
 		}
 		else {
 			// Check if the user is an administrator or not
@@ -268,7 +268,7 @@ public class ServerGameController {
 			}
 			else {
 				conn.send (new CommError (CommError.USER_LOGON_INCORRECT));
-				conn.getMessageBus().stopLoop ();
+				conn.getMessageBus().close ();
 			}
 		}
 	}
@@ -464,7 +464,7 @@ public class ServerGameController {
 	 * @throws TransmissionException   Thrown if there is a transmission error.
 	 */
 	private void disconnect (ServerConnectionThread conn, CommDisconnect commDisconnect) throws TransmissionException {
-		conn.getMessageBus().stopLoop ();
+		conn.getMessageBus().close ();
 	}
 
 	/**
