@@ -105,7 +105,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @param gameID    Gamekey of the client connecting.
 	 */
 	public void init (String username, String gameID) {
-		this.username = username;
+		setUsername(username);
 		this.gameID = gameID;
 
 		// Set convience fields
@@ -120,7 +120,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @param admin_username   Administrator username.
 	 */
 	public void init (String admin_username) {
-		this.username        = admin_username;
+		setUsername(admin_username);
 		this.gameID          = ADMINISTRATOR;
 		this.isAdministrator = true;
 	}
@@ -180,7 +180,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		ServerConnectionThread conn = connections.getAdminConnection();
 		
 		if (conn != null) {		// ensure we're not sending same message twice
-			CommAdminGameMessage adminMessage = new CommAdminGameMessage (isReceivingMessage, gameID, username, message); 
+			CommAdminGameMessage adminMessage = new CommAdminGameMessage (isReceivingMessage, gameID, getUsername(), message); 
 			conn.send (adminMessage, false);			
 		}
 	}
@@ -196,7 +196,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		ServerConnectionThread conn = connections.getAdminConnection();
 		
 		if (conn != null) {		// ensure we're not sending same message twice
-			CommAdminMessage adminMessage = new CommAdminMessage (gameID, username, message.flatten());
+			CommAdminMessage adminMessage = new CommAdminMessage (gameID, getUsername(), message.flatten());
 			conn.send (adminMessage, false);
 		}
 	}
@@ -268,24 +268,24 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		if (isAdministrator ())
 			server.getConnections().removeAdminConnection ();
 		else 
-			server.getConnections().removeConnection (gameID, username);
+			server.getConnections().removeConnection (gameID, getUsername());
 		
 		// Game users only
 		if (userList != null && tableList != null) {
 		    logger.debug ("cleanup", "remove user");
-		    userList.removeUser (username);
+		    userList.removeUser (getUsername());
 
 			// remove any instance of the user from the table list
 			logger.debug ("cleanup", "removing table");
-		    tableList.removeUserFromTables (username);
+		    tableList.removeUserFromTables (getUsername());
 
 			// Inform all connected clients that user has disconnected from game
-			CommDisconnect commDisconnect = new CommDisconnect (username);
+			CommDisconnect commDisconnect = new CommDisconnect (getUsername());
 			broadcast (commDisconnect);
 			sendDataMessageToAdmin (commDisconnect);
 
 			// Log message
-			logger.log ("Jogre Games Server: client [" + username + "] has logged off");
+			logger.log ("Jogre Games Server: client [" + getUsername() + "] has logged off");
 
 		    // Update snapshot
 		    try {

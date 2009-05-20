@@ -33,7 +33,7 @@ public abstract class AbstractConnectionThread implements MessageBus.MessagePars
 	private final MessageBus messageBus;
 
 	/** Username of the client. */
-	protected String username;
+	private String username;
 
 	/**
 	 * Constructor for a connection which takes a Socket and sends up the input
