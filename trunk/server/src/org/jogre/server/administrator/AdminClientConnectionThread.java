@@ -57,7 +57,7 @@ public class AdminClientConnectionThread extends AbstractConnectionThread {
 	public AdminClientConnectionThread (Socket connection, String username, IClient clientInterface) {
 		super (new SocketBasedMessageBus(connection));
 
-		this.username = username;
+		setUsername(username);
 		this.clientInterface = clientInterface;
 	}
 

@@ -71,7 +71,7 @@ public class ClientConnectionThread extends AbstractConnectionThread {
 	public ClientConnectionThread (Socket connection, String username, IClient clientInterface) {
 		super (new SocketBasedMessageBus(connection));
 
-		this.username = username;
+		setUsername(username);
 		this.clientInterface = clientInterface;	
 		this.game = null; 
 	}
@@ -100,7 +100,7 @@ public class ClientConnectionThread extends AbstractConnectionThread {
 			
 			// Update data tree first
 			if (commDataReceiver != null)
-				commDataReceiver.receiveGameMessage (message, username);
+				commDataReceiver.receiveGameMessage (message, getUsername());
 			
 			// Delegate to client interface for further processing
 		    this.clientInterface.receiveGameMessage (message);
@@ -110,7 +110,7 @@ public class ClientConnectionThread extends AbstractConnectionThread {
 			
 			// Update data tree first
 			if (commDataReceiver != null)
-				commDataReceiver.receiveTableMessage (message, username, tableNum);
+				commDataReceiver.receiveTableMessage (message, getUsername(), tableNum);
 				
 		    this.clientInterface.receiveTableMessage (message, tableNum);
 		}
