@@ -29,6 +29,7 @@ import org.jogre.common.Game;
 import org.jogre.common.IJogre;
 import org.jogre.common.Player;
 import org.jogre.common.PlayerList;
+import org.jogre.common.SocketBasedMessageBus;
 import org.jogre.common.Table;
 import org.jogre.common.TableList;
 import org.jogre.common.TransmissionException;
@@ -86,7 +87,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @param clientSocket      Client connection.
 	 */
 	public ServerConnectionThread (Socket clientSocket) {
-		super (clientSocket);
+		super (new SocketBasedMessageBus(clientSocket));
 
 		// Get link to the server (singleton) and the various parsers
 		this.server       = JogreServer.getInstance();

@@ -26,6 +26,7 @@ import nanoxml.XMLElement;
 import org.jogre.common.AbstractConnectionThread;
 import org.jogre.common.ClientCommDataReceiver;
 import org.jogre.common.Game;
+import org.jogre.common.SocketBasedMessageBus;
 import org.jogre.common.TableList;
 import org.jogre.common.UserList;
 import org.jogre.common.comm.CommGameMessage;
@@ -68,7 +69,7 @@ public class ClientConnectionThread extends AbstractConnectionThread {
 	 * @param clientInterface  Interface between this class and GUI.
 	 */
 	public ClientConnectionThread (Socket connection, String username, IClient clientInterface) {
-		super (connection);
+		super (new SocketBasedMessageBus(connection));
 
 		this.username = username;
 		this.clientInterface = clientInterface;	
