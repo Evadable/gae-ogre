@@ -79,14 +79,6 @@ public abstract class AbstractGameServer {
     this.serverControllerList = new ServerControllerList ();
     this.gameList             = new GameList ();
     this.gameLoader           = new GameLoader (gameList, serverControllerList);
-    
-    // Type initial games server info.
-    System.out.println ("------------------------------------------------------------------");
-    System.out.println ("                J O G R E   G A M E S   S E R V E R");
-    System.out.println ("------------------------------------------------------------------");
-    System.out.println (labels.get("author") + ":\t\t\tBob Marks");
-    System.out.println (labels.get("version") + ":\t\t" + IJogre.VERSION);
-
   }
 
   /**

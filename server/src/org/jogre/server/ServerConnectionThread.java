@@ -59,7 +59,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	JogreLogger logger = new JogreLogger (this.getClass());
 
 	/** link to the JogreServer */
-	protected JogreServer server;
+	protected AbstractGameServer server;
 
 	/** Link to the various parsers. */
 	private ServerControllerList controllers = null;

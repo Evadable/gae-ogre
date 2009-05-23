@@ -60,7 +60,7 @@ public abstract class ServerController {
     /**
      * Convience link to the server.
      */
-    protected JogreServer server;
+    protected AbstractGameServer server;
 
     /**
      * Convience link to the table list.
@@ -137,7 +137,7 @@ public abstract class ServerController {
      */
     public ServerController (String gameKey) {
     	this.gameId = gameKey;
-        this.server = JogreServer.getInstance();
+        this.server = AbstractGameServer.getInstance();
 
         // If game key is OK - these game keys should be OK
         Game game = server.getGameList().getGame (gameKey);

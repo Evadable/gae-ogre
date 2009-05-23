@@ -31,7 +31,6 @@ import javax.swing.JPanel;
 import org.jogre.common.Game;
 import org.jogre.common.GameList;
 import org.jogre.common.util.JogreLabels;
-import org.jogre.server.JogreServer;
 
 /**
  * Declare a little status bar.
@@ -45,7 +44,6 @@ public class AdminStatusBar extends JPanel {
 
     private JogreLabels labels = JogreLabels.getInstance();
     private String usersStr, tablesStr;
-    private JogreServer server;
 
     /**
      * Constructor.

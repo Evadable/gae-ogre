@@ -53,15 +53,6 @@ import org.jogre.server.data.db.DBConnection;
  */
 public class JogreServer extends AbstractGameServer {
 
-  /**
-   * Return the single instance of this server.
-   *
-   * @return
-   */
-  public static JogreServer getInstance () {
-    return (JogreServer) AbstractGameServer.getInstance();
-  }
-
   /** Default server port. */
   public static final int DEFAULT_SERVER_PORT = 1790;
 
@@ -300,6 +291,13 @@ public class JogreServer extends AbstractGameServer {
 	  
 		// Initialise the server
 		JogreServer server = new JogreServer(new InMemoryConnectionList (), ServerDataFactory.getInstance ());
+		
+    // Type initial games server info.
+    System.out.println ("------------------------------------------------------------------");
+    System.out.println ("                J O G R E   G A M E S   S E R V E R");
+    System.out.println ("------------------------------------------------------------------");
+    System.out.println (server.labels.get("author") + ":\t\t\tBob Marks");
+    System.out.println (server.labels.get("version") + ":\t\t" + IJogre.VERSION);
     System.out.println (ServerLabels.getInstance().get("server.properties") + ":\t" + ServerProperties.getInstance().getServerFile().getAbsolutePath());
 
 		// Parse the command line arguments
