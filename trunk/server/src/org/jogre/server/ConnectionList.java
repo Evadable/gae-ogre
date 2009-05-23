@@ -112,15 +112,6 @@ public class ConnectionList {
 	}
 
 	/**
-	 * Return number of connections.
-	 *
-	 * @return
-	 */
-	public int size () {
-		return connections.size();
-	}
-
-	/**
 	 * Return hash key from a gameId and a username.
 	 *
 	 * @param gameId   GameID
