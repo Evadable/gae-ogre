@@ -19,120 +19,67 @@
  */
 package org.jogre.server;
 
-import java.util.HashMap;
+public interface ConnectionList {
 
-import org.jogre.common.IJogre;
+  /**
+   * Create a new Connection object using a ServerConnectionThread and add
+   * to the connections HashMap using the username as the key.
+   *
+   * @param gameId 	       Game id e.g. "chess"
+   * @param username         Username of person.
+   * @param connectionThread ServerConnectionThread.
+   */
+  public abstract void addConnection(String gameId,
+      String username,
+      ServerConnectionThread connectionThread);
 
-/**
- * List of Connection objects.
- *
- * @author  Bob Marks
- * @version Beta 0.3
- */
-public class ConnectionList {
+  /**
+   * Set the administrator thread.
+   *
+   * @param gameId 	       Game id e.g. "chess"
+   * @param username         Username of person.
+   * @param connectionThread ServerConnectionThread.
+   */
+  public abstract void setAdminConnection(
+      ServerConnectionThread connectionThread);
 
-	/** Hashmap of connections. */
-	private HashMap connections;
+  /**
+   * Return a serverconnection thread for a specified user (which is a field
+   * of the Connection object).
+   *
+   * @param username Username of user.
+   * @return
+   */
+  public abstract ServerConnectionThread getServerConnectionThread(
+      String gameId, String username);
 
-	/**
-	 * Constructor which sets up a Hash to store the various Connection
-	 * objects in.
-	 */
-	public ConnectionList () {
-		this.connections = new HashMap ();
-	}
+  /**
+   * Return a Connection object of specified user.
+   *
+   * @param username
+   * @return
+   */
+  public abstract Connection getConnection(String gameId,
+      String username);
 
-	/**
-	 * Create a new Connection object using a ServerConnectionThread and add
-	 * to the connections HashMap using the username as the key.
-	 *
-	 * @param gameId 	       Game id e.g. "chess"
-	 * @param username         Username of person.
-	 * @param connectionThread ServerConnectionThread.
-	 */
-	public void addConnection (String gameId, String username, ServerConnectionThread connectionThread) {
-		Connection conn = new Connection (connectionThread);
-		
-		connections.put (getKey (gameId, username), conn);
-	}
-	
-	/**
-	 * Set the administrator thread.
-	 *
-	 * @param gameId 	       Game id e.g. "chess"
-	 * @param username         Username of person.
-	 * @param connectionThread ServerConnectionThread.
-	 */
-	public void setAdminConnection (ServerConnectionThread connectionThread) {
-		addConnection (IJogre.ADMINISTRATOR, IJogre.ADMINISTRATOR, connectionThread);
-	}
-	
-	/**
-	 * Return a serverconnection thread for a specified user (which is a field
-	 * of the Connection object).
-	 *
-	 * @param username Username of user.
-	 * @return
-	 */
-	public ServerConnectionThread getServerConnectionThread (String gameId, String username) {
-		if (gameId != null) {
-			if (gameId.equals(IJogre.ADMINISTRATOR))
-				return getConnection (IJogre.ADMINISTRATOR, IJogre.ADMINISTRATOR).getServerConnectionThread();
-			else 
-				return getConnection (gameId, username).getServerConnectionThread();
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Return a Connection object of specified user.
-	 *
-	 * @param username
-	 * @return
-	 */
-	public Connection getConnection (String gameId, String username) {
-		return (Connection)connections.get (getKey (gameId, username));
-	}
+  /**
+   * Remove a connection.
+   *
+   * @param username
+   */
+  public abstract void removeConnection(String gameId,
+      String username);
 
-	/**
-	 * Remove a connection.
-	 *
-	 * @param username
-	 */
-	public void removeConnection (String gameId, String username) {
-		connections.remove (getKey (gameId, username));
-	}
-	
-	/**
-	 * Remove the admin connection.
-	 */
-	public void removeAdminConnection () {
-		connections.remove (getKey (IJogre.ADMINISTRATOR, IJogre.ADMINISTRATOR));
-	}
+  /**
+   * Remove the admin connection.
+   */
+  public abstract void removeAdminConnection();
 
-	/**
-	 * Return hash key from a gameId and a username.
-	 *
-	 * @param gameId   GameID
-	 * @param username Username
-	 * @return
-	 */
-	private String getKey (String gameId, String username) {
-	    return gameId + "-" + username;
-	}
+  /**
+   * Return admin connection.
+   * 
+   * @return
+   */
+  public abstract ServerConnectionThread getAdminConnection();
 
-	/**
-	 * Return admin connection.
-	 * 
-	 * @return
-	 */
-	public ServerConnectionThread getAdminConnection() {
-		Connection conn = getConnection(IJogre.ADMINISTRATOR, IJogre.ADMINISTRATOR); 
-		
-		if (conn != null)
-			return conn.getServerConnectionThread();
-		 
-		return null;
-	}
 }
