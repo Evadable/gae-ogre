@@ -92,8 +92,6 @@ public class JogreServer extends AbstractGameServer {
    * @throws ServerDataException 
    */
   public void init () {
-    super.init();
-    
     // Reset the server snapshot
     try {
       // Reset the database snapshot table

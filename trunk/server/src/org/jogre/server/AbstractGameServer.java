@@ -73,9 +73,12 @@ public abstract class AbstractGameServer {
     }
     instance = this;
     
-    // Set final fields
+    // Set fields
     this.connections = connections;
     this.dataConnection = dataConnection;
+    this.serverControllerList = new ServerControllerList ();
+    this.gameList             = new GameList ();
+    this.gameLoader           = new GameLoader (gameList, serverControllerList);
     
     // Type initial games server info.
     System.out.println ("------------------------------------------------------------------");
@@ -84,16 +87,6 @@ public abstract class AbstractGameServer {
     System.out.println (labels.get("author") + ":\t\t\tBob Marks");
     System.out.println (labels.get("version") + ":\t\t" + IJogre.VERSION);
 
-  }
-
-  /**
-   * Initialise the JOGRE server.
-   */
-  public void init () {
-    // Setup fields
-    this.serverControllerList = new ServerControllerList ();
-    this.gameList             = new GameList ();
-    this.gameLoader           = new GameLoader (gameList, serverControllerList);
   }
 
   /**
