@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <snapshots>
-  <game id="connect4" numOfUsers="1" numOfTables="0"/>
+  <game id="connect4" numOfUsers="0" numOfTables="0"/>
 </snapshots>

@@ -28,7 +28,6 @@ import org.jogre.common.Game;
 import org.jogre.common.GameList;
 import org.jogre.common.IJogre;
 import org.jogre.common.util.JogreLabels;
-import org.jogre.server.JogreServer;
 import org.jogre.server.ServerLabels;
 
 /**

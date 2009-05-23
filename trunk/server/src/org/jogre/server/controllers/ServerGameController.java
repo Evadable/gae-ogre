@@ -48,7 +48,7 @@ import org.jogre.common.comm.CommNewTable;
 import org.jogre.common.comm.CommRequestData;
 import org.jogre.common.util.JogreLogger;
 import org.jogre.common.util.JogreUtils;
-import org.jogre.server.JogreServer;
+import org.jogre.server.AbstractGameServer;
 import org.jogre.server.ServerConnectionThread;
 import org.jogre.server.ServerController;
 import org.jogre.server.ServerProperties;
@@ -70,14 +70,14 @@ public class ServerGameController {
 	JogreLogger logger = new JogreLogger (this.getClass());
 
 	/** Convience link to the server. */
-	protected JogreServer server;
+	protected AbstractGameServer server;
 
 	/**
 	 * Constructor.
 	 */
 	public ServerGameController () {
 		// Set up fields
-		this.server = JogreServer.getInstance();
+		this.server = AbstractGameServer.getInstance();
 	}
 
 	/**

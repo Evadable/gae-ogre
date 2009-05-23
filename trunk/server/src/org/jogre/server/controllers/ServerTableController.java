@@ -29,7 +29,6 @@ import org.jogre.common.IError;
 import org.jogre.common.IGameOver;
 import org.jogre.common.JogreModel;
 import org.jogre.common.User;
-import org.jogre.common.UserList;
 import org.jogre.common.Player;
 import org.jogre.common.PlayerList;
 import org.jogre.common.Table;
@@ -37,7 +36,7 @@ import org.jogre.common.TableList;
 import org.jogre.common.TransmissionException;
 import org.jogre.common.comm.*;
 import org.jogre.common.playerstate.PlayerState;
-import org.jogre.server.JogreServer;
+import org.jogre.server.AbstractGameServer;
 import org.jogre.server.ServerConnectionThread;
 import org.jogre.server.ServerController;
 import org.jogre.server.data.ServerDataException;
@@ -52,14 +51,14 @@ import org.jogre.server.data.ServerDataException;
 public class ServerTableController {
 
     /** Convenience link to the server. */
-	protected JogreServer server;
+	protected AbstractGameServer server;
 
 	/**
 	 * Constructor of a ServerTable parser.
 	 */
 	public ServerTableController() {
 	    // Set up fields
-	    this.server = JogreServer.getInstance();
+	    this.server = AbstractGameServer.getInstance();
 	}
 
 	/**
