@@ -3,10 +3,10 @@
 <users>
   <user username="bob" password="bob123"/>
   <user username="dave" password="dave123">
-    <game_summary game="connect4" rating="1212" wins="1" loses="0" draws="0" streak="1"/>
+    <game_summary game="connect4" rating="1200" wins="1" loses="1" draws="0" streak="-1"/>
   </user>
   <user username="john" password="john123">
-    <game_summary game="connect4" rating="1188" wins="0" loses="1" draws="0" streak="-1"/>
+    <game_summary game="connect4" rating="1200" wins="1" loses="1" draws="0" streak="1"/>
   </user>
   <user username="sharon" password="sharon123"/>
 </users>
