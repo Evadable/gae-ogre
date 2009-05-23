@@ -134,7 +134,7 @@ public class JogreServer {
 	 */
 	public void init () {
 		// Setup fields
-		this.connections          = new ConnectionList ();
+		this.connections          = new InMemoryConnectionList ();
 		this.serverControllerList = new ServerControllerList ();
 		this.gameList             = new GameList ();
 		this.gameLoader           = new GameLoader (gameList, serverControllerList);
