@@ -72,7 +72,7 @@ public class JogreServer {
 	protected boolean linkToMasterServer = false;
 
 	/** List of server connenction objects. */
-	protected ConnectionList connections;
+	private final ConnectionList connections;
 
 	/** Link to the various games, and tables within games. */
 	protected GameList gameList;
@@ -84,7 +84,7 @@ public class JogreServer {
 	protected GameLoader gameLoader;
 	
 	/** Declare how a user connection. */
-	protected IServerData dataConnection = null;
+	private final IServerData dataConnection;
 	    
     private ServerLabels labels = ServerLabels.getInstance();		// convience link to server labels
     private long startTime;
@@ -92,7 +92,11 @@ public class JogreServer {
 	/**
 	 * Default server constructor.
 	 */
-	private JogreServer () {
+	private JogreServer (ConnectionList connections, IServerData dataConnection) {
+	  
+	  // Set final fields
+	  this.connections = connections;
+	  this.dataConnection = dataConnection;
 	  
 	  // Set the singleton instance
 	  if (instance != null) {
@@ -112,11 +116,6 @@ public class JogreServer {
 
 		// Set default port
 		serverPort = DEFAULT_SERVER_PORT;
-		
-		// Setup server properties (read "server.xml" file)
-		ServerProperties.setUpFromFile();
-		
-		System.out.println (labels.get("server.properties") + ":\t" + ServerProperties.getInstance().getServerFile().getAbsolutePath());
 		
 		// Set default values such as ports
 		setServerPort (ServerProperties.getInstance().getServerPort());
@@ -138,13 +137,9 @@ public class JogreServer {
 	 */
 	public void init () {
 		// Setup fields
-		this.connections          = new InMemoryConnectionList ();
 		this.serverControllerList = new ServerControllerList ();
 		this.gameList             = new GameList ();
 		this.gameLoader           = new GameLoader (gameList, serverControllerList);
-		
-		// Load the correct type of data connection
-		this.dataConnection = ServerDataFactory.getInstance ();
 		
 		// Reset the server snapshot
 		try {
@@ -412,8 +407,13 @@ public class JogreServer {
 	 * @param args     Additional arguments from command line.
 	 */
 	public static void main (String [] args) {
+	  
+    // Setup server properties (read "server.xml" file)
+    ServerProperties.setUpFromFile();
+	  
 		// Initialise the server
-		JogreServer server = new JogreServer();
+		JogreServer server = new JogreServer(new InMemoryConnectionList (), ServerDataFactory.getInstance ());
+    System.out.println (ServerLabels.getInstance().get("server.properties") + ":\t" + ServerProperties.getInstance().getServerFile().getAbsolutePath());
 
 		// Parse the command line arguments
 		server.parseCommandLineArguments (args);
