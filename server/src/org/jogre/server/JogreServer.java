@@ -93,6 +93,12 @@ public class JogreServer {
 	 * Default server constructor.
 	 */
 	private JogreServer () {
+	  
+	  // Set the singleton instance
+	  if (instance != null) {
+	    throw new AssertionError("There should only be one JogreServer!");
+	  }
+	  instance = this;
 		
 		// Take note of start time
 		startTime = System.currentTimeMillis();
@@ -122,8 +128,6 @@ public class JogreServer {
 	 * @return
 	 */
 	public static JogreServer getInstance () {
-		if (instance == null)
-			instance = new JogreServer ();
 		return instance;
 	}
 
@@ -409,7 +413,7 @@ public class JogreServer {
 	 */
 	public static void main (String [] args) {
 		// Initialise the server
-		JogreServer server = getInstance ();
+		JogreServer server = new JogreServer();
 
 		// Parse the command line arguments
 		server.parseCommandLineArguments (args);
