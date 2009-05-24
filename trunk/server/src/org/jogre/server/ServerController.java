@@ -137,7 +137,6 @@ public abstract class ServerController {
      */
     public ServerController (String gameKey) {
     	this.gameId = gameKey;
-        this.server = AbstractGameServer.getInstance();
 
         // If game key is OK - these game keys should be OK
         Game game = server.getGameList().getGame (gameKey);
@@ -146,6 +145,13 @@ public abstract class ServerController {
             this.tableList = game.getTableList();
         }
     }
+    
+  /**
+   * Sets the game server that this controller uses
+   */
+  void setGameServer(AbstractGameServer server) {
+    this.server = server;
+  }
 
 	/**
 	 * A class can override this method to provide custom properties of the game

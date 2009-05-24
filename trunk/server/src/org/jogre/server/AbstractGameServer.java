@@ -26,18 +26,6 @@ import org.jogre.server.data.IServerData;
 
 public abstract class AbstractGameServer {
 
-  // Singleton instance of this server
-  private static AbstractGameServer instance;
-  
-  /**
-   * Return the single instance of this server.
-   *
-   * @return
-   */
-  public static AbstractGameServer getInstance () {
-    return instance;
-  }
-  
   /** Logging */
   JogreLogger logger = new JogreLogger (this.getClass());
   
@@ -66,18 +54,12 @@ public abstract class AbstractGameServer {
    */
   AbstractGameServer (ConnectionList connections, IServerData dataConnection) {
     
-    // Set the singleton instance
-    if (instance != null) {
-      throw new AssertionError("There should only be one JogreServer!");
-    }
-    instance = this;
-    
     // Set fields
     this.connections = connections;
     this.dataConnection = dataConnection;
     this.serverControllerList = new ServerControllerList (this);
     this.gameList             = new GameList ();
-    this.gameLoader           = new GameLoader (gameList, serverControllerList);
+    this.gameLoader           = new GameLoader (gameList, serverControllerList, this);
   }
 
   /**
