@@ -190,7 +190,7 @@ public class JogreServer extends AbstractGameServer {
         Socket clientSocket = listenSocket.accept ();
 
         // Try to connect client to this server
-        ServerConnectionThread conn = new ServerConnectionThread (clientSocket);
+        ServerConnectionThread conn = new ServerConnectionThread (clientSocket, this);
 
                 conn.getMessageBus().open(conn);
       }

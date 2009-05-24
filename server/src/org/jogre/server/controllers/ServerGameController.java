@@ -70,14 +70,14 @@ public class ServerGameController {
 	JogreLogger logger = new JogreLogger (this.getClass());
 
 	/** Convience link to the server. */
-	protected AbstractGameServer server;
+	protected final AbstractGameServer server;
 
 	/**
 	 * Constructor.
 	 */
-	public ServerGameController () {
+	public ServerGameController (final AbstractGameServer gameServer) {
 		// Set up fields
-		this.server = AbstractGameServer.getInstance();
+		this.server = gameServer;
 	}
 
 	/**

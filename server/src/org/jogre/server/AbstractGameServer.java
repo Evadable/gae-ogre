@@ -20,7 +20,6 @@
 package org.jogre.server;
 
 import org.jogre.common.GameList;
-import org.jogre.common.IJogre;
 import org.jogre.common.util.JogreLogger;
 import org.jogre.server.controllers.ServerControllerList;
 import org.jogre.server.data.IServerData;
@@ -76,7 +75,7 @@ public abstract class AbstractGameServer {
     // Set fields
     this.connections = connections;
     this.dataConnection = dataConnection;
-    this.serverControllerList = new ServerControllerList ();
+    this.serverControllerList = new ServerControllerList (this);
     this.gameList             = new GameList ();
     this.gameLoader           = new GameLoader (gameList, serverControllerList);
   }

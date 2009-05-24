@@ -59,7 +59,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	JogreLogger logger = new JogreLogger (this.getClass());
 
 	/** link to the JogreServer */
-	protected AbstractGameServer server;
+	protected final AbstractGameServer server;
 
 	/** Link to the various parsers. */
 	private ServerControllerList controllers = null;
@@ -86,11 +86,11 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 *
 	 * @param clientSocket      Client connection.
 	 */
-	public ServerConnectionThread (Socket clientSocket) {
+	public ServerConnectionThread (Socket clientSocket, AbstractGameServer server) {
 		super (new SocketBasedMessageBus(clientSocket));
 
 		// Get link to the server (singleton) and the various parsers
-		this.server       = JogreServer.getInstance();
+		this.server       = server;
 		this.controllers  = server.getControllers();
 
 		// and also set up links to server objects which are often used.
@@ -445,6 +445,6 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @return   Server connection.
 	 */
 	public ServerController getServerController () {
-		return JogreServer.getInstance().getControllers().getCustomController (gameID);
+		return server.getControllers().getCustomController (gameID);
 	}
 }

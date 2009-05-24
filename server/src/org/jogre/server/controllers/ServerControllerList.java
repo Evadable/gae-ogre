@@ -21,6 +21,7 @@ package org.jogre.server.controllers;
 
 import java.util.HashMap;
 
+import org.jogre.server.AbstractGameServer;
 import org.jogre.server.ServerController;
 
 /**
@@ -45,10 +46,10 @@ public class ServerControllerList {
 	/**
 	 * Constructor for the parser list.
 	 */
-	public ServerControllerList () {
+	public ServerControllerList (AbstractGameServer server) {
 		// Create instances of the standard parsers
-		this.serverGameController = new ServerGameController ();
-		this.serverTableController = new ServerTableController ();
+		this.serverGameController = new ServerGameController (server);
+		this.serverTableController = new ServerTableController (server);
 
 		// Create new hashmaps to contain the objects
 		this.serverControllers = new HashMap ();
