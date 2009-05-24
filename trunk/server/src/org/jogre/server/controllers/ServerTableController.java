@@ -51,14 +51,14 @@ import org.jogre.server.data.ServerDataException;
 public class ServerTableController {
 
     /** Convenience link to the server. */
-	protected AbstractGameServer server;
+	protected final AbstractGameServer server;
 
 	/**
 	 * Constructor of a ServerTable parser.
 	 */
-	public ServerTableController() {
+	public ServerTableController(AbstractGameServer server) {
 	    // Set up fields
-	    this.server = AbstractGameServer.getInstance();
+	    this.server = server;
 	}
 
 	/**
