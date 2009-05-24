@@ -63,7 +63,7 @@ public class GameLoader {
 	 * @param parserList  Server parser list which this
 	 *                    class will add to with each game found.
 	 */
-	public GameLoader (GameList gameList, ServerControllerList parserList) {
+	public GameLoader (GameList gameList, ServerControllerList parserList, AbstractGameServer gameServer) {
 	    this.parserList = parserList;
 	    this.verboseSB = new StringBuffer ();
 	    this.iconDataHash = new HashMap ();
@@ -101,7 +101,7 @@ public class GameLoader {
 	            curGame = new Game (curGameKey, minNumOfPlayers, maxNumOfPlayers);
 	            gameList.addGame (curGame);
 
-	            loadParser (classLoader, curGame);
+	            loadParser (classLoader, curGame, gameServer);
 
 	            // Load the icon for the game.
 	            byte [] iconData = loadIconData(curGameKey);
@@ -173,7 +173,7 @@ public class GameLoader {
 	 *
 	 * @param curGame
 	 */
-	private void loadParser (URLClassLoader classLoader, Game curGame) {
+	private void loadParser (URLClassLoader classLoader, Game curGame, AbstractGameServer gameServer) {
 	    // Load for server controllers in the game directory
         File serverControllerDir = new File (
             ServerProperties.getInstance().getJogreHomeDir() +
@@ -199,9 +199,11 @@ public class GameLoader {
                     // Add tableParser to parserList if not null
                     if (serverController != null) {
                         if (serverController instanceof ServerController) {
-                            parserList.addServerController (curGame.getKey(), (ServerController)serverController);
+                            final ServerController controller = (ServerController)serverController;
+                            controller.setGameServer(gameServer);
+                            parserList.addServerController (curGame.getKey(), controller);
 
-                            curGame.setCustomGameProperties(((ServerController) serverController).getCustomGameProperties());
+                            curGame.setCustomGameProperties(controller.getCustomGameProperties());
 
                             verboseSB.append ("\t[controller]\t");
                             return;
