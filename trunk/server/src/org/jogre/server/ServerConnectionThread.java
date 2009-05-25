@@ -54,6 +54,8 @@ import org.jogre.server.data.ServerDataException;
  */
 public class ServerConnectionThread extends AbstractConnectionThread 
                                     implements IJogre {
+  
+  private static final String GAME_ID_KEY = "gameId";
 
 	/** Logging */
 	JogreLogger logger = new JogreLogger (this.getClass());
@@ -64,17 +66,11 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	/** Link to the various parsers. */
 	private ServerControllerList controllers = null;
 
-	/** Game ID which is set to a particular game, master server or admin. */
-	private String gameID = null;
-
 	/** Convience link to the userlist. */
 	private UserList userList = null;
 
 	/** Convience link to the tablelist. */
 	private TableList tableList = null;
-
-	/** Convience link to the game. */
-	private Game game = null;
 
 	/** Connection list. */
 	private ConnectionList connections = null;
@@ -106,10 +102,10 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 */
 	public void init (String username, String gameID) {
 		setUsername(username);
-		this.gameID = gameID;
+		getMessageBus().setProperty(GAME_ID_KEY, gameID);
 
 		// Set convience fields
-		this.game = server.getGameList().getGame (gameID);
+		Game game = server.getGameList().getGame (gameID);
 		this.userList = game.getUserList();	     // link to userlist
 		this.tableList = game.getTableList();	 // link to table list
 	}
@@ -121,7 +117,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 */
 	public void init (String admin_username) {
 		setUsername(admin_username);
-		this.gameID          = ADMINISTRATOR;
+    getMessageBus().setProperty(GAME_ID_KEY, ADMINISTRATOR);
 		this.isAdministrator = true;
 	}
 
@@ -180,7 +176,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		ServerConnectionThread conn = connections.getAdminConnection();
 		
 		if (conn != null) {		// ensure we're not sending same message twice
-			CommAdminGameMessage adminMessage = new CommAdminGameMessage (isReceivingMessage, gameID, getUsername(), message); 
+			CommAdminGameMessage adminMessage = new CommAdminGameMessage (isReceivingMessage, getGameID(), getUsername(), message); 
 			conn.send (adminMessage, false);			
 		}
 	}
@@ -196,7 +192,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		ServerConnectionThread conn = connections.getAdminConnection();
 		
 		if (conn != null) {		// ensure we're not sending same message twice
-			CommAdminMessage adminMessage = new CommAdminMessage (gameID, getUsername(), message.flatten());
+			CommAdminMessage adminMessage = new CommAdminMessage (getGameID(), getUsername(), message.flatten());
 			conn.send (adminMessage, false);
 		}
 	}
@@ -217,7 +213,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @return   Game object (which contains the userlist and table list).
 	 */
 	public Game getGame () {
-	    return game;
+	    return server.getGameList().getGame (getGameID());
 	}
 
 	/**
@@ -226,7 +222,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @return    Game ID (e.g. chess-0.2).
 	 */
 	public String getGameID () {
-		return this.gameID;
+		return getMessageBus().getProperty(GAME_ID_KEY, null);
 	}
 
 	/**
@@ -268,7 +264,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		if (isAdministrator ())
 			server.getConnections().removeAdminConnection ();
 		else 
-			server.getConnections().removeConnection (gameID, getUsername());
+			server.getConnections().removeConnection (getGameID(), getUsername());
 		
 		// Game users only
 		if (userList != null && tableList != null) {
@@ -445,6 +441,6 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @return   Server connection.
 	 */
 	public ServerController getServerController () {
-		return server.getControllers().getCustomController (gameID);
+		return server.getControllers().getCustomController (getGameID());
 	}
 }
