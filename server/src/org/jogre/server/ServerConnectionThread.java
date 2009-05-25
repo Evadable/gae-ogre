@@ -56,6 +56,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
                                     implements IJogre {
   
   private static final String GAME_ID_KEY = "gameId";
+  private static final String IS_ADMINISTRATOR_KEY = "isAdmin";
 
 	/** Logging */
 	JogreLogger logger = new JogreLogger (this.getClass());
@@ -74,8 +75,6 @@ public class ServerConnectionThread extends AbstractConnectionThread
 
 	/** Connection list. */
 	private ConnectionList connections = null;
-	
-	private boolean isAdministrator = false;
 	
 	/**
 	 * Constructor which takes a socket connection and a link to the server.
@@ -118,7 +117,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	public void init (String admin_username) {
 		setUsername(admin_username);
     getMessageBus().setProperty(GAME_ID_KEY, ADMINISTRATOR);
-		this.isAdministrator = true;
+    getMessageBus().setProperty(IS_ADMINISTRATOR_KEY, "1");
 	}
 
 	/**
@@ -249,7 +248,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @return  True if user is an administrator.    
 	 */
 	public boolean isAdministrator () {
-		return this.isAdministrator;
+		return getMessageBus().getProperty(IS_ADMINISTRATOR_KEY, null) != null;
 	}
 
 	/**
