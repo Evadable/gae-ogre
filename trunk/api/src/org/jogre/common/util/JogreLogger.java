@@ -34,16 +34,74 @@ public class JogreLogger implements IJogreLog {
   // dont log constant.
   protected static final String DONT_LOG = "-1";
   
-  private static final Level[] LEVELS = {null, Level.SEVERE, Level.INFO, Level.FINE};
-
-  private final Logger logger;
+  /**
+   * Interface that knows how to write log output data
+   */
+  public static interface LogWriter {
+    
+    /**
+     * Method which performs the debug. Override this for customized log output
+     *
+     * @param logPriority Priority of the log (should be between 1 and 3)
+     * @param method   Used to show class.method () in log. If this is equal
+     *                 to DONT_LOG then this isnt displayed.
+     * @param message  Message to log.
+     */
+    void log (int logPriority, String method, String message);
+  }
   
+  /**
+   * Factory that produces log writers
+   */
+  public static interface LogWriterFactory {
+    LogWriter getLogWriter(Class<?> loggedClass);
+  }
+  
+  /**
+   * Default implementation, uses Java logging
+   */
+  private static class DefaultLogWriter implements LogWriter {
+    
+    private static final Level[] LEVELS = {null, Level.SEVERE, Level.INFO, Level.FINE};
+    
+    private Logger logger;
+    
+    public DefaultLogWriter(Class<?> loggedClass) {
+      logger = Logger.getLogger(loggedClass.getName());
+    }
+
+    @Override
+    public void log(int logPriority, String method, String message) {
+      if (logPriority == NONE) {
+        return;
+      }
+      if (DONT_LOG.equals(method)) {
+        return;
+      }
+      if (method != null) {
+        message = "(" + method + "): " + message;
+      }
+      logPriority = Math.min(Math.max(0, logPriority), LEVELS.length - 1);
+      logger.log(LEVELS[logPriority], message);
+    }
+  }
+  
+  static LogWriterFactory factory = new LogWriterFactory() {
+
+    @Override
+    public LogWriter getLogWriter(Class<?> loggedClass) {
+      return new DefaultLogWriter(loggedClass);
+    }
+  };
+  
+  private final LogWriter writer;
+
 	/**
 	 * Constructor which takes the class of the logged Class.
 	 * @param loggedClass
 	 */
 	public JogreLogger (Class<?> loggedClass) {
-	  logger = Logger.getLogger(loggedClass.getName());
+	  writer = factory.getLogWriter(loggedClass);
 	}
 
 	/**
@@ -53,7 +111,7 @@ public class JogreLogger implements IJogreLog {
 	 * @param message  Message to log.
 	 */
 	public void error (String method, String message) {
-		log (ERROR, method, message);
+		writer.log (ERROR, method, message);
 	}
 
 	/**
@@ -64,7 +122,7 @@ public class JogreLogger implements IJogreLog {
 	 *
 	 */
 	public void info (String method, String message) {
-		log (INFO, method, message);
+	  writer.log (INFO, method, message);
 	}
 
 	/**
@@ -74,7 +132,7 @@ public class JogreLogger implements IJogreLog {
 	 * @param message  Message to log.
 	 */
 	public void debug (String method, String message) {
-		log (DEBUG, method, message);
+	  writer.log (DEBUG, method, message);
 	}
 
 	/**
@@ -83,7 +141,7 @@ public class JogreLogger implements IJogreLog {
 	 * @param message  Message to log
 	 */
 	public void log (String message) {
-		log (INFO, DONT_LOG, message);
+	  writer.log (INFO, DONT_LOG, message);
 	}
 
 	/**
@@ -93,27 +151,5 @@ public class JogreLogger implements IJogreLog {
 	 */
 	public void stacktrace (Throwable e) {
 	    error ("Exception", e.getMessage());
-	}
-
-	/**
-	 * Method which performs the debug. Override this for customized log output
-	 *
-	 * @param logPriority Priority of the log (should be between 1 and 3)
-	 * @param method   Used to show class.method () in log. If this is equal
-	 *                 to DONT_LOG then this isnt displayed.
-	 * @param message  Message to log.
-	 */
-	protected void log (int logPriority, String method, String message) {
-	  if (logPriority == NONE) {
-	    return;
-	  }
-	  if (DONT_LOG.equals(method)) {
-	    return;
-	  }
-	  if (method != null) {
-	    message = "(" + method + "): " + message;
-	  }
-	  logPriority = Math.min(Math.max(0, logPriority), LEVELS.length - 1);
-	  logger.log(LEVELS[logPriority], message);
 	}
 }

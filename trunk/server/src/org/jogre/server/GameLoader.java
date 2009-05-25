@@ -227,6 +227,7 @@ public class GameLoader {
 	 * @return
 	 */
 	private Object loadServerController (URLClassLoader classLoader, String gameKey, String className) {
+	    Exception failure = null;
 	    try {
             //Class instance = Class.forName (className);
             Class instance = classLoader.loadClass(className);
@@ -239,15 +240,15 @@ public class GameLoader {
             Constructor constructor = instance.getConstructor (classParams);
             return constructor.newInstance (params);
         } catch (ClassNotFoundException e) {
-
+          failure = e;
         } catch (InstantiationException ie) {
-
+          failure = ie;
         } catch (IllegalAccessException iae) {
-
+          failure = iae;
         } catch (Exception e) {
-
+          failure = e;
         }
-
+      logger.error("Could not load server-controller for gameKey " + gameKey, failure.getMessage());
 	    return null;
 	}
 

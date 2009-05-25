@@ -29,6 +29,7 @@ import java.util.Locale;
 import org.jogre.common.IError;
 import org.jogre.common.IJogre;
 import org.jogre.common.JogreGlobals;
+import org.jogre.common.util.DownwardsCompatibleLogger;
 import org.jogre.common.util.JogreLabels;
 import org.jogre.server.data.IServerData;
 import org.jogre.server.data.ServerDataException;
@@ -285,6 +286,9 @@ public class JogreServer extends AbstractGameServer {
 	 * @param args     Additional arguments from command line.
 	 */
 	public static void main (String [] args) {
+	  
+	  // Set up downwards compatible logging
+	  DownwardsCompatibleLogger.install();
 	  
     // Setup server properties (read "server.xml" file)
     ServerProperties.setUpFromFile();
