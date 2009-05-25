@@ -56,5 +56,18 @@ public interface MessageBus {
    * @exception ConcurrentModificationException if the method is called more than once
    */
   public abstract void open(final MessageParser parser);
+  
+  /**
+   * Set a property that should be associated with the MessageBus.
+   * Connection objects that use the messaging object can be non-durable, so they need
+   * a way to store a small amount of data for bootstrapping. In a http-based world,
+   * the messaging implementation may choose to set the data as part of an http cookie.
+   */
+  public abstract void setProperty(String key, String valueOrNull);
+  
+  /**
+   * Gets a property currently associated with this object.
+   */
+  public abstract String getProperty(String key, String defaultValue);
 
 }

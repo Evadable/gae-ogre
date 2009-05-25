@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ConcurrentModificationException;
+import java.util.Properties;
 
 import nanoxml.XMLElement;
 import nanoxml.XMLParseException;
@@ -26,6 +27,9 @@ public class SocketBasedMessageBus implements MessageBus {
   
   /** When the boolean loop becomes false the Thread finishes. */
   private boolean loop = true;
+  
+  /** Properties associated with this object */
+  private final Properties properties;
 
   private final BufferedReader in;
   private final PrintStream out;
@@ -45,6 +49,7 @@ public class SocketBasedMessageBus implements MessageBus {
     } catch (IOException e) {
       throw new IllegalArgumentException("Could not connect to socket", e);
     }
+    properties = new Properties();
   }
   
   private void doLoop(final MessageParser parser) {
@@ -153,5 +158,19 @@ public class SocketBasedMessageBus implements MessageBus {
       }
     };
     executingThread.start();
+  }
+
+  @Override
+  public String getProperty(String key, String defaultValue) {
+    return properties.getProperty(key, defaultValue);
+  }
+
+  @Override
+  public void setProperty(String key, String valueOrNull) {
+    if (valueOrNull == null) {
+      properties.remove(key);
+    } else {
+      properties.setProperty(key, valueOrNull);
+    }
   }
 }
