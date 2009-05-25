@@ -137,13 +137,6 @@ public abstract class ServerController {
      */
     public ServerController (String gameKey) {
     	this.gameId = gameKey;
-
-        // If game key is OK - these game keys should be OK
-        Game game = server.getGameList().getGame (gameKey);
-        if (game != null) {
-            this.userList = game.getUserList();
-            this.tableList = game.getTableList();
-        }
     }
     
   /**
@@ -151,6 +144,13 @@ public abstract class ServerController {
    */
   void setGameServer(AbstractGameServer server) {
     this.server = server;
+    
+    // If game key is OK - these game keys should be OK
+    Game game = server.getGameList().getGame (gameId);
+    if (game != null) {
+        this.userList = game.getUserList();
+        this.tableList = game.getTableList();
+    }
   }
 
 	/**

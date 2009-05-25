@@ -24,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.jogre.common.util.JogreLogger.LogWriter;
+
 /**
  * <p>Custom logging was created for JOGRE so that is as flexible and as
  * lightweight as possible (e.g. log4j is too large at 345kb). This logging
@@ -71,7 +73,7 @@ import java.util.Date;
  * @author  Bob Marks
  * @version Alpha 0.2.3
  */
-public class DownwardsCompatibleLogger extends JogreLogger {
+public class DownwardsCompatibleLogger implements JogreLogger.LogWriter, IJogreLog {
 
   // declare keys are which are stored in the resources strings
   private static final String KEY_LOG_CONSOLE_PRIORITY = "log.priority.console";
@@ -100,13 +102,24 @@ public class DownwardsCompatibleLogger extends JogreLogger {
   private SimpleDateFormat dateFormatDir  = null;
   private SimpleDateFormat dateFormatFile = null;
   private SimpleDateFormat dateFormatLog  = null;
+  
+  /**
+   * Configures JOGRE to use downwards compatible logging
+   */
+  public static void install() {
+    JogreLogger.factory = new JogreLogger.LogWriterFactory() {
+      @Override
+      public LogWriter getLogWriter(Class<?> loggedClass) {
+        return new DownwardsCompatibleLogger(loggedClass);
+      }
+    };
+  }
 
   /**
    * Constructor which takes the class of the logged Class.
    * @param loggedClass
    */
   public DownwardsCompatibleLogger (Class loggedClass) {
-    super(loggedClass);
     // Populate the class Name
     String fullClassName = loggedClass.getName();
     this.className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
@@ -154,7 +167,7 @@ public class DownwardsCompatibleLogger extends JogreLogger {
    * @param message  Message to log.
    */
   @Override
-  protected void log (int logPriority, String method, String message) {
+  public void log (int logPriority, String method, String message) {
 
     // Check priority
     // Create log message from priority, time stamp, classs & message
@@ -166,11 +179,11 @@ public class DownwardsCompatibleLogger extends JogreLogger {
     String classMethodStr = "";
     String priorityStr = "";
 
-    if (!method.equals (DONT_LOG))
+    if (!method.equals (JogreLogger.DONT_LOG))
       classMethodStr = className + "." +  method + "(): ";
 
     // Create the priority string if required
-    if (showPriority && logPriority > 0 && logPriority < 4 && !method.equals (DONT_LOG))
+    if (showPriority && logPriority > 0 && logPriority < 4 && !method.equals (JogreLogger.DONT_LOG))
       priorityStr = PRIORITY_STRS [logPriority] + " ";
 
     String logMessage =

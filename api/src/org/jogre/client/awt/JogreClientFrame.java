@@ -37,6 +37,7 @@ import org.jogre.common.JogreGlobals;
 import org.jogre.common.Table;
 import org.jogre.common.User;
 import org.jogre.common.comm.Comm;
+import org.jogre.common.util.DownwardsCompatibleLogger;
 import org.jogre.common.util.GameLabels;
 import org.jogre.common.util.GameProperties;
 import org.jogre.common.util.JogreLabels;
@@ -95,6 +96,9 @@ public abstract class JogreClientFrame extends JFrame
 	public JogreClientFrame (String [] args, boolean hasExtInfo) {
 		// Class super constructor on JFrame
 		super ();
+		
+		// Set up downwards compatible logging
+		DownwardsCompatibleLogger.install();
 		
 		// Save parameter
 		this.hasExtendedInfo = hasExtInfo;
