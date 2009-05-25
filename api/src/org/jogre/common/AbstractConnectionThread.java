@@ -28,12 +28,12 @@ package org.jogre.common;
  * @version Alpha 0.2.3
  */
 public abstract class AbstractConnectionThread implements MessageBus.MessageParser {
+  
+  /** A property key used to store the user object. */
+  private static final String USER_KEY = "user";
 
 	/** Communication between the server and the user. */
 	private final MessageBus messageBus;
-
-	/** Username of the client. */
-	private String username;
 
 	/**
 	 * Constructor for a connection which takes a Socket and sends up the input
@@ -61,7 +61,7 @@ public abstract class AbstractConnectionThread implements MessageBus.MessagePars
 	 * @return  Username of client / server who created this thread.
 	 */
 	public String getUsername() {
-		return username;
+		return messageBus.getProperty(USER_KEY, null);
 	}
 
 	/**
@@ -70,6 +70,6 @@ public abstract class AbstractConnectionThread implements MessageBus.MessagePars
 	 * @param username  Username of client / server who created this thread.
 	 */
 	public void setUsername (String username) {
-		this.username = username;
+	  messageBus.setProperty(USER_KEY, username);
 	}
 }
