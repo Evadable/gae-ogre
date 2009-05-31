@@ -40,4 +40,15 @@ public class PayloadBuilderTest extends TestCase {
       // fall through
     }
   }
+  
+  public void testReset() {
+    assertEquals(
+        "<payload meta=\"foo\"></payload>", 
+        PayloadBuilder.payload(null).addChildNoparse("<a/>").reset("foo").toString());
+    PayloadBuilder pb = PayloadBuilder.payload(null).addChildNoparse("<a/>");
+    pb.toString();
+    assertEquals(
+        "<payload meta=\"foo\"><a></payload>", 
+        pb.reset("foo").addChildNoparse("<a>").toString());
+  }
 }
