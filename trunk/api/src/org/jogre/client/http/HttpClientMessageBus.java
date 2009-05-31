@@ -68,7 +68,6 @@ public class HttpClientMessageBus implements MessageBus {
   private final JogreLogger logger = new JogreLogger(HttpClientMessageBus.class);
   private final int silencePeriodInMillis;
   private final int maxMessages;
-  private boolean isInitialized = false;
   private boolean isInterrupted = false;
   private boolean isStarted = false;
   private MessageParser parser;
@@ -183,7 +182,7 @@ public class HttpClientMessageBus implements MessageBus {
           logger.error("Could not parse http response", parseFailed.getMessage());
         }
       }
-      if (!isInitialized) {
+      if (lastMeta == null) {
         sleep(lastCommunication);
       }
     }
