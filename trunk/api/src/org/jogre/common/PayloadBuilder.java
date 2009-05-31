@@ -5,30 +5,43 @@ import nanoxml.XMLElement;
 /**
  * Utility class, used to concatenate a set of xml-elements (given as strings)
  * into a single entity that can be parsed back on the receiving side.
- * The final result can be retrieved by using the toString() method
+ * The final result can be retrieved by using the toString() method.
+ * This object is not threadsafe!
  * 
  * @author Jens Scheffler
  *
  */
 public class PayloadBuilder {
   
-  private final StringBuilder root;
+  /**
+   * Name of the (optional) meta-attribute of the outer xml tag
+   */
+  public static final String META = "meta";
+  
+  private final StringBuilder root = new StringBuilder();
+  private int size = 0;
   
   /**
    * Constructor
    * @param meta an arbitrary string with meta-information that should be included in the outer tag
    */
-  private PayloadBuilder(String meta) {
+  public PayloadBuilder(String meta) {
+    reset(meta);
+  }
+  
+  /**
+   * Resets the builder, so that it can be reused
+   */
+  public PayloadBuilder reset(String newMeta) {
+    root.delete(0, root.length());
     XMLElement elem = new XMLElement("payload");
-    if (meta != null) {
-      elem.setAttribute("meta", meta);
-    }
-    
-    // This assumes that the final element always ends with "/>".
-    // It deletes the backslash, thus making the element an open tag
-    root = new StringBuilder(elem.toString());
-    assert root.charAt(root.length() - 2) == '/';
+    if (newMeta != null) {
+      elem.setAttribute(META, newMeta);
+    }    
+    root.append(elem.toString());
     root.deleteCharAt(root.length() - 2);
+    size = 0;
+    return this;
   }
 
   /**
@@ -45,6 +58,7 @@ public class PayloadBuilder {
    */
   public PayloadBuilder addChildNoparse(String xmlData) {
     root.append(xmlData);
+    size++;
     return this;
   }
   
@@ -58,6 +72,13 @@ public class PayloadBuilder {
     XMLElement elem = new XMLElement();
     elem.parseString(xmlData);
     return addChildNoparse(elem.toString());
+  }
+  
+  /**
+   * Returns the amount of elements the builder currently contains.
+   */
+  public int size() {
+    return size;
   }
 
   /**
