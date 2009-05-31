@@ -4,6 +4,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.jogre.common.PayloadBuilder;
 import org.jogre.common.TransmissionException;
@@ -45,12 +46,6 @@ public class HttpClientMessageBus implements MessageBus {
     public void execute(HttpClientMessageBus bus);
     
     /**
-     * Creates a queue that can be used in a multi-threaded environment.
-     * @return
-     */
-    public Queue<String> newQueue();
-    
-    /**
      * Holds the current thread for a certain amount of milliseconds
      */
     public void sleep(long millis) throws InterruptedException;
@@ -62,10 +57,10 @@ public class HttpClientMessageBus implements MessageBus {
     
   }
   
-  private final Environment env;
-  private final Queue<String> outqueue;
+  private final Queue<String> outqueue = new ConcurrentLinkedQueue<String>();
   private final Properties props = new Properties();
   private final JogreLogger logger = new JogreLogger(HttpClientMessageBus.class);
+  private final Environment env;
   private final int silencePeriodInMillis;
   private final int maxMessages;
   private boolean isInterrupted = false;
@@ -86,7 +81,6 @@ public class HttpClientMessageBus implements MessageBus {
     this.env = env;
     this.maxMessages = maxMessages;
     this.silencePeriodInMillis = silencePeriodInMillis;
-    this.outqueue = env.newQueue();
   }
   
   /**
@@ -102,7 +96,7 @@ public class HttpClientMessageBus implements MessageBus {
    * Sleeps for a while.
    */
   private void sleep(long lastComm) throws InterruptedException {
-    long diff = silencePeriodInMillis - (env.currentTimeMillis() - lastComm);
+    long diff = env.currentTimeMillis() - lastComm - silencePeriodInMillis;
     if (diff > 0) {
       env.sleep(diff);
     }
@@ -155,6 +149,13 @@ public class HttpClientMessageBus implements MessageBus {
   @Override
   public String getProperty(String key, String defaultValue) {
     return props.getProperty(key, defaultValue);
+  }
+  
+  /**
+   * For unit tests, retrieve the queue that internally stores the XML snippets.
+   */
+  Queue<String> getQueue() {
+    return outqueue;
   }
 
   /**
