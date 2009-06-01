@@ -96,7 +96,7 @@ public class HttpClientMessageBus implements MessageBus {
    * Sleeps for a while.
    */
   private void sleep(long lastComm) throws InterruptedException {
-    long diff = env.currentTimeMillis() - lastComm - silencePeriodInMillis;
+    long diff = silencePeriodInMillis - (env.currentTimeMillis() - lastComm);
     if (diff > 0) {
       env.sleep(diff);
     }
