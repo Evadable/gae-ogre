@@ -44,6 +44,9 @@ public interface IJogre {
 	/** Default port that JOGRE runs on. */
 	public static final int DEFAULT_PORT = 1790;
 	
+	/** Default protocol JOGRE should use */
+	public static final String DEFAULT_PROTOCOL = "http";
+	
 	/** Default number of players (2). */
 	public static final int DEFAULT_NUM_OF_PLAYERS = 2;
 

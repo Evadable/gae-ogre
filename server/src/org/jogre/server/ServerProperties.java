@@ -225,6 +225,22 @@ public class ServerProperties implements IJogre, ITransmittable {
 	public void setServerPort(int portNum) {
 		setAttribute ("server_properties/configuration/server/@port", portNum);
 	}
+	
+	/**
+	 * Gets the protocol (socket, http) that should be used
+	 * 
+	 * @return the protocol
+	 */
+	public String getProtocol() {
+	  return getStringAttribute ("server_properties/configuration/server/@protocol", DEFAULT_PROTOCOL);
+	}
+	
+	/**
+	 * Sets the protocol that should be used. 
+	 */
+	public void setProtocol(String protocol) {
+	  setAttribute("server_properties/configuration/server/@protocol", protocol);
+	}
 
 	/**
 	 * Return the maximum number of users.
@@ -1037,12 +1053,23 @@ public class ServerProperties implements IJogre, ITransmittable {
 	 * @return       Value or xpath or null if it cant find it.
 	 */
 	private String getStringAttribute (String xpath) {
-		Object obj = doc.selectSingleNode (xpath);
-		if (obj != null)
-			return ((Attribute)obj).getValue();
-		return null;
+		return getStringAttribute(xpath, null);
 	}
 	
+  /**
+   * Little helper method for returning an attribute as a String.
+   * 
+   * @param xpath  Xpath to attribute.
+   * @param defaultValue a default if the attribute is not there
+   * @return       Value or xpath or null if it cant find it.
+   */
+  private String getStringAttribute (String xpath, String defaultValue) {
+    Object obj = doc.selectSingleNode (xpath);
+    if (obj != null)
+      return ((Attribute)obj).getValue();
+    return defaultValue;
+  }
+  
 	/**
 	 * Little helper method for returning a boolean attribute.
 	 * 
