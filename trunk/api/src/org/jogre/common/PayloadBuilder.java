@@ -18,6 +18,11 @@ public class PayloadBuilder {
    */
   public static final String META = "meta";
   
+  /**
+   * Name of the outer tag (payload)
+   */
+  public static final String TAG = "payload";
+  
   private final StringBuilder root = new StringBuilder();
   private int size = 0;
   
@@ -34,7 +39,7 @@ public class PayloadBuilder {
    */
   public PayloadBuilder reset(String newMeta) {
     root.delete(0, root.length());
-    XMLElement elem = new XMLElement("payload");
+    XMLElement elem = new XMLElement(TAG);
     if (newMeta != null) {
       elem.setAttribute(META, newMeta);
     }    

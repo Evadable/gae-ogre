@@ -153,7 +153,7 @@ public class HttpClientMessageBusTest extends TestCase {
     EasyMock.expect(environment.currentTimeMillis()).andReturn((long) (SILENCE - 3));
     environment.sleep(3L);
     
-    // That's it for now, let's interrup the thread and try it out
+    // That's it for now, let's interrupt the thread and try it out
     EasyMock.expectLastCall().andThrow(new InterruptedException("end of test"));
     EasyMock.replay(environment, parser);
     try {

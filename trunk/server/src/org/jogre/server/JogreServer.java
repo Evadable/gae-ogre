@@ -311,7 +311,12 @@ public class JogreServer extends AbstractGameServer {
 		server.initialTests ();
 		
 		// Setup server and run the server
-		server.init();
-		server.run ();
+		server.init();		
+		final String protocol = ServerProperties.getInstance().getProtocol();
+		if ("http".equalsIgnoreCase(protocol)) {
+		  throw new RuntimeException("Not implemented yet: http");
+		} else {
+		  server.run ();
+		}
 	}
 }

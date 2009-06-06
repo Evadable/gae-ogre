@@ -27,6 +27,7 @@ import nanoxml.XMLElement;
 import org.jogre.common.AbstractConnectionThread;
 import org.jogre.common.Game;
 import org.jogre.common.IJogre;
+import org.jogre.common.MessageBus;
 import org.jogre.common.Player;
 import org.jogre.common.PlayerList;
 import org.jogre.common.SocketBasedMessageBus;
@@ -82,16 +83,25 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @param clientSocket      Client connection.
 	 */
 	public ServerConnectionThread (Socket clientSocket, AbstractGameServer server) {
-		super (new SocketBasedMessageBus(clientSocket));
-
-		// Get link to the server (singleton) and the various parsers
-		this.server       = server;
-		this.controllers  = server.getControllers();
-
-		// and also set up links to server objects which are often used.
-		this.connections = server.getConnections();	 // link to connections
+		this (new SocketBasedMessageBus(clientSocket), server);
 	}
 
+  /**
+   * Constructor which takes a message bus and a link to the server.
+   *
+   * @param messageBus      Message Bus.
+   */
+  public ServerConnectionThread (MessageBus messageBus, AbstractGameServer server) {
+    super (messageBus);
+
+    // Get link to the server (singleton) and the various parsers
+    this.server       = server;
+    this.controllers  = server.getControllers();
+
+    // and also set up links to server objects which are often used.
+    this.connections = server.getConnections();  // link to connections
+  }
+  
 	/**
 	 * Initilise this server connection thread with a username and a
 	 * game key.
