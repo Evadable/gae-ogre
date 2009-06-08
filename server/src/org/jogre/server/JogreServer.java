@@ -26,6 +26,14 @@ import java.net.Socket;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.jogre.common.IError;
 import org.jogre.common.IJogre;
 import org.jogre.common.JogreGlobals;
@@ -35,6 +43,8 @@ import org.jogre.server.data.IServerData;
 import org.jogre.server.data.ServerDataException;
 import org.jogre.server.data.ServerDataFactory;
 import org.jogre.server.data.db.DBConnection;
+import org.jogre.server.http.CommunicationHandler;
+import org.jogre.server.http.InMemoryMessageBusFactory;
 
 /**
  * <p>This is the all important JogreServer class.</p>
@@ -154,12 +164,33 @@ public class JogreServer extends AbstractGameServer {
     System.out.println ("\t-port=x         x=" + labels.get ("port.number.default.1790"));
         System.out.println ("\t-lang=x         x=" + JogreGlobals.SUPPORTED_LANGS);
   }
+  
+  /**
+   * Run the server using the http protocol
+   */
+  private void runHttpBased() throws Exception {
+    System.out.println (labels.get("jogre.games.server.listening.on.port") + ": " + serverPort);
+    final CommunicationHandler comm = new CommunicationHandler(this, new InMemoryMessageBusFactory());
+    final Handler handler =new AbstractHandler()  {
+        @Override
+        public void handle(String target, Request req,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException,
+            ServletException {
+          comm.dispatch(request, response);
+          ((Request)request).setHandled(true);
+        }
+    };
+    Server srv = new Server(serverPort);
+    srv.setHandler(handler);
+    srv.start();
+  }
 
   /**
    * Run method which runs a new server and listens for clients on the
    * specified port.
    */
-  public void run () {
+  private void runSocketBased () {
     
     // Output welcome message to the console         
     System.out.println ("------------------------------------------------------------------");
@@ -285,7 +316,7 @@ public class JogreServer extends AbstractGameServer {
 	 *
 	 * @param args     Additional arguments from command line.
 	 */
-	public static void main (String [] args) {
+	public static void main (String [] args) throws Exception {
 	  
 	  // Set up downwards compatible logging
 	  DownwardsCompatibleLogger.install();
@@ -314,9 +345,9 @@ public class JogreServer extends AbstractGameServer {
 		server.init();		
 		final String protocol = ServerProperties.getInstance().getProtocol();
 		if ("http".equalsIgnoreCase(protocol)) {
-		  throw new RuntimeException("Not implemented yet: http");
+		  server.runHttpBased();
 		} else {
-		  server.run ();
+		  server.runSocketBased ();
 		}
 	}
 }

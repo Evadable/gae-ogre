@@ -26,6 +26,7 @@ import nanoxml.XMLElement;
 import org.jogre.client.IClient;
 import org.jogre.common.AbstractConnectionThread;
 import org.jogre.common.GameList;
+import org.jogre.common.MessageBus;
 import org.jogre.common.SocketBasedMessageBus;
 import org.jogre.common.comm.Comm;
 import org.jogre.common.comm.CommAdminMessage;
@@ -50,12 +51,12 @@ public class AdminClientConnectionThread extends AbstractConnectionThread {
 	 * Default constructor which takes a Socket connection to the server, a
 	 * username and an IClient which sits between this class and the GUI.
 	 *
-	 * @param connection       Socket connection to server.
+	 * @param bus       connection to server.
 	 * @param username         Username
 	 * @param clientInterface  Interface between this class and GUI.
 	 */
-	public AdminClientConnectionThread (Socket connection, String username, IClient clientInterface) {
-		super (new SocketBasedMessageBus(connection));
+	public AdminClientConnectionThread (MessageBus bus, String username, IClient clientInterface) {
+		super (bus);
 
 		setUsername(username);
 		this.clientInterface = clientInterface;

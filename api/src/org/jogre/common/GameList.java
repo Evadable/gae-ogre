@@ -94,7 +94,14 @@ public class GameList implements ITransmittable {
 	 * @return          Game Object stored in cache.
 	 */
 	public Game getGame (String gameKey) {
-		return (Game)gamelist.get (gameKey);
+	  if (gameKey == null) {
+	    throw new NullPointerException("Game key is null");
+	  }
+		final Game result = (Game)gamelist.get (gameKey);
+    if (result == null) {
+      throw new NullPointerException("Game is null for key: " + gameKey);
+    }
+    return result;
 	}
 
 	/**

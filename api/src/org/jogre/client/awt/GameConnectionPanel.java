@@ -25,6 +25,8 @@ import nanoxml.XMLElement;
 
 import org.jogre.client.ClientConnectionThread;
 import org.jogre.common.Game;
+import org.jogre.common.MessageBus;
+import org.jogre.common.SocketBasedMessageBus;
 import org.jogre.common.TransmissionException;
 import org.jogre.common.comm.Comm;
 import org.jogre.common.comm.CommError;
@@ -82,12 +84,12 @@ public class GameConnectionPanel extends ConnectionPanel {
 	 * 
 	 * @see org.jogre.client.awt.ConnectionPanel#connect(java.lang.String, int, java.lang.String, java.lang.String)
 	 */
-	protected void connect (Socket socket, 
+	protected void connect (MessageBus bus, 
 			                String username,
 			                String password) 
 	{
 		// Create a new connection thread to handle communication
-        this.conn = new ClientConnectionThread (socket, username, this);
+        this.conn = new ClientConnectionThread (bus, username, this);
         conn.getMessageBus().open(conn);       // Start the thread
 
         // Create a connect message.
