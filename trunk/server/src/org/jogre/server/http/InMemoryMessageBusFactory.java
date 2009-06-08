@@ -97,7 +97,7 @@ public class InMemoryMessageBusFactory implements MessageBusFactory {
       HttpServletResponse response) throws IOException {
     final NaiiveMessageBus busImpl = (NaiiveMessageBus) bus;
     final int newState = newCount();
-    PayloadBuilder payload = PayloadBuilder.payload("" + newState);
+    PayloadBuilder payload = PayloadBuilder.payload(busImpl.id + "," + newState);
     synchronized (busImpl.snippets) {
       for (QueuedMessage snippet : busImpl.snippets) {
         snippet.id = newState;

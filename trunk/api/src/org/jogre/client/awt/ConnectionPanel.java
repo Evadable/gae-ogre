@@ -35,7 +35,11 @@ import javax.swing.JTextField;
 import nanoxml.XMLElement;
 
 import org.jogre.client.IClient;
+import org.jogre.client.http.HttpClientEnvironment;
+import org.jogre.client.http.HttpClientMessageBus;
 import org.jogre.common.IJogre;
+import org.jogre.common.MessageBus;
+import org.jogre.common.SocketBasedMessageBus;
 import org.jogre.common.comm.Comm;
 import org.jogre.common.comm.CommError;
 import org.jogre.common.util.JogreLabels;
@@ -78,11 +82,11 @@ public abstract class ConnectionPanel extends JogrePanel
      * Abstract method for connecting to a Jogre server which must be overwritten
      * in the implmentation.  This may be
      * 
-     * @param socket    Socket object to connect to server with. 
+     * @param bus    MessageBus object to connect to server with. 
      * @param username  Username to connect to server.
      * @param password  Password to connect to server.
      */
-    protected abstract void connect (Socket socket, String username, String password);
+    protected abstract void connect (MessageBus bus, String username, String password);
         
     /**
      * Constructor for an application which doesn't take a
@@ -210,11 +214,19 @@ public abstract class ConnectionPanel extends JogrePanel
 
         // Try and create a socket connection
         Socket socket = null;
-        try {            
-        	socket = new Socket (server, port);
+        try {
+          
+          MessageBus bus = null;
+          
+          if (false) {
+            bus = new SocketBasedMessageBus(new Socket(server, port));
+          } else {          
+            bus = new HttpClientMessageBus(new HttpClientEnvironment(
+                "http://" + server + ":" + port), 1000, 5);
+          }
 
         	// Let sub class handle the connection for here on...
-        	connect (socket, username, password);
+        	connect (bus, username, password);
         }
         catch (ConnectException coEx) {
         	statusLabel.setText (labels.get("cannot.connect.to.server"));	

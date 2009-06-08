@@ -51,6 +51,7 @@ public class CommunicationHandler {
       payload.parseFromReader(reader);
     } catch (XMLParseException e) {
       resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
+      return;
     }
     if (!payload.getName().equals(PayloadBuilder.TAG)) {
       resp.sendError(HttpServletResponse.SC_BAD_REQUEST);

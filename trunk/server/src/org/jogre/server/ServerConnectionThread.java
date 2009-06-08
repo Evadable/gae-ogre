@@ -68,12 +68,6 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	/** Link to the various parsers. */
 	private ServerControllerList controllers = null;
 
-	/** Convience link to the userlist. */
-	private UserList userList = null;
-
-	/** Convience link to the tablelist. */
-	private TableList tableList = null;
-
 	/** Connection list. */
 	private ConnectionList connections = null;
 	
@@ -112,11 +106,6 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	public void init (String username, String gameID) {
 		setUsername(username);
 		getMessageBus().setProperty(GAME_ID_KEY, gameID);
-
-		// Set convience fields
-		Game game = server.getGameList().getGame (gameID);
-		this.userList = game.getUserList();	     // link to userlist
-		this.tableList = game.getTableList();	 // link to table list
 	}
 	
 	/**
@@ -240,7 +229,8 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @return   Userlist.
 	 */
 	public UserList getUserList () {
-		return this.userList;
+    Game game = server.getGameList().getGame(getGameID());
+    return game.getUserList();
 	}
 
 	/**
@@ -249,7 +239,8 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @return
 	 */
 	public TableList getTableList () {
-	    return this.tableList;
+    Game game = server.getGameList().getGame(getGameID());
+    return game.getTableList();
 	}
 	
 	/**
@@ -276,13 +267,13 @@ public class ServerConnectionThread extends AbstractConnectionThread
 			server.getConnections().removeConnection (getGameID(), getUsername());
 		
 		// Game users only
-		if (userList != null && tableList != null) {
+		if (getUserList() != null && getTableList() != null) {
 		    logger.debug ("cleanup", "remove user");
-		    userList.removeUser (getUsername());
+		    getUserList().removeUser (getUsername());
 
 			// remove any instance of the user from the table list
 			logger.debug ("cleanup", "removing table");
-		    tableList.removeUserFromTables (getUsername());
+		    getTableList().removeUserFromTables (getUsername());
 
 			// Inform all connected clients that user has disconnected from game
 			CommDisconnect commDisconnect = new CommDisconnect (getUsername());
@@ -314,7 +305,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		    ((CommTableMessage)transObject).setTableNum (tableNum);
 
 		// Insure that that user is actually in this table
-		Table table = tableList.getTable(tableNum);
+		Table table = getTableList().getTable(tableNum);
 		if (table != null) {
 			PlayerList playerList = table.getPlayerList();
 			Player player = playerList.getPlayer(usernameTo);
@@ -333,7 +324,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		if (transObject instanceof CommTableMessage)
 		    ((CommTableMessage)transObject).setTableNum (tableNum);
 
-		Table table = tableList.getTable(tableNum);
+		Table table = getTableList().getTable(tableNum);
 		if (table != null) {
 			Vector players = table.getPlayerList().getPlayers();
 
@@ -370,7 +361,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		if (transObject instanceof CommTableMessage)
 		    ((CommTableMessage)transObject).setTableNum (tableNum);
 
-	    Table table = tableList.getTable(tableNum);
+	    Table table = getTableList().getTable(tableNum);
 		if (table != null) {
 		    Vector players = table.getPlayerList().getPlayers();
 
@@ -398,7 +389,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 */
 	public void broadcast (ITransmittable transmittableObject) {
 		// retrieve all the clients
-		Vector users = userList.getUsers();
+		Vector users = getUserList().getUsers();
 		for (int i = 0; i < users.size(); i++) {
 			transmit((String)users.get(i), transmittableObject);
 		}
@@ -412,7 +403,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 */
 	public void broadcast (String omitUser, ITransmittable transmittableObject) {
 		// retrieve all the clients
-		Vector users = userList.getUsers();
+		Vector users = getUserList().getUsers();
 		for (int i = 0; i < users.size(); i++) {
 			String currentUsername = (String)users.get(i);
 			if (!omitUser.equals(currentUsername))
