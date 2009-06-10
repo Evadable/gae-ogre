@@ -19,7 +19,6 @@
  */
 package org.jogre.server;
 
-import java.net.Socket;
 import java.util.Vector;
 
 import nanoxml.XMLElement;
@@ -30,7 +29,6 @@ import org.jogre.common.IJogre;
 import org.jogre.common.MessageBus;
 import org.jogre.common.Player;
 import org.jogre.common.PlayerList;
-import org.jogre.common.SocketBasedMessageBus;
 import org.jogre.common.Table;
 import org.jogre.common.TableList;
 import org.jogre.common.TransmissionException;
@@ -42,7 +40,6 @@ import org.jogre.common.comm.CommTableMessage;
 import org.jogre.common.comm.ITransmittable;
 import org.jogre.common.playerstate.PlayerStateGameStarted;
 import org.jogre.common.util.JogreLogger;
-import org.jogre.server.controllers.ServerControllerList;
 import org.jogre.server.data.ServerDataException;
 
 /**
@@ -60,25 +57,10 @@ public class ServerConnectionThread extends AbstractConnectionThread
   private static final String IS_ADMINISTRATOR_KEY = "isAdmin";
 
 	/** Logging */
-	JogreLogger logger = new JogreLogger (this.getClass());
+	final JogreLogger logger = new JogreLogger (this.getClass());
 
 	/** link to the JogreServer */
 	protected final AbstractGameServer server;
-
-	/** Link to the various parsers. */
-	private ServerControllerList controllers = null;
-
-	/** Connection list. */
-	private ConnectionList connections = null;
-	
-	/**
-	 * Constructor which takes a socket connection and a link to the server.
-	 *
-	 * @param clientSocket      Client connection.
-	 */
-	public ServerConnectionThread (Socket clientSocket, AbstractGameServer server) {
-		this (new SocketBasedMessageBus(clientSocket), server);
-	}
 
   /**
    * Constructor which takes a message bus and a link to the server.
@@ -90,10 +72,6 @@ public class ServerConnectionThread extends AbstractConnectionThread
 
     // Get link to the server (singleton) and the various parsers
     this.server       = server;
-    this.controllers  = server.getControllers();
-
-    // and also set up links to server objects which are often used.
-    this.connections = server.getConnections();  // link to connections
   }
   
 	/**
@@ -133,11 +111,11 @@ public class ServerConnectionThread extends AbstractConnectionThread
 			// If message contains a "table" attribute then delegate to a table message
 			if (sTableNum == null) {				
 				// Parse game message
-	            controllers.getGameController().parseGameMessage (this, message);
+			  server.getControllers().getGameController().parseGameMessage (this, message);
 			}
 	        else {
 	            int tableNum = Integer.parseInt (sTableNum);
-	            controllers.getTableController().parseTableMessage (this, message, tableNum);
+	            server.getControllers().getTableController().parseTableMessage (this, message, tableNum);
 	        }
 	        
 	        // Send a copy to the administrator thread if it is listening.
@@ -171,7 +149,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 		// Wrap the message inside an <admin_message> which details
 		// additional info about the message such as which user thread has sent it
 		// and what game.
-		ServerConnectionThread conn = connections.getAdminConnection();
+		ServerConnectionThread conn = server.getConnections().getAdminConnection();
 		
 		if (conn != null) {		// ensure we're not sending same message twice
 			CommAdminGameMessage adminMessage = new CommAdminGameMessage (isReceivingMessage, getGameID(), getUsername(), message); 
@@ -187,7 +165,7 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @param isReceivingMessage
 	 */
 	public void sendDataMessageToAdmin (ITransmittable message) {
-		ServerConnectionThread conn = connections.getAdminConnection();
+		ServerConnectionThread conn = server.getConnections().getAdminConnection();
 		
 		if (conn != null) {		// ensure we're not sending same message twice
 			CommAdminMessage adminMessage = new CommAdminMessage (getGameID(), getUsername(), message.flatten());
@@ -418,7 +396,8 @@ public class ServerConnectionThread extends AbstractConnectionThread
 	 * @param transObject  Transmittable object.
 	 */
 	public void transmit (String username, ITransmittable transObject) {
-		ServerConnectionThread conn = connections.getServerConnectionThread (getGameID(), username);
+		ServerConnectionThread conn = server.getConnections().getServerConnectionThread (
+		    getGameID(), username);
 
 		// Send the object to the user
 		conn.send (transObject);

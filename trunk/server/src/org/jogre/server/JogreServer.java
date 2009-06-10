@@ -37,6 +37,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.jogre.common.IError;
 import org.jogre.common.IJogre;
 import org.jogre.common.JogreGlobals;
+import org.jogre.common.SocketBasedMessageBus;
 import org.jogre.common.util.DownwardsCompatibleLogger;
 import org.jogre.common.util.JogreLabels;
 import org.jogre.server.data.IServerData;
@@ -222,9 +223,10 @@ public class JogreServer extends AbstractGameServer {
         Socket clientSocket = listenSocket.accept ();
 
         // Try to connect client to this server
-        ServerConnectionThread conn = new ServerConnectionThread (clientSocket, this);
+        ServerConnectionThread conn = new ServerConnectionThread (
+            new SocketBasedMessageBus(clientSocket), this);
 
-                conn.getMessageBus().open(conn);
+        conn.getMessageBus().open(conn);
       }
     }
     catch (BindException bindEx) {
