@@ -55,6 +55,7 @@ public class CommunicationHandler {
     }
     if (!payload.getName().equals(PayloadBuilder.TAG)) {
       resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      return;
     }
     
     // New or existing connection?
