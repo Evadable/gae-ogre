@@ -14,6 +14,7 @@ import nanoxml.XMLParseException;
 import org.jogre.common.MessageBus;
 import org.jogre.common.PayloadBuilder;
 import org.jogre.common.TransmissionException;
+import org.jogre.common.MessageBus.MessageParser;
 import org.jogre.common.util.JogreLogger;
 import org.jogre.server.AbstractGameServer;
 import org.jogre.server.ServerConnectionThread;
@@ -34,6 +35,10 @@ public class CommunicationHandler {
   public CommunicationHandler(AbstractGameServer gameServer, MessageBusFactory busFactory) {
     this.gameServer = gameServer;
     this.busFactory = busFactory;
+  }
+  
+  MessageParser newParser(MessageBus bus) {
+    return new ServerConnectionThread (bus, gameServer);
   }
 
   /**
@@ -66,7 +71,7 @@ public class CommunicationHandler {
       bus = busFactory.newMessageBus(req);
       newBus = true;
     }
-    ServerConnectionThread conn = new ServerConnectionThread (bus, gameServer);
+    MessageParser conn = newParser(bus);
     if (newBus) {
       bus.open(conn);
     }
