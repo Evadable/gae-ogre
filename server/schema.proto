@@ -1,0 +1,29 @@
+// JOGRE protocol-buffer based schema definition
+// author: Jens Scheffler
+
+// Compile from project root with
+// ./protoc --java_out=./src schema.proto
+
+package javatests;
+
+option java_package = "org.jogre.server.data";
+option java_outer_classname = "ProtoSchema";
+option optimize_for = SPEED;
+
+// A message that is queued for http delivery
+message OutgoingMessage {
+  required string payload = 1;
+  required int32 ackToken = 2;
+}
+
+// A key/value pair of strings
+message Property {
+  required string key = 1;
+  required string value = 2;
+}
+
+// The persistent state of a MessageBus
+message MessageBusState {
+  repeated OutgoingMessage messageQueue = 1;
+  repeated Property connectionProperties = 2;
+}
