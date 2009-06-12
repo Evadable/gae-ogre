@@ -18,10 +18,15 @@ import com.google.appengine.repackaged.com.google.common.base.Preconditions;
  */
 public class StoreBasedMessageBus implements MessageBus {
   
-  private String key;
   private final Persistence<MessageBusState> store;
-  private final Properties cachedProperties = new Properties();
+  
+  private String key;
+  private Properties cachedProperties;
   private boolean mayCacheMessages;
+  
+  String getRandomKey() {
+    return String.valueOf(Math.random()).substring(2);
+  }
   
   StoreBasedMessageBus(String key, Persistence<byte[]> binaryStore) {
     Preconditions.checkNotNull(binaryStore);
