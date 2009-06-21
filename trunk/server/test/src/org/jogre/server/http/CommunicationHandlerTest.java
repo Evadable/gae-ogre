@@ -92,6 +92,7 @@ public class CommunicationHandlerTest extends TestCase implements Comparator {
     EasyMock.expect(factory.newMessageBus(req)).andReturn(bus);
     bus.open(parser);
     factory.writeState(bus, resp);
+    factory.commit(req);
     control.replay();
     handler.dispatch(req, resp);
     control.verify();
@@ -102,6 +103,7 @@ public class CommunicationHandlerTest extends TestCase implements Comparator {
     requestBody = PayloadBuilder.payload("foo").toString();
     EasyMock.expect(factory.loadMessageBus(req, "foo")).andReturn(bus);
     factory.writeState(bus, resp);
+    factory.commit(req);
     control.replay();
     handler.dispatch(req, resp);
     control.verify();
@@ -114,8 +116,27 @@ public class CommunicationHandlerTest extends TestCase implements Comparator {
     parser.parse((XMLElement) EasyMock.cmp("<a/>", this, LogicalOperator.EQUAL));
     parser.parse((XMLElement) EasyMock.cmp("<b/>", this, LogicalOperator.EQUAL));
     factory.writeState(bus, resp);
+    factory.commit(req);
     control.replay();
     handler.dispatch(req, resp);
+    control.verify();
+    assertEquals(1, amountOfCallsToNewParser);
+  }
+  
+  public void testRollback() throws Exception {
+    requestBody = PayloadBuilder.payload("foo").toString();
+    EasyMock.expect(factory.loadMessageBus(req, "foo")).andReturn(bus);
+    factory.writeState(bus, resp);
+    RuntimeException ex = new RuntimeException("expected");
+    EasyMock.expectLastCall().andThrow(ex);
+    factory.rollback(req);
+    control.replay();
+    try {
+      handler.dispatch(req, resp);
+      fail("Should have thrown a RuntimeException");
+    } catch (RuntimeException e) {
+      assertEquals(e, ex);
+    }
     control.verify();
     assertEquals(1, amountOfCallsToNewParser);
   }

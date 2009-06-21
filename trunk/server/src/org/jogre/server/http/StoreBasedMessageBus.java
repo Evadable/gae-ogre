@@ -23,13 +23,17 @@ import com.google.common.collect.Lists;
  * @author Jens Scheffler
  *
  */
-public class StoreBasedMessageBus implements MessageBus {
+class StoreBasedMessageBus implements MessageBus {
   
   private final Persistence<MessageBusState> store;
   
   private String key;
   private Properties cachedProperties;
   private List<String> unsavedMessages = Lists.newArrayList();
+  private String cachedSecret;
+  private int highestAckedMessage = -1;
+  private boolean isModified;
+  private MessageBusState lastKnownState = null;
   
   String getRandomKey() {
     return String.valueOf(Math.random()).substring(2);
@@ -50,12 +54,14 @@ public class StoreBasedMessageBus implements MessageBus {
       throw new ConcurrentModificationException("bus is not open");
     }
     if (cachedProperties == null) {
-      MessageBusState state = store.get(key);
-      if (state == null) {
+      lastKnownState = store.get(key);
+      if (lastKnownState == null) {
         throw new ConcurrentModificationException("bus has already been closed");
       }
+      isModified = false;
+      cachedSecret = lastKnownState.getRandomSecret();
       cachedProperties = new Properties();
-      for (Property p : state.getConnectionPropertiesList()) {
+      for (Property p : lastKnownState.getConnectionPropertiesList()) {
         cachedProperties.setProperty(p.getKey(), p.getValue());
       }
     }
@@ -65,6 +71,7 @@ public class StoreBasedMessageBus implements MessageBus {
   public void close() {
     checkOpen();
     store.mutate(key, Functions.constant((MessageBusState) null));
+    isModified = false;
     cachedProperties = null;
   }
 
@@ -83,6 +90,7 @@ public class StoreBasedMessageBus implements MessageBus {
     }
     
     // Try to create a new entry in the store
+    isModified = false;
     while(key == null) {
       
       // Create random key and try to insert
@@ -98,7 +106,11 @@ public class StoreBasedMessageBus implements MessageBus {
           }
           
           // No collision, so store a new empty object
-          return MessageBusState.newBuilder().build();
+          cachedSecret = String.valueOf(Math.random());
+          return lastKnownState = MessageBusState
+                                  .newBuilder()
+                                  .setRandomSecret(cachedSecret)
+                                  .build();
         }});
     }
   }
@@ -106,12 +118,14 @@ public class StoreBasedMessageBus implements MessageBus {
   @Override
   public void send(ITransmittable transObject) {
     checkOpen();
+    isModified = true;
     unsavedMessages.add(transObject.flatten().toString());
   }
 
   @Override
   public void setProperty(String key, String valueOrNull) {
     checkOpen();
+    isModified = true;
     if (valueOrNull != null) {
       cachedProperties.setProperty(key, valueOrNull);
     } else {
@@ -121,6 +135,9 @@ public class StoreBasedMessageBus implements MessageBus {
 
   void save() {
     checkOpen();
+    if (!isModified) {
+      return;
+    }
     store.mutate(key, new Function<MessageBusState, MessageBusState>(){
       @Override
       public MessageBusState apply(MessageBusState oldState) {
@@ -144,23 +161,55 @@ public class StoreBasedMessageBus implements MessageBus {
               .build());
         }
         
+        // Remove any acked message
+        int maxId = Math.max(highestAckedMessage, 1);
+        builder.clearMessageQueue();
+        for (int i = oldState.getMessageQueueCount() - 1; i >= 0; i--) {
+          OutgoingMessage messageInQueue = oldState.getMessageQueue(i);
+          maxId = Math.max(maxId, messageInQueue.getAckToken());
+          if (messageInQueue.getAckToken() > highestAckedMessage) {
+            builder.addMessageQueue(messageInQueue);
+          }
+        }
+        
         // Attach any cached messages
         if (!unsavedMessages.isEmpty()) {
+          maxId++;
           for (String payload : unsavedMessages) {
             builder.addMessageQueue(
                 OutgoingMessage.newBuilder()
-                .setAckToken(-1)
+                .setAckToken(maxId)
                 .setPayload(payload)
                 .build());
           }
         }
         
         // Done
-        return builder.build();
+        return lastKnownState = builder.build();
       }});
     
     // If there were any unsaved messages and we arrived at this point,
     // they should be persisted
     unsavedMessages.clear();
+  }
+  
+  String getHandle() {
+    checkOpen();
+    return key;
+  }
+  
+  String getSecret() {
+    checkOpen();
+    return cachedSecret;
+  }
+  
+  void ack(int lastAckTocken) {
+    checkOpen();
+    isModified = true;
+    highestAckedMessage = Math.max(highestAckedMessage, lastAckTocken);
+  }
+  
+  MessageBusState getLastKnownState() {
+    return lastKnownState;
   }
 }

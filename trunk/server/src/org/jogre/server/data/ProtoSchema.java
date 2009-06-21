@@ -638,8 +638,15 @@ public final class ProtoSchema {
       return connectionProperties_.get(index);
     }
     
+    // required string randomSecret = 3;
+    private boolean hasRandomSecret;
+    private java.lang.String randomSecret_ = "";
+    public boolean hasRandomSecret() { return hasRandomSecret; }
+    public java.lang.String getRandomSecret() { return randomSecret_; }
+    
     @Override
     public final boolean isInitialized() {
+      if (!hasRandomSecret) return false;
       for (org.jogre.server.data.ProtoSchema.OutgoingMessage element : getMessageQueueList()) {
         if (!element.isInitialized()) return false;
       }
@@ -658,6 +665,9 @@ public final class ProtoSchema {
       for (org.jogre.server.data.ProtoSchema.Property element : getConnectionPropertiesList()) {
         output.writeMessage(2, element);
       }
+      if (hasRandomSecret()) {
+        output.writeString(3, getRandomSecret());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -675,6 +685,10 @@ public final class ProtoSchema {
       for (org.jogre.server.data.ProtoSchema.Property element : getConnectionPropertiesList()) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, element);
+      }
+      if (hasRandomSecret()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(3, getRandomSecret());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -822,6 +836,9 @@ public final class ProtoSchema {
           }
           result.connectionProperties_.addAll(other.connectionProperties_);
         }
+        if (other.hasRandomSecret()) {
+          setRandomSecret(other.getRandomSecret());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -866,6 +883,10 @@ public final class ProtoSchema {
               org.jogre.server.data.ProtoSchema.Property.Builder subBuilder = org.jogre.server.data.ProtoSchema.Property.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addConnectionProperties(subBuilder.buildPartial());
+              break;
+            }
+            case 26: {
+              setRandomSecret(input.readString());
               break;
             }
           }
@@ -962,6 +983,24 @@ public final class ProtoSchema {
         result.connectionProperties_ = java.util.Collections.emptyList();
         return this;
       }
+      
+      // required string randomSecret = 3;
+      public boolean hasRandomSecret() {
+        return result.hasRandomSecret();
+      }
+      public java.lang.String getRandomSecret() {
+        return result.getRandomSecret();
+      }
+      public Builder setRandomSecret(java.lang.String value) {
+        result.hasRandomSecret = true;
+        result.randomSecret_ = value;
+        return this;
+      }
+      public Builder clearRandomSecret() {
+        result.hasRandomSecret = false;
+        result.randomSecret_ = "";
+        return this;
+      }
     }
     
     static {
@@ -996,10 +1035,11 @@ public final class ProtoSchema {
       "\n\014schema.proto\022\tjavatests\"4\n\017OutgoingMes" +
       "sage\022\017\n\007payload\030\001 \002(\t\022\020\n\010ackToken\030\002 \002(\005\"" +
       "&\n\010Property\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"" +
-      "v\n\017MessageBusState\0220\n\014messageQueue\030\001 \003(\013" +
-      "2\032.javatests.OutgoingMessage\0221\n\024connecti" +
-      "onProperties\030\002 \003(\0132\023.javatests.PropertyB" +
-      "&\n\025org.jogre.server.dataB\013ProtoSchemaH\001";
+      "\214\001\n\017MessageBusState\0220\n\014messageQueue\030\001 \003(" +
+      "\0132\032.javatests.OutgoingMessage\0221\n\024connect" +
+      "ionProperties\030\002 \003(\0132\023.javatests.Property" +
+      "\022\024\n\014randomSecret\030\003 \002(\tB&\n\025org.jogre.serv" +
+      "er.dataB\013ProtoSchemaH\001";
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
@@ -1026,7 +1066,7 @@ public final class ProtoSchema {
           internal_static_javatests_MessageBusState_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_javatests_MessageBusState_descriptor,
-              new java.lang.String[] { "MessageQueue", "ConnectionProperties", },
+              new java.lang.String[] { "MessageQueue", "ConnectionProperties", "RandomSecret", },
               org.jogre.server.data.ProtoSchema.MessageBusState.class,
               org.jogre.server.data.ProtoSchema.MessageBusState.Builder.class);
           return null;

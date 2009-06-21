@@ -143,6 +143,17 @@ public class StoreBasedMessageBusTest extends TestCase {
     assertEquals(protoStore.get(KEY).getMessageQueueCount(), 1);
     OutgoingMessage element = protoStore.get(KEY).getMessageQueue(0);
     assertEquals(new CommError(23).flatten().toString(), element.getPayload());
-    assertEquals(-1, element.getAckToken());
+    assertEquals(2, element.getAckToken());
+  }
+
+  public void testSendAckSend() {
+    testSendMessage();
+    bus.ack(2);
+    bus.send(new CommError(24));
+    bus.save();
+    assertEquals(protoStore.get(KEY).getMessageQueueCount(), 1);
+    OutgoingMessage element = protoStore.get(KEY).getMessageQueue(0);
+    assertEquals(new CommError(24).flatten().toString(), element.getPayload());
+    assertEquals(3, element.getAckToken());
   }
 }
