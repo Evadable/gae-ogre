@@ -64,4 +64,14 @@ public interface MessageBusFactory {
    * @return a MessageBus object, or null if the handle is invalid
    */
   public MessageBus fromHandle(String handle);
+  
+  /**
+   * Commits any changes made to the store in this thread that have not been written yet.
+   */
+  public void commit(HttpServletRequest request);
+  
+  /**
+   * Commits any changes made to the store in this thread that have not been written yet.
+   */
+  public void rollback(HttpServletRequest request);
 }

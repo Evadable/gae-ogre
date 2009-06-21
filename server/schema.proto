@@ -26,4 +26,5 @@ message Property {
 message MessageBusState {
   repeated OutgoingMessage messageQueue = 1;
   repeated Property connectionProperties = 2;
+  required string randomSecret = 3;
 }

@@ -158,4 +158,14 @@ public class InMemoryMessageBusFactory implements MessageBusFactory {
       }
     }
   }
+
+  @Override
+  public void commit(HttpServletRequest request) {
+    // Nothing to do, since all objects are in memory
+  }
+
+  @Override
+  public void rollback(HttpServletRequest request) {
+    // Nothing to do, since all objects are in memory
+  }
 }

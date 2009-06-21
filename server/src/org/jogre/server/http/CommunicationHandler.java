@@ -63,31 +63,45 @@ public class CommunicationHandler {
       return;
     }
     
-    // New or existing connection?
-    MessageBus bus = busFactory.loadMessageBus(
-        req, payload.getAttribute(PayloadBuilder.META, "").toString());
-    boolean newBus = false;
-    if (bus == null) {
-      bus = busFactory.newMessageBus(req);
-      newBus = true;
-    }
-    MessageParser conn = newParser(bus);
-    if (newBus) {
-      bus.open(conn);
-    }
+    boolean success = false;
     
-    // Process the payload
-    for (XMLElement child : (Vector<XMLElement>)payload.getChildren()) {
-      try {
-        conn.parse(child);
-      } catch (TransmissionException e) {
-        logger.error("dispatch", "Error while processing " + child);
-        logger.stacktrace(e);
+    try {
+      // New or existing connection?
+      MessageBus bus = busFactory.loadMessageBus(
+          req, payload.getAttribute(PayloadBuilder.META, "").toString());
+      boolean newBus = false;
+      if (bus == null) {
+        bus = busFactory.newMessageBus(req);
+        newBus = true;
+      }
+      MessageParser conn = newParser(bus);
+      if (newBus) {
+        bus.open(conn);
+      }
+      
+      // Process the payload
+      for (XMLElement child : (Vector<XMLElement>)payload.getChildren()) {
+        try {
+          conn.parse(child);
+        } catch (TransmissionException e) {
+          logger.error("dispatch", "Error while processing " + child);
+          logger.stacktrace(e);
+        }
+      }
+      
+      // Now, put some data into the response and return
+      busFactory.writeState(bus, resp);
+      success = true;
+      
+    } finally {
+      
+      // Commit all changes to the store, or roll them back
+      if (success) {
+        busFactory.commit(req);
+      } else {
+        busFactory.rollback(req);
       }
     }
-    
-    // Now, put some data into the response and return
-    busFactory.writeState(bus, resp);
   }
   
 }
