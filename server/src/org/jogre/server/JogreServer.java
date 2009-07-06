@@ -44,8 +44,9 @@ import org.jogre.server.data.IServerData;
 import org.jogre.server.data.ServerDataException;
 import org.jogre.server.data.ServerDataFactory;
 import org.jogre.server.data.db.DBConnection;
-import org.jogre.server.http.CommunicationHandler;
-import org.jogre.server.http.InMemoryMessageBusFactory;
+
+import com.appenginefan.toolkit.common.WebConnectionServer;
+import com.appenginefan.toolkit.persistence.MapBasedPersistence;
 
 /**
  * <p>This is the all important JogreServer class.</p>
@@ -95,6 +96,12 @@ public class JogreServer extends AbstractGameServer {
    * @throws ServerDataException 
    */
   public void init () {
+    
+    // Inject this instance into the connection list?
+    if (getConnections() instanceof WebConnectionList) {
+      ((WebConnectionList) getConnections()).setGameServer(this);
+    }
+    
     // Reset the server snapshot
     try {
       // Reset the database snapshot table
@@ -171,14 +178,14 @@ public class JogreServer extends AbstractGameServer {
    */
   private void runHttpBased() throws Exception {
     System.out.println (labels.get("jogre.games.server.listening.on.port") + ": " + serverPort);
-    final CommunicationHandler comm = new CommunicationHandler(this, new InMemoryMessageBusFactory());
+    final WebConnectionList connections = (WebConnectionList) getConnections();
     final Handler handler =new AbstractHandler()  {
         @Override
         public void handle(String target, Request req,
             HttpServletRequest request,
             HttpServletResponse response) throws IOException,
             ServletException {
-          comm.dispatch(request, response);
+          connections.getServer().dispatch(connections, request, response);
           ((Request)request).setHandled(true);
         }
     };
@@ -311,24 +318,33 @@ public class JogreServer extends AbstractGameServer {
       }
     }
   }
-  
-	/**
-	 * Main method which creates a single instance of the server,
-	 * parses the commandline arguments and then runs the server.
-	 *
-	 * @param args     Additional arguments from command line.
-	 */
-	public static void main (String [] args) throws Exception {
-	  
-	  // Set up downwards compatible logging
-	  DownwardsCompatibleLogger.install();
-	  
+
+  /**
+   * Main method which creates a single instance of the server,
+   * parses the commandline arguments and then runs the server.
+   *
+   * @param args     Additional arguments from command line.
+   */
+  public static void main (String [] args) throws Exception {
+    
+    // Set up downwards compatible logging
+    DownwardsCompatibleLogger.install();
+    
     // Setup server properties (read "server.xml" file)
     ServerProperties.setUpFromFile();
-	  
-		// Initialise the server
-		JogreServer server = new JogreServer(new InMemoryConnectionList (), ServerDataFactory.getInstance ());
-		
+    
+    // Set up the connection list
+    final String protocol = ServerProperties.getInstance().getProtocol();
+    ConnectionList connections = new InMemoryConnectionList();
+    if ("http".equalsIgnoreCase(protocol)) {
+      final WebConnectionServer comm = 
+        WebConnectionServer.fromPeristence(new MapBasedPersistence<byte[]>());
+      connections = new WebConnectionList(comm, new MapBasedPersistence<String>());
+    }
+    
+    // Initialise the server
+    JogreServer server = new JogreServer(connections, ServerDataFactory.getInstance ());
+    
     // Type initial games server info.
     System.out.println ("------------------------------------------------------------------");
     System.out.println ("                J O G R E   G A M E S   S E R V E R");
@@ -337,19 +353,19 @@ public class JogreServer extends AbstractGameServer {
     System.out.println (server.labels.get("version") + ":\t\t" + IJogre.VERSION);
     System.out.println (ServerLabels.getInstance().get("server.properties") + ":\t" + ServerProperties.getInstance().getServerFile().getAbsolutePath());
 
-		// Parse the command line arguments
-		server.parseCommandLineArguments (args);
+    // Parse the command line arguments
+    server.parseCommandLineArguments (args);
 
-		// Perform basic tests to ensure server can run
-		server.initialTests ();
-		
-		// Setup server and run the server
-		server.init();		
-		final String protocol = ServerProperties.getInstance().getProtocol();
-		if ("http".equalsIgnoreCase(protocol)) {
-		  server.runHttpBased();
-		} else {
-		  server.runSocketBased ();
-		}
-	}
+    // Perform basic tests to ensure server can run
+    server.initialTests ();
+    
+    // Setup server and run the server
+    server.init();    
+    if ("http".equalsIgnoreCase(protocol)) {
+      server.runHttpBased();
+    } else {
+      server.runSocketBased ();
+    }
+  }
+
 }

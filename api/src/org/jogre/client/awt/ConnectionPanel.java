@@ -26,6 +26,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.net.URL;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -33,17 +35,20 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import nanoxml.XMLElement;
+import nanoxml.XMLParseException;
 
 import org.jogre.client.IClient;
-import org.jogre.client.http.HttpClientEnvironment;
-import org.jogre.client.http.HttpClientMessageBus;
 import org.jogre.common.IJogre;
 import org.jogre.common.MessageBus;
 import org.jogre.common.SocketBasedMessageBus;
+import org.jogre.common.TransmissionException;
 import org.jogre.common.comm.Comm;
 import org.jogre.common.comm.CommError;
+import org.jogre.common.comm.ITransmittable;
 import org.jogre.common.util.JogreLabels;
 import org.jogre.common.util.JogreUtils;
+
+import com.appenginefan.toolkit.common.WebConnectionClient;
 
 /**
  * Connection panel which replaces the old ConnectionDialog
@@ -57,6 +62,7 @@ import org.jogre.common.util.JogreUtils;
  * @author Bob Marks
  * @version Beta 0.3
  */
+@SuppressWarnings("serial")
 public abstract class ConnectionPanel extends JogrePanel
                                       implements IClient
 {
@@ -213,16 +219,73 @@ public abstract class ConnectionPanel extends JogrePanel
         }
 
         // Try and create a socket connection
-        Socket socket = null;
         try {
           
           MessageBus bus = null;
           
           if (false) {
             bus = new SocketBasedMessageBus(new Socket(server, port));
-          } else {          
-            bus = new HttpClientMessageBus(new HttpClientEnvironment(
-                "http://" + server + ":" + port), 1000, 5);
+          } else {   
+            final WebConnectionClient connection = new WebConnectionClient(
+                new URL("http://" + server + ":" + port), 1000, 5);
+            final Properties properties = new Properties();
+            bus = new MessageBus(){
+
+              @Override
+              public void close() {
+                connection.close();
+              }
+
+              @Override
+              public String getProperty(String key, String defaultValue) {
+                return properties.getProperty(key, defaultValue);
+              }
+
+              @Override
+              public void open(final MessageParser parser) {
+                connection.open(new WebConnectionClient.Receiver(){
+                  @Override
+                  public void receive(String inString) {
+                    if (inString.startsWith("<")) {
+                      
+                      // Starts with an '<' so try and parse this XML
+                      XMLElement message = new XMLElement ();
+            
+                      try {
+                          message.parseString (inString);
+            
+                          // parse this element
+                        if (message != null)
+                          parser.parse(message);
+                      } catch (XMLParseException xmlParseEx) {
+                        // TODO: logging?
+                        //logger.error ("run", "problem parsing: " + inString);
+                        //logger.stacktrace (xmlParseEx);
+                        xmlParseEx.printStackTrace();
+                      } catch (TransmissionException e) {
+                        // TODO: logging?
+                        //logger.error ("run", "problem parsing: " + inString);
+                        //logger.stacktrace (xmlParseEx);
+                        e.printStackTrace();
+                      }
+                    }
+                  }});                
+              }
+
+              @Override
+              public void send(ITransmittable transObject) {
+                connection.send(transObject.flatten().toString());
+              }
+
+              @Override
+              public void setProperty(String key,
+                  String valueOrNull) {
+                if (valueOrNull == null) {
+                  properties.remove(key);
+                } else {
+                  properties.setProperty(key, valueOrNull);
+                }
+              }};
           }
 
         	// Let sub class handle the connection for here on...
