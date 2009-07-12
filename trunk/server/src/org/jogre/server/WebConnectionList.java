@@ -1,5 +1,7 @@
 package org.jogre.server;
 
+import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 
 import nanoxml.XMLElement;
@@ -21,6 +23,10 @@ import static com.google.common.base.Functions.constant;
  * features to persist and recreate connections on the fly
  */
 public class WebConnectionList implements WebConnectionServer.Receiver, ConnectionList {
+  
+  private static final Logger LOG = Logger.getLogger(WebConnectionList.class.getName());
+  private static final String THIS_THREAD = "thisThread";
+  private static final String CACHE = "WebConnectionList.cache";
   
   private static class Bus implements MessageBus {
     
@@ -48,7 +54,9 @@ public class WebConnectionList implements WebConnectionServer.Receiver, Connecti
 
     @Override
     public void send(ITransmittable transObject) {
-      endpoint.send(transObject.flatten().toString());
+      final String asMessage = transObject.flatten().toString();
+      LOG.info(String.format("SERVER --> %s : %s", endpoint.getHandle(), asMessage)); 
+      endpoint.send(asMessage);
     }
 
     @Override
@@ -64,7 +72,6 @@ public class WebConnectionList implements WebConnectionServer.Receiver, Connecti
   private final WebConnectionServer connectionServer;
   private AbstractGameServer gameServer;
   private final Persistence<String> userGame2Handle;
-  private final ThreadLocal<InMemoryConnectionList> requestCache;
   private final ThreadLocal<HttpServletRequest> currentRequest;
   
   public WebConnectionList(
@@ -72,21 +79,23 @@ public class WebConnectionList implements WebConnectionServer.Receiver, Connecti
       Persistence<String> userGame2Handle) {
     this.connectionServer = connectionServer;
     this.userGame2Handle = userGame2Handle;
-    this.requestCache = new ThreadLocal<InMemoryConnectionList>();
     this.currentRequest = new ThreadLocal<HttpServletRequest>();
   }
   
   private InMemoryConnectionList getCache() {
-    if (requestCache.get() == null) {
-      requestCache.set(new InMemoryConnectionList());
+    InMemoryConnectionList result = (InMemoryConnectionList) 
+        currentRequest.get().getAttribute(CACHE);
+    if (result == null) {
+      result = new InMemoryConnectionList();
+      currentRequest.get().setAttribute(CACHE, result);
     }
-    return requestCache.get();
+    return result;
   }
   
   @Override
   public void onEmptyPayload(WebConnectionServer arg0,
       ServerEndpoint arg1, HttpServletRequest arg2) {
-    this.currentRequest.set(arg2);
+    // Do nothing
   }
 
   @Override
@@ -97,21 +106,31 @@ public class WebConnectionList implements WebConnectionServer.Receiver, Connecti
       HttpServletRequest req) {
     
     this.currentRequest.set(req);
-    
-    // Can we parse the payload?
-    final XMLElement payload = new XMLElement();
     try {
-      payload.parseString(message);
-    } catch (XMLParseException e) {
-      return;
-    }
-    
-    // Wrap the endpoint in a message bus, then dispatch
-    final Bus asBus = new Bus(endpoint);
-    try {
-      new ServerConnectionThread(asBus, gameServer).parse(payload);
-    } catch (TransmissionException e) {
-      e.printStackTrace();
+      LOG.info(String.format("SERVER <-- %s : %s", endpoint.getHandle(), message)); 
+      
+      // Can we parse the payload?
+      final XMLElement payload = new XMLElement();
+      try {
+        payload.parseString(message);
+      } catch (XMLParseException e) {
+        return;
+      }
+      
+      // Wrap the endpoint in a message bus, then dispatch
+      ServerConnectionThread thread = (ServerConnectionThread) req.getAttribute(THIS_THREAD);
+      if (thread == null) {
+        final Bus asBus = new Bus(endpoint);
+        thread = new ServerConnectionThread(asBus, gameServer);
+        req.setAttribute(THIS_THREAD, thread);
+      }
+      try {
+        thread.parse(payload);
+      } catch (TransmissionException e) {
+        e.printStackTrace();
+      }
+    } finally {
+      this.currentRequest.set(null);
     }
   }
 
