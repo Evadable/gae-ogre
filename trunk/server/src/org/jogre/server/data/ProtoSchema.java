@@ -7,58 +7,111 @@ public final class ProtoSchema {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public static final class OutgoingMessage extends
+  public static final class GameInfo extends
       com.google.protobuf.GeneratedMessage {
-    // Use OutgoingMessage.newBuilder() to construct.
-    private OutgoingMessage() {}
+    // Use GameInfo.newBuilder() to construct.
+    private GameInfo() {}
     
-    private static final OutgoingMessage defaultInstance = new OutgoingMessage();
-    public static OutgoingMessage getDefaultInstance() {
+    private static final GameInfo defaultInstance = new GameInfo();
+    public static GameInfo getDefaultInstance() {
       return defaultInstance;
     }
     
-    public OutgoingMessage getDefaultInstanceForType() {
+    public GameInfo getDefaultInstanceForType() {
       return defaultInstance;
     }
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.jogre.server.data.ProtoSchema.internal_static_javatests_OutgoingMessage_descriptor;
+      return org.jogre.server.data.ProtoSchema.internal_static_persistence_GameInfo_descriptor;
     }
     
     @Override
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.jogre.server.data.ProtoSchema.internal_static_javatests_OutgoingMessage_fieldAccessorTable;
+      return org.jogre.server.data.ProtoSchema.internal_static_persistence_GameInfo_fieldAccessorTable;
     }
     
-    // required string payload = 1;
-    private boolean hasPayload;
-    private java.lang.String payload_ = "";
-    public boolean hasPayload() { return hasPayload; }
-    public java.lang.String getPayload() { return payload_; }
+    // required int64 id = 1;
+    private boolean hasId;
+    private long id_ = 0L;
+    public boolean hasId() { return hasId; }
+    public long getId() { return id_; }
     
-    // required int32 ackToken = 2;
-    private boolean hasAckToken;
-    private int ackToken_ = 0;
-    public boolean hasAckToken() { return hasAckToken; }
-    public int getAckToken() { return ackToken_; }
+    // optional string game_key = 2;
+    private boolean hasGameKey;
+    private java.lang.String gameKey_ = "";
+    public boolean hasGameKey() { return hasGameKey; }
+    public java.lang.String getGameKey() { return gameKey_; }
+    
+    // optional string players = 3;
+    private boolean hasPlayers;
+    private java.lang.String players_ = "";
+    public boolean hasPlayers() { return hasPlayers; }
+    public java.lang.String getPlayers() { return players_; }
+    
+    // optional string results = 4;
+    private boolean hasResults;
+    private java.lang.String results_ = "";
+    public boolean hasResults() { return hasResults; }
+    public java.lang.String getResults() { return results_; }
+    
+    // optional int64 start_time = 5;
+    private boolean hasStartTime;
+    private long startTime_ = 0L;
+    public boolean hasStartTime() { return hasStartTime; }
+    public long getStartTime() { return startTime_; }
+    
+    // optional int64 end_time = 6;
+    private boolean hasEndTime;
+    private long endTime_ = 0L;
+    public boolean hasEndTime() { return hasEndTime; }
+    public long getEndTime() { return endTime_; }
+    
+    // optional string history = 7;
+    private boolean hasHistory;
+    private java.lang.String history_ = "";
+    public boolean hasHistory() { return hasHistory; }
+    public java.lang.String getHistory() { return history_; }
+    
+    // optional string score = 8;
+    private boolean hasScore;
+    private java.lang.String score_ = "";
+    public boolean hasScore() { return hasScore; }
+    public java.lang.String getScore() { return score_; }
     
     @Override
     public final boolean isInitialized() {
-      if (!hasPayload) return false;
-      if (!hasAckToken) return false;
+      if (!hasId) return false;
       return true;
     }
     
     @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (hasPayload()) {
-        output.writeString(1, getPayload());
+      if (hasId()) {
+        output.writeInt64(1, getId());
       }
-      if (hasAckToken()) {
-        output.writeInt32(2, getAckToken());
+      if (hasGameKey()) {
+        output.writeString(2, getGameKey());
+      }
+      if (hasPlayers()) {
+        output.writeString(3, getPlayers());
+      }
+      if (hasResults()) {
+        output.writeString(4, getResults());
+      }
+      if (hasStartTime()) {
+        output.writeInt64(5, getStartTime());
+      }
+      if (hasEndTime()) {
+        output.writeInt64(6, getEndTime());
+      }
+      if (hasHistory()) {
+        output.writeString(7, getHistory());
+      }
+      if (hasScore()) {
+        output.writeString(8, getScore());
       }
       getUnknownFields().writeTo(output);
     }
@@ -70,59 +123,83 @@ public final class ProtoSchema {
       if (size != -1) return size;
     
       size = 0;
-      if (hasPayload()) {
+      if (hasId()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getPayload());
+          .computeInt64Size(1, getId());
       }
-      if (hasAckToken()) {
+      if (hasGameKey()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, getAckToken());
+          .computeStringSize(2, getGameKey());
+      }
+      if (hasPlayers()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(3, getPlayers());
+      }
+      if (hasResults()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(4, getResults());
+      }
+      if (hasStartTime()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(5, getStartTime());
+      }
+      if (hasEndTime()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(6, getEndTime());
+      }
+      if (hasHistory()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(7, getHistory());
+      }
+      if (hasScore()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(8, getScore());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
     
-    public static org.jogre.server.data.ProtoSchema.OutgoingMessage parseFrom(
+    public static org.jogre.server.data.ProtoSchema.GameInfo parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static org.jogre.server.data.ProtoSchema.OutgoingMessage parseFrom(
+    public static org.jogre.server.data.ProtoSchema.GameInfo parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistry extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static org.jogre.server.data.ProtoSchema.OutgoingMessage parseFrom(byte[] data)
+    public static org.jogre.server.data.ProtoSchema.GameInfo parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static org.jogre.server.data.ProtoSchema.OutgoingMessage parseFrom(
+    public static org.jogre.server.data.ProtoSchema.GameInfo parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistry extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static org.jogre.server.data.ProtoSchema.OutgoingMessage parseFrom(java.io.InputStream input)
+    public static org.jogre.server.data.ProtoSchema.GameInfo parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static org.jogre.server.data.ProtoSchema.OutgoingMessage parseFrom(
+    public static org.jogre.server.data.ProtoSchema.GameInfo parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistry extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static org.jogre.server.data.ProtoSchema.OutgoingMessage parseFrom(
+    public static org.jogre.server.data.ProtoSchema.GameInfo parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static org.jogre.server.data.ProtoSchema.OutgoingMessage parseFrom(
+    public static org.jogre.server.data.ProtoSchema.GameInfo parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistry extensionRegistry)
         throws java.io.IOException {
@@ -132,25 +209,25 @@ public final class ProtoSchema {
     
     public static Builder newBuilder() { return new Builder(); }
     public Builder newBuilderForType() { return new Builder(); }
-    public static Builder newBuilder(org.jogre.server.data.ProtoSchema.OutgoingMessage prototype) {
+    public static Builder newBuilder(org.jogre.server.data.ProtoSchema.GameInfo prototype) {
       return new Builder().mergeFrom(prototype);
     }
     
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      // Construct using org.jogre.server.data.ProtoSchema.OutgoingMessage.newBuilder()
+      // Construct using org.jogre.server.data.ProtoSchema.GameInfo.newBuilder()
       private Builder() {}
       
-      org.jogre.server.data.ProtoSchema.OutgoingMessage result = new org.jogre.server.data.ProtoSchema.OutgoingMessage();
+      org.jogre.server.data.ProtoSchema.GameInfo result = new org.jogre.server.data.ProtoSchema.GameInfo();
       
       @Override
-      protected org.jogre.server.data.ProtoSchema.OutgoingMessage internalGetResult() {
+      protected org.jogre.server.data.ProtoSchema.GameInfo internalGetResult() {
         return result;
       }
       
       @Override
       public Builder clear() {
-        result = new org.jogre.server.data.ProtoSchema.OutgoingMessage();
+        result = new org.jogre.server.data.ProtoSchema.GameInfo();
         return this;
       }
       
@@ -162,14 +239,14 @@ public final class ProtoSchema {
       @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return org.jogre.server.data.ProtoSchema.OutgoingMessage.getDescriptor();
+        return org.jogre.server.data.ProtoSchema.GameInfo.getDescriptor();
       }
       
-      public org.jogre.server.data.ProtoSchema.OutgoingMessage getDefaultInstanceForType() {
-        return org.jogre.server.data.ProtoSchema.OutgoingMessage.getDefaultInstance();
+      public org.jogre.server.data.ProtoSchema.GameInfo getDefaultInstanceForType() {
+        return org.jogre.server.data.ProtoSchema.GameInfo.getDefaultInstance();
       }
       
-      public org.jogre.server.data.ProtoSchema.OutgoingMessage build() {
+      public org.jogre.server.data.ProtoSchema.GameInfo build() {
         if (!isInitialized()) {
           throw new com.google.protobuf.UninitializedMessageException(
             result);
@@ -177,7 +254,7 @@ public final class ProtoSchema {
         return buildPartial();
       }
       
-      private org.jogre.server.data.ProtoSchema.OutgoingMessage buildParsed()
+      private org.jogre.server.data.ProtoSchema.GameInfo buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw new com.google.protobuf.UninitializedMessageException(
@@ -186,29 +263,47 @@ public final class ProtoSchema {
         return buildPartial();
       }
       
-      public org.jogre.server.data.ProtoSchema.OutgoingMessage buildPartial() {
-        org.jogre.server.data.ProtoSchema.OutgoingMessage returnMe = result;
+      public org.jogre.server.data.ProtoSchema.GameInfo buildPartial() {
+        org.jogre.server.data.ProtoSchema.GameInfo returnMe = result;
         result = null;
         return returnMe;
       }
       
       @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.jogre.server.data.ProtoSchema.OutgoingMessage) {
-          return mergeFrom((org.jogre.server.data.ProtoSchema.OutgoingMessage)other);
+        if (other instanceof org.jogre.server.data.ProtoSchema.GameInfo) {
+          return mergeFrom((org.jogre.server.data.ProtoSchema.GameInfo)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(org.jogre.server.data.ProtoSchema.OutgoingMessage other) {
-        if (other == org.jogre.server.data.ProtoSchema.OutgoingMessage.getDefaultInstance()) return this;
-        if (other.hasPayload()) {
-          setPayload(other.getPayload());
+      public Builder mergeFrom(org.jogre.server.data.ProtoSchema.GameInfo other) {
+        if (other == org.jogre.server.data.ProtoSchema.GameInfo.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
         }
-        if (other.hasAckToken()) {
-          setAckToken(other.getAckToken());
+        if (other.hasGameKey()) {
+          setGameKey(other.getGameKey());
+        }
+        if (other.hasPlayers()) {
+          setPlayers(other.getPlayers());
+        }
+        if (other.hasResults()) {
+          setResults(other.getResults());
+        }
+        if (other.hasStartTime()) {
+          setStartTime(other.getStartTime());
+        }
+        if (other.hasEndTime()) {
+          setEndTime(other.getEndTime());
+        }
+        if (other.hasHistory()) {
+          setHistory(other.getHistory());
+        }
+        if (other.hasScore()) {
+          setScore(other.getScore());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -244,649 +339,36 @@ public final class ProtoSchema {
               }
               break;
             }
-            case 10: {
-              setPayload(input.readString());
-              break;
-            }
-            case 16: {
-              setAckToken(input.readInt32());
-              break;
-            }
-          }
-        }
-      }
-      
-      
-      // required string payload = 1;
-      public boolean hasPayload() {
-        return result.hasPayload();
-      }
-      public java.lang.String getPayload() {
-        return result.getPayload();
-      }
-      public Builder setPayload(java.lang.String value) {
-        result.hasPayload = true;
-        result.payload_ = value;
-        return this;
-      }
-      public Builder clearPayload() {
-        result.hasPayload = false;
-        result.payload_ = "";
-        return this;
-      }
-      
-      // required int32 ackToken = 2;
-      public boolean hasAckToken() {
-        return result.hasAckToken();
-      }
-      public int getAckToken() {
-        return result.getAckToken();
-      }
-      public Builder setAckToken(int value) {
-        result.hasAckToken = true;
-        result.ackToken_ = value;
-        return this;
-      }
-      public Builder clearAckToken() {
-        result.hasAckToken = false;
-        result.ackToken_ = 0;
-        return this;
-      }
-    }
-    
-    static {
-      org.jogre.server.data.ProtoSchema.getDescriptor();
-    }
-  }
-  
-  public static final class Property extends
-      com.google.protobuf.GeneratedMessage {
-    // Use Property.newBuilder() to construct.
-    private Property() {}
-    
-    private static final Property defaultInstance = new Property();
-    public static Property getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public Property getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return org.jogre.server.data.ProtoSchema.internal_static_javatests_Property_descriptor;
-    }
-    
-    @Override
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return org.jogre.server.data.ProtoSchema.internal_static_javatests_Property_fieldAccessorTable;
-    }
-    
-    // required string key = 1;
-    private boolean hasKey;
-    private java.lang.String key_ = "";
-    public boolean hasKey() { return hasKey; }
-    public java.lang.String getKey() { return key_; }
-    
-    // required string value = 2;
-    private boolean hasValue;
-    private java.lang.String value_ = "";
-    public boolean hasValue() { return hasValue; }
-    public java.lang.String getValue() { return value_; }
-    
-    @Override
-    public final boolean isInitialized() {
-      if (!hasKey) return false;
-      if (!hasValue) return false;
-      return true;
-    }
-    
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (hasKey()) {
-        output.writeString(1, getKey());
-      }
-      if (hasValue()) {
-        output.writeString(2, getValue());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    @Override
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (hasKey()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getKey());
-      }
-      if (hasValue()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getValue());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    public static org.jogre.server.data.ProtoSchema.Property parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.Property parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistry extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.Property parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.Property parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistry extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.Property parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.Property parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistry extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.Property parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.Property parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistry extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return new Builder(); }
-    public Builder newBuilderForType() { return new Builder(); }
-    public static Builder newBuilder(org.jogre.server.data.ProtoSchema.Property prototype) {
-      return new Builder().mergeFrom(prototype);
-    }
-    
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      // Construct using org.jogre.server.data.ProtoSchema.Property.newBuilder()
-      private Builder() {}
-      
-      org.jogre.server.data.ProtoSchema.Property result = new org.jogre.server.data.ProtoSchema.Property();
-      
-      @Override
-      protected org.jogre.server.data.ProtoSchema.Property internalGetResult() {
-        return result;
-      }
-      
-      @Override
-      public Builder clear() {
-        result = new org.jogre.server.data.ProtoSchema.Property();
-        return this;
-      }
-      
-      @Override
-      public Builder clone() {
-        return new Builder().mergeFrom(result);
-      }
-      
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return org.jogre.server.data.ProtoSchema.Property.getDescriptor();
-      }
-      
-      public org.jogre.server.data.ProtoSchema.Property getDefaultInstanceForType() {
-        return org.jogre.server.data.ProtoSchema.Property.getDefaultInstance();
-      }
-      
-      public org.jogre.server.data.ProtoSchema.Property build() {
-        if (!isInitialized()) {
-          throw new com.google.protobuf.UninitializedMessageException(
-            result);
-        }
-        return buildPartial();
-      }
-      
-      private org.jogre.server.data.ProtoSchema.Property buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
-          throw new com.google.protobuf.UninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return buildPartial();
-      }
-      
-      public org.jogre.server.data.ProtoSchema.Property buildPartial() {
-        org.jogre.server.data.ProtoSchema.Property returnMe = result;
-        result = null;
-        return returnMe;
-      }
-      
-      @Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.jogre.server.data.ProtoSchema.Property) {
-          return mergeFrom((org.jogre.server.data.ProtoSchema.Property)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(org.jogre.server.data.ProtoSchema.Property other) {
-        if (other == org.jogre.server.data.ProtoSchema.Property.getDefaultInstance()) return this;
-        if (other.hasKey()) {
-          setKey(other.getKey());
-        }
-        if (other.hasValue()) {
-          setValue(other.getValue());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input)
-          throws java.io.IOException {
-        return mergeFrom(input,
-          com.google.protobuf.ExtensionRegistry.getEmptyRegistry());
-      }
-      
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistry extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              setKey(input.readString());
+            case 8: {
+              setId(input.readInt64());
               break;
             }
             case 18: {
-              setValue(input.readString());
-              break;
-            }
-          }
-        }
-      }
-      
-      
-      // required string key = 1;
-      public boolean hasKey() {
-        return result.hasKey();
-      }
-      public java.lang.String getKey() {
-        return result.getKey();
-      }
-      public Builder setKey(java.lang.String value) {
-        result.hasKey = true;
-        result.key_ = value;
-        return this;
-      }
-      public Builder clearKey() {
-        result.hasKey = false;
-        result.key_ = "";
-        return this;
-      }
-      
-      // required string value = 2;
-      public boolean hasValue() {
-        return result.hasValue();
-      }
-      public java.lang.String getValue() {
-        return result.getValue();
-      }
-      public Builder setValue(java.lang.String value) {
-        result.hasValue = true;
-        result.value_ = value;
-        return this;
-      }
-      public Builder clearValue() {
-        result.hasValue = false;
-        result.value_ = "";
-        return this;
-      }
-    }
-    
-    static {
-      org.jogre.server.data.ProtoSchema.getDescriptor();
-    }
-  }
-  
-  public static final class MessageBusState extends
-      com.google.protobuf.GeneratedMessage {
-    // Use MessageBusState.newBuilder() to construct.
-    private MessageBusState() {}
-    
-    private static final MessageBusState defaultInstance = new MessageBusState();
-    public static MessageBusState getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public MessageBusState getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return org.jogre.server.data.ProtoSchema.internal_static_javatests_MessageBusState_descriptor;
-    }
-    
-    @Override
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return org.jogre.server.data.ProtoSchema.internal_static_javatests_MessageBusState_fieldAccessorTable;
-    }
-    
-    // repeated .javatests.OutgoingMessage messageQueue = 1;
-    private java.util.List<org.jogre.server.data.ProtoSchema.OutgoingMessage> messageQueue_ =
-      java.util.Collections.emptyList();
-    public java.util.List<org.jogre.server.data.ProtoSchema.OutgoingMessage> getMessageQueueList() {
-      return messageQueue_;
-    }
-    public int getMessageQueueCount() { return messageQueue_.size(); }
-    public org.jogre.server.data.ProtoSchema.OutgoingMessage getMessageQueue(int index) {
-      return messageQueue_.get(index);
-    }
-    
-    // repeated .javatests.Property connectionProperties = 2;
-    private java.util.List<org.jogre.server.data.ProtoSchema.Property> connectionProperties_ =
-      java.util.Collections.emptyList();
-    public java.util.List<org.jogre.server.data.ProtoSchema.Property> getConnectionPropertiesList() {
-      return connectionProperties_;
-    }
-    public int getConnectionPropertiesCount() { return connectionProperties_.size(); }
-    public org.jogre.server.data.ProtoSchema.Property getConnectionProperties(int index) {
-      return connectionProperties_.get(index);
-    }
-    
-    // required string randomSecret = 3;
-    private boolean hasRandomSecret;
-    private java.lang.String randomSecret_ = "";
-    public boolean hasRandomSecret() { return hasRandomSecret; }
-    public java.lang.String getRandomSecret() { return randomSecret_; }
-    
-    @Override
-    public final boolean isInitialized() {
-      if (!hasRandomSecret) return false;
-      for (org.jogre.server.data.ProtoSchema.OutgoingMessage element : getMessageQueueList()) {
-        if (!element.isInitialized()) return false;
-      }
-      for (org.jogre.server.data.ProtoSchema.Property element : getConnectionPropertiesList()) {
-        if (!element.isInitialized()) return false;
-      }
-      return true;
-    }
-    
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      for (org.jogre.server.data.ProtoSchema.OutgoingMessage element : getMessageQueueList()) {
-        output.writeMessage(1, element);
-      }
-      for (org.jogre.server.data.ProtoSchema.Property element : getConnectionPropertiesList()) {
-        output.writeMessage(2, element);
-      }
-      if (hasRandomSecret()) {
-        output.writeString(3, getRandomSecret());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    @Override
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      for (org.jogre.server.data.ProtoSchema.OutgoingMessage element : getMessageQueueList()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, element);
-      }
-      for (org.jogre.server.data.ProtoSchema.Property element : getConnectionPropertiesList()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, element);
-      }
-      if (hasRandomSecret()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(3, getRandomSecret());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    public static org.jogre.server.data.ProtoSchema.MessageBusState parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.MessageBusState parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistry extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.MessageBusState parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.MessageBusState parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistry extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.MessageBusState parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.MessageBusState parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistry extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.MessageBusState parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static org.jogre.server.data.ProtoSchema.MessageBusState parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistry extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return new Builder(); }
-    public Builder newBuilderForType() { return new Builder(); }
-    public static Builder newBuilder(org.jogre.server.data.ProtoSchema.MessageBusState prototype) {
-      return new Builder().mergeFrom(prototype);
-    }
-    
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      // Construct using org.jogre.server.data.ProtoSchema.MessageBusState.newBuilder()
-      private Builder() {}
-      
-      org.jogre.server.data.ProtoSchema.MessageBusState result = new org.jogre.server.data.ProtoSchema.MessageBusState();
-      
-      @Override
-      protected org.jogre.server.data.ProtoSchema.MessageBusState internalGetResult() {
-        return result;
-      }
-      
-      @Override
-      public Builder clear() {
-        result = new org.jogre.server.data.ProtoSchema.MessageBusState();
-        return this;
-      }
-      
-      @Override
-      public Builder clone() {
-        return new Builder().mergeFrom(result);
-      }
-      
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return org.jogre.server.data.ProtoSchema.MessageBusState.getDescriptor();
-      }
-      
-      public org.jogre.server.data.ProtoSchema.MessageBusState getDefaultInstanceForType() {
-        return org.jogre.server.data.ProtoSchema.MessageBusState.getDefaultInstance();
-      }
-      
-      public org.jogre.server.data.ProtoSchema.MessageBusState build() {
-        if (!isInitialized()) {
-          throw new com.google.protobuf.UninitializedMessageException(
-            result);
-        }
-        return buildPartial();
-      }
-      
-      private org.jogre.server.data.ProtoSchema.MessageBusState buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
-          throw new com.google.protobuf.UninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return buildPartial();
-      }
-      
-      public org.jogre.server.data.ProtoSchema.MessageBusState buildPartial() {
-        if (result.messageQueue_ != java.util.Collections.EMPTY_LIST) {
-          result.messageQueue_ =
-            java.util.Collections.unmodifiableList(result.messageQueue_);
-        }
-        if (result.connectionProperties_ != java.util.Collections.EMPTY_LIST) {
-          result.connectionProperties_ =
-            java.util.Collections.unmodifiableList(result.connectionProperties_);
-        }
-        org.jogre.server.data.ProtoSchema.MessageBusState returnMe = result;
-        result = null;
-        return returnMe;
-      }
-      
-      @Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.jogre.server.data.ProtoSchema.MessageBusState) {
-          return mergeFrom((org.jogre.server.data.ProtoSchema.MessageBusState)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(org.jogre.server.data.ProtoSchema.MessageBusState other) {
-        if (other == org.jogre.server.data.ProtoSchema.MessageBusState.getDefaultInstance()) return this;
-        if (!other.messageQueue_.isEmpty()) {
-          if (result.messageQueue_.isEmpty()) {
-            result.messageQueue_ = new java.util.ArrayList<org.jogre.server.data.ProtoSchema.OutgoingMessage>();
-          }
-          result.messageQueue_.addAll(other.messageQueue_);
-        }
-        if (!other.connectionProperties_.isEmpty()) {
-          if (result.connectionProperties_.isEmpty()) {
-            result.connectionProperties_ = new java.util.ArrayList<org.jogre.server.data.ProtoSchema.Property>();
-          }
-          result.connectionProperties_.addAll(other.connectionProperties_);
-        }
-        if (other.hasRandomSecret()) {
-          setRandomSecret(other.getRandomSecret());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input)
-          throws java.io.IOException {
-        return mergeFrom(input,
-          com.google.protobuf.ExtensionRegistry.getEmptyRegistry());
-      }
-      
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistry extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              org.jogre.server.data.ProtoSchema.OutgoingMessage.Builder subBuilder = org.jogre.server.data.ProtoSchema.OutgoingMessage.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addMessageQueue(subBuilder.buildPartial());
-              break;
-            }
-            case 18: {
-              org.jogre.server.data.ProtoSchema.Property.Builder subBuilder = org.jogre.server.data.ProtoSchema.Property.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addConnectionProperties(subBuilder.buildPartial());
+              setGameKey(input.readString());
               break;
             }
             case 26: {
-              setRandomSecret(input.readString());
+              setPlayers(input.readString());
+              break;
+            }
+            case 34: {
+              setResults(input.readString());
+              break;
+            }
+            case 40: {
+              setStartTime(input.readInt64());
+              break;
+            }
+            case 48: {
+              setEndTime(input.readInt64());
+              break;
+            }
+            case 58: {
+              setHistory(input.readString());
+              break;
+            }
+            case 66: {
+              setScore(input.readString());
               break;
             }
           }
@@ -894,111 +376,1439 @@ public final class ProtoSchema {
       }
       
       
-      // repeated .javatests.OutgoingMessage messageQueue = 1;
-      public java.util.List<org.jogre.server.data.ProtoSchema.OutgoingMessage> getMessageQueueList() {
-        return java.util.Collections.unmodifiableList(result.messageQueue_);
+      // required int64 id = 1;
+      public boolean hasId() {
+        return result.hasId();
       }
-      public int getMessageQueueCount() {
-        return result.getMessageQueueCount();
+      public long getId() {
+        return result.getId();
       }
-      public org.jogre.server.data.ProtoSchema.OutgoingMessage getMessageQueue(int index) {
-        return result.getMessageQueue(index);
-      }
-      public Builder setMessageQueue(int index, org.jogre.server.data.ProtoSchema.OutgoingMessage value) {
-        result.messageQueue_.set(index, value);
+      public Builder setId(long value) {
+        result.hasId = true;
+        result.id_ = value;
         return this;
       }
-      public Builder setMessageQueue(int index, org.jogre.server.data.ProtoSchema.OutgoingMessage.Builder builderForValue) {
-        result.messageQueue_.set(index, builderForValue.build());
-        return this;
-      }
-      public Builder addMessageQueue(org.jogre.server.data.ProtoSchema.OutgoingMessage value) {
-        if (result.messageQueue_.isEmpty()) {
-          result.messageQueue_ = new java.util.ArrayList<org.jogre.server.data.ProtoSchema.OutgoingMessage>();
-        }
-        result.messageQueue_.add(value);
-        return this;
-      }
-      public Builder addMessageQueue(org.jogre.server.data.ProtoSchema.OutgoingMessage.Builder builderForValue) {
-        if (result.messageQueue_.isEmpty()) {
-          result.messageQueue_ = new java.util.ArrayList<org.jogre.server.data.ProtoSchema.OutgoingMessage>();
-        }
-        result.messageQueue_.add(builderForValue.build());
-        return this;
-      }
-      public Builder addAllMessageQueue(
-          java.lang.Iterable<? extends org.jogre.server.data.ProtoSchema.OutgoingMessage> values) {
-        if (result.messageQueue_.isEmpty()) {
-          result.messageQueue_ = new java.util.ArrayList<org.jogre.server.data.ProtoSchema.OutgoingMessage>();
-        }
-        super.addAll(values, result.messageQueue_);
-        return this;
-      }
-      public Builder clearMessageQueue() {
-        result.messageQueue_ = java.util.Collections.emptyList();
+      public Builder clearId() {
+        result.hasId = false;
+        result.id_ = 0L;
         return this;
       }
       
-      // repeated .javatests.Property connectionProperties = 2;
-      public java.util.List<org.jogre.server.data.ProtoSchema.Property> getConnectionPropertiesList() {
-        return java.util.Collections.unmodifiableList(result.connectionProperties_);
+      // optional string game_key = 2;
+      public boolean hasGameKey() {
+        return result.hasGameKey();
       }
-      public int getConnectionPropertiesCount() {
-        return result.getConnectionPropertiesCount();
+      public java.lang.String getGameKey() {
+        return result.getGameKey();
       }
-      public org.jogre.server.data.ProtoSchema.Property getConnectionProperties(int index) {
-        return result.getConnectionProperties(index);
-      }
-      public Builder setConnectionProperties(int index, org.jogre.server.data.ProtoSchema.Property value) {
-        result.connectionProperties_.set(index, value);
+      public Builder setGameKey(java.lang.String value) {
+        result.hasGameKey = true;
+        result.gameKey_ = value;
         return this;
       }
-      public Builder setConnectionProperties(int index, org.jogre.server.data.ProtoSchema.Property.Builder builderForValue) {
-        result.connectionProperties_.set(index, builderForValue.build());
-        return this;
-      }
-      public Builder addConnectionProperties(org.jogre.server.data.ProtoSchema.Property value) {
-        if (result.connectionProperties_.isEmpty()) {
-          result.connectionProperties_ = new java.util.ArrayList<org.jogre.server.data.ProtoSchema.Property>();
-        }
-        result.connectionProperties_.add(value);
-        return this;
-      }
-      public Builder addConnectionProperties(org.jogre.server.data.ProtoSchema.Property.Builder builderForValue) {
-        if (result.connectionProperties_.isEmpty()) {
-          result.connectionProperties_ = new java.util.ArrayList<org.jogre.server.data.ProtoSchema.Property>();
-        }
-        result.connectionProperties_.add(builderForValue.build());
-        return this;
-      }
-      public Builder addAllConnectionProperties(
-          java.lang.Iterable<? extends org.jogre.server.data.ProtoSchema.Property> values) {
-        if (result.connectionProperties_.isEmpty()) {
-          result.connectionProperties_ = new java.util.ArrayList<org.jogre.server.data.ProtoSchema.Property>();
-        }
-        super.addAll(values, result.connectionProperties_);
-        return this;
-      }
-      public Builder clearConnectionProperties() {
-        result.connectionProperties_ = java.util.Collections.emptyList();
+      public Builder clearGameKey() {
+        result.hasGameKey = false;
+        result.gameKey_ = "";
         return this;
       }
       
-      // required string randomSecret = 3;
-      public boolean hasRandomSecret() {
-        return result.hasRandomSecret();
+      // optional string players = 3;
+      public boolean hasPlayers() {
+        return result.hasPlayers();
       }
-      public java.lang.String getRandomSecret() {
-        return result.getRandomSecret();
+      public java.lang.String getPlayers() {
+        return result.getPlayers();
       }
-      public Builder setRandomSecret(java.lang.String value) {
-        result.hasRandomSecret = true;
-        result.randomSecret_ = value;
+      public Builder setPlayers(java.lang.String value) {
+        result.hasPlayers = true;
+        result.players_ = value;
         return this;
       }
-      public Builder clearRandomSecret() {
-        result.hasRandomSecret = false;
-        result.randomSecret_ = "";
+      public Builder clearPlayers() {
+        result.hasPlayers = false;
+        result.players_ = "";
+        return this;
+      }
+      
+      // optional string results = 4;
+      public boolean hasResults() {
+        return result.hasResults();
+      }
+      public java.lang.String getResults() {
+        return result.getResults();
+      }
+      public Builder setResults(java.lang.String value) {
+        result.hasResults = true;
+        result.results_ = value;
+        return this;
+      }
+      public Builder clearResults() {
+        result.hasResults = false;
+        result.results_ = "";
+        return this;
+      }
+      
+      // optional int64 start_time = 5;
+      public boolean hasStartTime() {
+        return result.hasStartTime();
+      }
+      public long getStartTime() {
+        return result.getStartTime();
+      }
+      public Builder setStartTime(long value) {
+        result.hasStartTime = true;
+        result.startTime_ = value;
+        return this;
+      }
+      public Builder clearStartTime() {
+        result.hasStartTime = false;
+        result.startTime_ = 0L;
+        return this;
+      }
+      
+      // optional int64 end_time = 6;
+      public boolean hasEndTime() {
+        return result.hasEndTime();
+      }
+      public long getEndTime() {
+        return result.getEndTime();
+      }
+      public Builder setEndTime(long value) {
+        result.hasEndTime = true;
+        result.endTime_ = value;
+        return this;
+      }
+      public Builder clearEndTime() {
+        result.hasEndTime = false;
+        result.endTime_ = 0L;
+        return this;
+      }
+      
+      // optional string history = 7;
+      public boolean hasHistory() {
+        return result.hasHistory();
+      }
+      public java.lang.String getHistory() {
+        return result.getHistory();
+      }
+      public Builder setHistory(java.lang.String value) {
+        result.hasHistory = true;
+        result.history_ = value;
+        return this;
+      }
+      public Builder clearHistory() {
+        result.hasHistory = false;
+        result.history_ = "";
+        return this;
+      }
+      
+      // optional string score = 8;
+      public boolean hasScore() {
+        return result.hasScore();
+      }
+      public java.lang.String getScore() {
+        return result.getScore();
+      }
+      public Builder setScore(java.lang.String value) {
+        result.hasScore = true;
+        result.score_ = value;
+        return this;
+      }
+      public Builder clearScore() {
+        result.hasScore = false;
+        result.score_ = "";
+        return this;
+      }
+    }
+    
+    static {
+      org.jogre.server.data.ProtoSchema.getDescriptor();
+    }
+  }
+  
+  public static final class GameSummary extends
+      com.google.protobuf.GeneratedMessage {
+    // Use GameSummary.newBuilder() to construct.
+    private GameSummary() {}
+    
+    private static final GameSummary defaultInstance = new GameSummary();
+    public static GameSummary getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public GameSummary getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.jogre.server.data.ProtoSchema.internal_static_persistence_GameSummary_descriptor;
+    }
+    
+    @Override
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.jogre.server.data.ProtoSchema.internal_static_persistence_GameSummary_fieldAccessorTable;
+    }
+    
+    // required string game_key = 1;
+    private boolean hasGameKey;
+    private java.lang.String gameKey_ = "";
+    public boolean hasGameKey() { return hasGameKey; }
+    public java.lang.String getGameKey() { return gameKey_; }
+    
+    // required string username = 2;
+    private boolean hasUsername;
+    private java.lang.String username_ = "";
+    public boolean hasUsername() { return hasUsername; }
+    public java.lang.String getUsername() { return username_; }
+    
+    // optional int32 rating = 3;
+    private boolean hasRating;
+    private int rating_ = 0;
+    public boolean hasRating() { return hasRating; }
+    public int getRating() { return rating_; }
+    
+    // optional int32 wins = 4;
+    private boolean hasWins;
+    private int wins_ = 0;
+    public boolean hasWins() { return hasWins; }
+    public int getWins() { return wins_; }
+    
+    // optional int32 loses = 5;
+    private boolean hasLoses;
+    private int loses_ = 0;
+    public boolean hasLoses() { return hasLoses; }
+    public int getLoses() { return loses_; }
+    
+    // optional int32 draws = 6;
+    private boolean hasDraws;
+    private int draws_ = 0;
+    public boolean hasDraws() { return hasDraws; }
+    public int getDraws() { return draws_; }
+    
+    // optional int32 streak = 7;
+    private boolean hasStreak;
+    private int streak_ = 0;
+    public boolean hasStreak() { return hasStreak; }
+    public int getStreak() { return streak_; }
+    
+    @Override
+    public final boolean isInitialized() {
+      if (!hasGameKey) return false;
+      if (!hasUsername) return false;
+      return true;
+    }
+    
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (hasGameKey()) {
+        output.writeString(1, getGameKey());
+      }
+      if (hasUsername()) {
+        output.writeString(2, getUsername());
+      }
+      if (hasRating()) {
+        output.writeInt32(3, getRating());
+      }
+      if (hasWins()) {
+        output.writeInt32(4, getWins());
+      }
+      if (hasLoses()) {
+        output.writeInt32(5, getLoses());
+      }
+      if (hasDraws()) {
+        output.writeInt32(6, getDraws());
+      }
+      if (hasStreak()) {
+        output.writeInt32(7, getStreak());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (hasGameKey()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(1, getGameKey());
+      }
+      if (hasUsername()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(2, getUsername());
+      }
+      if (hasRating()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, getRating());
+      }
+      if (hasWins()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, getWins());
+      }
+      if (hasLoses()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, getLoses());
+      }
+      if (hasDraws()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, getDraws());
+      }
+      if (hasStreak()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, getStreak());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    public static org.jogre.server.data.ProtoSchema.GameSummary parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.GameSummary parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.GameSummary parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.GameSummary parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.GameSummary parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.GameSummary parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.GameSummary parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.GameSummary parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return new Builder(); }
+    public Builder newBuilderForType() { return new Builder(); }
+    public static Builder newBuilder(org.jogre.server.data.ProtoSchema.GameSummary prototype) {
+      return new Builder().mergeFrom(prototype);
+    }
+    
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      // Construct using org.jogre.server.data.ProtoSchema.GameSummary.newBuilder()
+      private Builder() {}
+      
+      org.jogre.server.data.ProtoSchema.GameSummary result = new org.jogre.server.data.ProtoSchema.GameSummary();
+      
+      @Override
+      protected org.jogre.server.data.ProtoSchema.GameSummary internalGetResult() {
+        return result;
+      }
+      
+      @Override
+      public Builder clear() {
+        result = new org.jogre.server.data.ProtoSchema.GameSummary();
+        return this;
+      }
+      
+      @Override
+      public Builder clone() {
+        return new Builder().mergeFrom(result);
+      }
+      
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.jogre.server.data.ProtoSchema.GameSummary.getDescriptor();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.GameSummary getDefaultInstanceForType() {
+        return org.jogre.server.data.ProtoSchema.GameSummary.getDefaultInstance();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.GameSummary build() {
+        if (!isInitialized()) {
+          throw new com.google.protobuf.UninitializedMessageException(
+            result);
+        }
+        return buildPartial();
+      }
+      
+      private org.jogre.server.data.ProtoSchema.GameSummary buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        if (!isInitialized()) {
+          throw new com.google.protobuf.UninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return buildPartial();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.GameSummary buildPartial() {
+        org.jogre.server.data.ProtoSchema.GameSummary returnMe = result;
+        result = null;
+        return returnMe;
+      }
+      
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.jogre.server.data.ProtoSchema.GameSummary) {
+          return mergeFrom((org.jogre.server.data.ProtoSchema.GameSummary)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(org.jogre.server.data.ProtoSchema.GameSummary other) {
+        if (other == org.jogre.server.data.ProtoSchema.GameSummary.getDefaultInstance()) return this;
+        if (other.hasGameKey()) {
+          setGameKey(other.getGameKey());
+        }
+        if (other.hasUsername()) {
+          setUsername(other.getUsername());
+        }
+        if (other.hasRating()) {
+          setRating(other.getRating());
+        }
+        if (other.hasWins()) {
+          setWins(other.getWins());
+        }
+        if (other.hasLoses()) {
+          setLoses(other.getLoses());
+        }
+        if (other.hasDraws()) {
+          setDraws(other.getDraws());
+        }
+        if (other.hasStreak()) {
+          setStreak(other.getStreak());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return mergeFrom(input,
+          com.google.protobuf.ExtensionRegistry.getEmptyRegistry());
+      }
+      
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistry extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              setGameKey(input.readString());
+              break;
+            }
+            case 18: {
+              setUsername(input.readString());
+              break;
+            }
+            case 24: {
+              setRating(input.readInt32());
+              break;
+            }
+            case 32: {
+              setWins(input.readInt32());
+              break;
+            }
+            case 40: {
+              setLoses(input.readInt32());
+              break;
+            }
+            case 48: {
+              setDraws(input.readInt32());
+              break;
+            }
+            case 56: {
+              setStreak(input.readInt32());
+              break;
+            }
+          }
+        }
+      }
+      
+      
+      // required string game_key = 1;
+      public boolean hasGameKey() {
+        return result.hasGameKey();
+      }
+      public java.lang.String getGameKey() {
+        return result.getGameKey();
+      }
+      public Builder setGameKey(java.lang.String value) {
+        result.hasGameKey = true;
+        result.gameKey_ = value;
+        return this;
+      }
+      public Builder clearGameKey() {
+        result.hasGameKey = false;
+        result.gameKey_ = "";
+        return this;
+      }
+      
+      // required string username = 2;
+      public boolean hasUsername() {
+        return result.hasUsername();
+      }
+      public java.lang.String getUsername() {
+        return result.getUsername();
+      }
+      public Builder setUsername(java.lang.String value) {
+        result.hasUsername = true;
+        result.username_ = value;
+        return this;
+      }
+      public Builder clearUsername() {
+        result.hasUsername = false;
+        result.username_ = "";
+        return this;
+      }
+      
+      // optional int32 rating = 3;
+      public boolean hasRating() {
+        return result.hasRating();
+      }
+      public int getRating() {
+        return result.getRating();
+      }
+      public Builder setRating(int value) {
+        result.hasRating = true;
+        result.rating_ = value;
+        return this;
+      }
+      public Builder clearRating() {
+        result.hasRating = false;
+        result.rating_ = 0;
+        return this;
+      }
+      
+      // optional int32 wins = 4;
+      public boolean hasWins() {
+        return result.hasWins();
+      }
+      public int getWins() {
+        return result.getWins();
+      }
+      public Builder setWins(int value) {
+        result.hasWins = true;
+        result.wins_ = value;
+        return this;
+      }
+      public Builder clearWins() {
+        result.hasWins = false;
+        result.wins_ = 0;
+        return this;
+      }
+      
+      // optional int32 loses = 5;
+      public boolean hasLoses() {
+        return result.hasLoses();
+      }
+      public int getLoses() {
+        return result.getLoses();
+      }
+      public Builder setLoses(int value) {
+        result.hasLoses = true;
+        result.loses_ = value;
+        return this;
+      }
+      public Builder clearLoses() {
+        result.hasLoses = false;
+        result.loses_ = 0;
+        return this;
+      }
+      
+      // optional int32 draws = 6;
+      public boolean hasDraws() {
+        return result.hasDraws();
+      }
+      public int getDraws() {
+        return result.getDraws();
+      }
+      public Builder setDraws(int value) {
+        result.hasDraws = true;
+        result.draws_ = value;
+        return this;
+      }
+      public Builder clearDraws() {
+        result.hasDraws = false;
+        result.draws_ = 0;
+        return this;
+      }
+      
+      // optional int32 streak = 7;
+      public boolean hasStreak() {
+        return result.hasStreak();
+      }
+      public int getStreak() {
+        return result.getStreak();
+      }
+      public Builder setStreak(int value) {
+        result.hasStreak = true;
+        result.streak_ = value;
+        return this;
+      }
+      public Builder clearStreak() {
+        result.hasStreak = false;
+        result.streak_ = 0;
+        return this;
+      }
+    }
+    
+    static {
+      org.jogre.server.data.ProtoSchema.getDescriptor();
+    }
+  }
+  
+  public static final class Snapshot extends
+      com.google.protobuf.GeneratedMessage {
+    // Use Snapshot.newBuilder() to construct.
+    private Snapshot() {}
+    
+    private static final Snapshot defaultInstance = new Snapshot();
+    public static Snapshot getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public Snapshot getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.jogre.server.data.ProtoSchema.internal_static_persistence_Snapshot_descriptor;
+    }
+    
+    @Override
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.jogre.server.data.ProtoSchema.internal_static_persistence_Snapshot_fieldAccessorTable;
+    }
+    
+    // required string game_key = 1;
+    private boolean hasGameKey;
+    private java.lang.String gameKey_ = "";
+    public boolean hasGameKey() { return hasGameKey; }
+    public java.lang.String getGameKey() { return gameKey_; }
+    
+    // optional int32 num_of_users = 2;
+    private boolean hasNumOfUsers;
+    private int numOfUsers_ = 0;
+    public boolean hasNumOfUsers() { return hasNumOfUsers; }
+    public int getNumOfUsers() { return numOfUsers_; }
+    
+    // optional int32 num_of_tables = 3;
+    private boolean hasNumOfTables;
+    private int numOfTables_ = 0;
+    public boolean hasNumOfTables() { return hasNumOfTables; }
+    public int getNumOfTables() { return numOfTables_; }
+    
+    @Override
+    public final boolean isInitialized() {
+      if (!hasGameKey) return false;
+      return true;
+    }
+    
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (hasGameKey()) {
+        output.writeString(1, getGameKey());
+      }
+      if (hasNumOfUsers()) {
+        output.writeInt32(2, getNumOfUsers());
+      }
+      if (hasNumOfTables()) {
+        output.writeInt32(3, getNumOfTables());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (hasGameKey()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(1, getGameKey());
+      }
+      if (hasNumOfUsers()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, getNumOfUsers());
+      }
+      if (hasNumOfTables()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, getNumOfTables());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    public static org.jogre.server.data.ProtoSchema.Snapshot parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.Snapshot parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.Snapshot parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.Snapshot parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.Snapshot parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.Snapshot parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.Snapshot parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.Snapshot parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return new Builder(); }
+    public Builder newBuilderForType() { return new Builder(); }
+    public static Builder newBuilder(org.jogre.server.data.ProtoSchema.Snapshot prototype) {
+      return new Builder().mergeFrom(prototype);
+    }
+    
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      // Construct using org.jogre.server.data.ProtoSchema.Snapshot.newBuilder()
+      private Builder() {}
+      
+      org.jogre.server.data.ProtoSchema.Snapshot result = new org.jogre.server.data.ProtoSchema.Snapshot();
+      
+      @Override
+      protected org.jogre.server.data.ProtoSchema.Snapshot internalGetResult() {
+        return result;
+      }
+      
+      @Override
+      public Builder clear() {
+        result = new org.jogre.server.data.ProtoSchema.Snapshot();
+        return this;
+      }
+      
+      @Override
+      public Builder clone() {
+        return new Builder().mergeFrom(result);
+      }
+      
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.jogre.server.data.ProtoSchema.Snapshot.getDescriptor();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.Snapshot getDefaultInstanceForType() {
+        return org.jogre.server.data.ProtoSchema.Snapshot.getDefaultInstance();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.Snapshot build() {
+        if (!isInitialized()) {
+          throw new com.google.protobuf.UninitializedMessageException(
+            result);
+        }
+        return buildPartial();
+      }
+      
+      private org.jogre.server.data.ProtoSchema.Snapshot buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        if (!isInitialized()) {
+          throw new com.google.protobuf.UninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return buildPartial();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.Snapshot buildPartial() {
+        org.jogre.server.data.ProtoSchema.Snapshot returnMe = result;
+        result = null;
+        return returnMe;
+      }
+      
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.jogre.server.data.ProtoSchema.Snapshot) {
+          return mergeFrom((org.jogre.server.data.ProtoSchema.Snapshot)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(org.jogre.server.data.ProtoSchema.Snapshot other) {
+        if (other == org.jogre.server.data.ProtoSchema.Snapshot.getDefaultInstance()) return this;
+        if (other.hasGameKey()) {
+          setGameKey(other.getGameKey());
+        }
+        if (other.hasNumOfUsers()) {
+          setNumOfUsers(other.getNumOfUsers());
+        }
+        if (other.hasNumOfTables()) {
+          setNumOfTables(other.getNumOfTables());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return mergeFrom(input,
+          com.google.protobuf.ExtensionRegistry.getEmptyRegistry());
+      }
+      
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistry extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              setGameKey(input.readString());
+              break;
+            }
+            case 16: {
+              setNumOfUsers(input.readInt32());
+              break;
+            }
+            case 24: {
+              setNumOfTables(input.readInt32());
+              break;
+            }
+          }
+        }
+      }
+      
+      
+      // required string game_key = 1;
+      public boolean hasGameKey() {
+        return result.hasGameKey();
+      }
+      public java.lang.String getGameKey() {
+        return result.getGameKey();
+      }
+      public Builder setGameKey(java.lang.String value) {
+        result.hasGameKey = true;
+        result.gameKey_ = value;
+        return this;
+      }
+      public Builder clearGameKey() {
+        result.hasGameKey = false;
+        result.gameKey_ = "";
+        return this;
+      }
+      
+      // optional int32 num_of_users = 2;
+      public boolean hasNumOfUsers() {
+        return result.hasNumOfUsers();
+      }
+      public int getNumOfUsers() {
+        return result.getNumOfUsers();
+      }
+      public Builder setNumOfUsers(int value) {
+        result.hasNumOfUsers = true;
+        result.numOfUsers_ = value;
+        return this;
+      }
+      public Builder clearNumOfUsers() {
+        result.hasNumOfUsers = false;
+        result.numOfUsers_ = 0;
+        return this;
+      }
+      
+      // optional int32 num_of_tables = 3;
+      public boolean hasNumOfTables() {
+        return result.hasNumOfTables();
+      }
+      public int getNumOfTables() {
+        return result.getNumOfTables();
+      }
+      public Builder setNumOfTables(int value) {
+        result.hasNumOfTables = true;
+        result.numOfTables_ = value;
+        return this;
+      }
+      public Builder clearNumOfTables() {
+        result.hasNumOfTables = false;
+        result.numOfTables_ = 0;
+        return this;
+      }
+    }
+    
+    static {
+      org.jogre.server.data.ProtoSchema.getDescriptor();
+    }
+  }
+  
+  public static final class User extends
+      com.google.protobuf.GeneratedMessage {
+    // Use User.newBuilder() to construct.
+    private User() {}
+    
+    private static final User defaultInstance = new User();
+    public static User getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public User getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.jogre.server.data.ProtoSchema.internal_static_persistence_User_descriptor;
+    }
+    
+    @Override
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.jogre.server.data.ProtoSchema.internal_static_persistence_User_fieldAccessorTable;
+    }
+    
+    // required string username = 1;
+    private boolean hasUsername;
+    private java.lang.String username_ = "";
+    public boolean hasUsername() { return hasUsername; }
+    public java.lang.String getUsername() { return username_; }
+    
+    // optional string password = 2;
+    private boolean hasPassword;
+    private java.lang.String password_ = "";
+    public boolean hasPassword() { return hasPassword; }
+    public java.lang.String getPassword() { return password_; }
+    
+    // optional int32 security_question = 3;
+    private boolean hasSecurityQuestion;
+    private int securityQuestion_ = 0;
+    public boolean hasSecurityQuestion() { return hasSecurityQuestion; }
+    public int getSecurityQuestion() { return securityQuestion_; }
+    
+    // optional string security_answer = 4;
+    private boolean hasSecurityAnswer;
+    private java.lang.String securityAnswer_ = "";
+    public boolean hasSecurityAnswer() { return hasSecurityAnswer; }
+    public java.lang.String getSecurityAnswer() { return securityAnswer_; }
+    
+    // optional string year_of_birth = 5;
+    private boolean hasYearOfBirth;
+    private java.lang.String yearOfBirth_ = "";
+    public boolean hasYearOfBirth() { return hasYearOfBirth; }
+    public java.lang.String getYearOfBirth() { return yearOfBirth_; }
+    
+    // optional string email = 6;
+    private boolean hasEmail;
+    private java.lang.String email_ = "";
+    public boolean hasEmail() { return hasEmail; }
+    public java.lang.String getEmail() { return email_; }
+    
+    // optional bool receive_newsletter = 7;
+    private boolean hasReceiveNewsletter;
+    private boolean receiveNewsletter_ = false;
+    public boolean hasReceiveNewsletter() { return hasReceiveNewsletter; }
+    public boolean getReceiveNewsletter() { return receiveNewsletter_; }
+    
+    @Override
+    public final boolean isInitialized() {
+      if (!hasUsername) return false;
+      return true;
+    }
+    
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (hasUsername()) {
+        output.writeString(1, getUsername());
+      }
+      if (hasPassword()) {
+        output.writeString(2, getPassword());
+      }
+      if (hasSecurityQuestion()) {
+        output.writeInt32(3, getSecurityQuestion());
+      }
+      if (hasSecurityAnswer()) {
+        output.writeString(4, getSecurityAnswer());
+      }
+      if (hasYearOfBirth()) {
+        output.writeString(5, getYearOfBirth());
+      }
+      if (hasEmail()) {
+        output.writeString(6, getEmail());
+      }
+      if (hasReceiveNewsletter()) {
+        output.writeBool(7, getReceiveNewsletter());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (hasUsername()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(1, getUsername());
+      }
+      if (hasPassword()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(2, getPassword());
+      }
+      if (hasSecurityQuestion()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, getSecurityQuestion());
+      }
+      if (hasSecurityAnswer()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(4, getSecurityAnswer());
+      }
+      if (hasYearOfBirth()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(5, getYearOfBirth());
+      }
+      if (hasEmail()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(6, getEmail());
+      }
+      if (hasReceiveNewsletter()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, getReceiveNewsletter());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    public static org.jogre.server.data.ProtoSchema.User parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.User parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.User parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.User parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.User parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.User parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.User parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static org.jogre.server.data.ProtoSchema.User parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistry extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return new Builder(); }
+    public Builder newBuilderForType() { return new Builder(); }
+    public static Builder newBuilder(org.jogre.server.data.ProtoSchema.User prototype) {
+      return new Builder().mergeFrom(prototype);
+    }
+    
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      // Construct using org.jogre.server.data.ProtoSchema.User.newBuilder()
+      private Builder() {}
+      
+      org.jogre.server.data.ProtoSchema.User result = new org.jogre.server.data.ProtoSchema.User();
+      
+      @Override
+      protected org.jogre.server.data.ProtoSchema.User internalGetResult() {
+        return result;
+      }
+      
+      @Override
+      public Builder clear() {
+        result = new org.jogre.server.data.ProtoSchema.User();
+        return this;
+      }
+      
+      @Override
+      public Builder clone() {
+        return new Builder().mergeFrom(result);
+      }
+      
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.jogre.server.data.ProtoSchema.User.getDescriptor();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.User getDefaultInstanceForType() {
+        return org.jogre.server.data.ProtoSchema.User.getDefaultInstance();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.User build() {
+        if (!isInitialized()) {
+          throw new com.google.protobuf.UninitializedMessageException(
+            result);
+        }
+        return buildPartial();
+      }
+      
+      private org.jogre.server.data.ProtoSchema.User buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        if (!isInitialized()) {
+          throw new com.google.protobuf.UninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return buildPartial();
+      }
+      
+      public org.jogre.server.data.ProtoSchema.User buildPartial() {
+        org.jogre.server.data.ProtoSchema.User returnMe = result;
+        result = null;
+        return returnMe;
+      }
+      
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.jogre.server.data.ProtoSchema.User) {
+          return mergeFrom((org.jogre.server.data.ProtoSchema.User)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(org.jogre.server.data.ProtoSchema.User other) {
+        if (other == org.jogre.server.data.ProtoSchema.User.getDefaultInstance()) return this;
+        if (other.hasUsername()) {
+          setUsername(other.getUsername());
+        }
+        if (other.hasPassword()) {
+          setPassword(other.getPassword());
+        }
+        if (other.hasSecurityQuestion()) {
+          setSecurityQuestion(other.getSecurityQuestion());
+        }
+        if (other.hasSecurityAnswer()) {
+          setSecurityAnswer(other.getSecurityAnswer());
+        }
+        if (other.hasYearOfBirth()) {
+          setYearOfBirth(other.getYearOfBirth());
+        }
+        if (other.hasEmail()) {
+          setEmail(other.getEmail());
+        }
+        if (other.hasReceiveNewsletter()) {
+          setReceiveNewsletter(other.getReceiveNewsletter());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return mergeFrom(input,
+          com.google.protobuf.ExtensionRegistry.getEmptyRegistry());
+      }
+      
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistry extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              setUsername(input.readString());
+              break;
+            }
+            case 18: {
+              setPassword(input.readString());
+              break;
+            }
+            case 24: {
+              setSecurityQuestion(input.readInt32());
+              break;
+            }
+            case 34: {
+              setSecurityAnswer(input.readString());
+              break;
+            }
+            case 42: {
+              setYearOfBirth(input.readString());
+              break;
+            }
+            case 50: {
+              setEmail(input.readString());
+              break;
+            }
+            case 56: {
+              setReceiveNewsletter(input.readBool());
+              break;
+            }
+          }
+        }
+      }
+      
+      
+      // required string username = 1;
+      public boolean hasUsername() {
+        return result.hasUsername();
+      }
+      public java.lang.String getUsername() {
+        return result.getUsername();
+      }
+      public Builder setUsername(java.lang.String value) {
+        result.hasUsername = true;
+        result.username_ = value;
+        return this;
+      }
+      public Builder clearUsername() {
+        result.hasUsername = false;
+        result.username_ = "";
+        return this;
+      }
+      
+      // optional string password = 2;
+      public boolean hasPassword() {
+        return result.hasPassword();
+      }
+      public java.lang.String getPassword() {
+        return result.getPassword();
+      }
+      public Builder setPassword(java.lang.String value) {
+        result.hasPassword = true;
+        result.password_ = value;
+        return this;
+      }
+      public Builder clearPassword() {
+        result.hasPassword = false;
+        result.password_ = "";
+        return this;
+      }
+      
+      // optional int32 security_question = 3;
+      public boolean hasSecurityQuestion() {
+        return result.hasSecurityQuestion();
+      }
+      public int getSecurityQuestion() {
+        return result.getSecurityQuestion();
+      }
+      public Builder setSecurityQuestion(int value) {
+        result.hasSecurityQuestion = true;
+        result.securityQuestion_ = value;
+        return this;
+      }
+      public Builder clearSecurityQuestion() {
+        result.hasSecurityQuestion = false;
+        result.securityQuestion_ = 0;
+        return this;
+      }
+      
+      // optional string security_answer = 4;
+      public boolean hasSecurityAnswer() {
+        return result.hasSecurityAnswer();
+      }
+      public java.lang.String getSecurityAnswer() {
+        return result.getSecurityAnswer();
+      }
+      public Builder setSecurityAnswer(java.lang.String value) {
+        result.hasSecurityAnswer = true;
+        result.securityAnswer_ = value;
+        return this;
+      }
+      public Builder clearSecurityAnswer() {
+        result.hasSecurityAnswer = false;
+        result.securityAnswer_ = "";
+        return this;
+      }
+      
+      // optional string year_of_birth = 5;
+      public boolean hasYearOfBirth() {
+        return result.hasYearOfBirth();
+      }
+      public java.lang.String getYearOfBirth() {
+        return result.getYearOfBirth();
+      }
+      public Builder setYearOfBirth(java.lang.String value) {
+        result.hasYearOfBirth = true;
+        result.yearOfBirth_ = value;
+        return this;
+      }
+      public Builder clearYearOfBirth() {
+        result.hasYearOfBirth = false;
+        result.yearOfBirth_ = "";
+        return this;
+      }
+      
+      // optional string email = 6;
+      public boolean hasEmail() {
+        return result.hasEmail();
+      }
+      public java.lang.String getEmail() {
+        return result.getEmail();
+      }
+      public Builder setEmail(java.lang.String value) {
+        result.hasEmail = true;
+        result.email_ = value;
+        return this;
+      }
+      public Builder clearEmail() {
+        result.hasEmail = false;
+        result.email_ = "";
+        return this;
+      }
+      
+      // optional bool receive_newsletter = 7;
+      public boolean hasReceiveNewsletter() {
+        return result.hasReceiveNewsletter();
+      }
+      public boolean getReceiveNewsletter() {
+        return result.getReceiveNewsletter();
+      }
+      public Builder setReceiveNewsletter(boolean value) {
+        result.hasReceiveNewsletter = true;
+        result.receiveNewsletter_ = value;
+        return this;
+      }
+      public Builder clearReceiveNewsletter() {
+        result.hasReceiveNewsletter = false;
+        result.receiveNewsletter_ = false;
         return this;
       }
     }
@@ -1009,20 +1819,25 @@ public final class ProtoSchema {
   }
   
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_javatests_OutgoingMessage_descriptor;
+    internal_static_persistence_GameInfo_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_javatests_OutgoingMessage_fieldAccessorTable;
+      internal_static_persistence_GameInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_javatests_Property_descriptor;
+    internal_static_persistence_GameSummary_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_javatests_Property_fieldAccessorTable;
+      internal_static_persistence_GameSummary_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_javatests_MessageBusState_descriptor;
+    internal_static_persistence_Snapshot_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_javatests_MessageBusState_fieldAccessorTable;
+      internal_static_persistence_Snapshot_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_persistence_User_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_persistence_User_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1032,43 +1847,58 @@ public final class ProtoSchema {
       descriptor;
   static {
     java.lang.String descriptorData =
-      "\n\014schema.proto\022\tjavatests\"4\n\017OutgoingMes" +
-      "sage\022\017\n\007payload\030\001 \002(\t\022\020\n\010ackToken\030\002 \002(\005\"" +
-      "&\n\010Property\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"" +
-      "\214\001\n\017MessageBusState\0220\n\014messageQueue\030\001 \003(" +
-      "\0132\032.javatests.OutgoingMessage\0221\n\024connect" +
-      "ionProperties\030\002 \003(\0132\023.javatests.Property" +
-      "\022\024\n\014randomSecret\030\003 \002(\tB&\n\025org.jogre.serv" +
-      "er.dataB\013ProtoSchemaH\001";
+      "\n\014schema.proto\022\013persistence\"\220\001\n\010GameInfo" +
+      "\022\n\n\002id\030\001 \002(\003\022\020\n\010game_key\030\002 \001(\t\022\017\n\007player" +
+      "s\030\003 \001(\t\022\017\n\007results\030\004 \001(\t\022\022\n\nstart_time\030\005" +
+      " \001(\003\022\020\n\010end_time\030\006 \001(\003\022\017\n\007history\030\007 \001(\t\022" +
+      "\r\n\005score\030\010 \001(\t\"}\n\013GameSummary\022\020\n\010game_ke" +
+      "y\030\001 \002(\t\022\020\n\010username\030\002 \002(\t\022\016\n\006rating\030\003 \001(" +
+      "\005\022\014\n\004wins\030\004 \001(\005\022\r\n\005loses\030\005 \001(\005\022\r\n\005draws\030" +
+      "\006 \001(\005\022\016\n\006streak\030\007 \001(\005\"I\n\010Snapshot\022\020\n\010gam" +
+      "e_key\030\001 \002(\t\022\024\n\014num_of_users\030\002 \001(\005\022\025\n\rnum" +
+      "_of_tables\030\003 \001(\005\"\240\001\n\004User\022\020\n\010username\030\001 " +
+      "\002(\t\022\020\n\010password\030\002 \001(\t\022\031\n\021security_questi" +
+      "on\030\003 \001(\005\022\027\n\017security_answer\030\004 \001(\t\022\025\n\ryea" +
+      "r_of_birth\030\005 \001(\t\022\r\n\005email\030\006 \001(\t\022\032\n\022recei" +
+      "ve_newsletter\030\007 \001(\010B&\n\025org.jogre.server." +
+      "dataB\013ProtoSchemaH\001";
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_javatests_OutgoingMessage_descriptor =
+          internal_static_persistence_GameInfo_descriptor =
             getDescriptor().getMessageTypes().get(0);
-          internal_static_javatests_OutgoingMessage_fieldAccessorTable = new
+          internal_static_persistence_GameInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_javatests_OutgoingMessage_descriptor,
-              new java.lang.String[] { "Payload", "AckToken", },
-              org.jogre.server.data.ProtoSchema.OutgoingMessage.class,
-              org.jogre.server.data.ProtoSchema.OutgoingMessage.Builder.class);
-          internal_static_javatests_Property_descriptor =
+              internal_static_persistence_GameInfo_descriptor,
+              new java.lang.String[] { "Id", "GameKey", "Players", "Results", "StartTime", "EndTime", "History", "Score", },
+              org.jogre.server.data.ProtoSchema.GameInfo.class,
+              org.jogre.server.data.ProtoSchema.GameInfo.Builder.class);
+          internal_static_persistence_GameSummary_descriptor =
             getDescriptor().getMessageTypes().get(1);
-          internal_static_javatests_Property_fieldAccessorTable = new
+          internal_static_persistence_GameSummary_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_javatests_Property_descriptor,
-              new java.lang.String[] { "Key", "Value", },
-              org.jogre.server.data.ProtoSchema.Property.class,
-              org.jogre.server.data.ProtoSchema.Property.Builder.class);
-          internal_static_javatests_MessageBusState_descriptor =
+              internal_static_persistence_GameSummary_descriptor,
+              new java.lang.String[] { "GameKey", "Username", "Rating", "Wins", "Loses", "Draws", "Streak", },
+              org.jogre.server.data.ProtoSchema.GameSummary.class,
+              org.jogre.server.data.ProtoSchema.GameSummary.Builder.class);
+          internal_static_persistence_Snapshot_descriptor =
             getDescriptor().getMessageTypes().get(2);
-          internal_static_javatests_MessageBusState_fieldAccessorTable = new
+          internal_static_persistence_Snapshot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_javatests_MessageBusState_descriptor,
-              new java.lang.String[] { "MessageQueue", "ConnectionProperties", "RandomSecret", },
-              org.jogre.server.data.ProtoSchema.MessageBusState.class,
-              org.jogre.server.data.ProtoSchema.MessageBusState.Builder.class);
+              internal_static_persistence_Snapshot_descriptor,
+              new java.lang.String[] { "GameKey", "NumOfUsers", "NumOfTables", },
+              org.jogre.server.data.ProtoSchema.Snapshot.class,
+              org.jogre.server.data.ProtoSchema.Snapshot.Builder.class);
+          internal_static_persistence_User_descriptor =
+            getDescriptor().getMessageTypes().get(3);
+          internal_static_persistence_User_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_persistence_User_descriptor,
+              new java.lang.String[] { "Username", "Password", "SecurityQuestion", "SecurityAnswer", "YearOfBirth", "Email", "ReceiveNewsletter", },
+              org.jogre.server.data.ProtoSchema.User.class,
+              org.jogre.server.data.ProtoSchema.User.Builder.class);
           return null;
         }
       };
