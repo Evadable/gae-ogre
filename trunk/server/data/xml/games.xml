@@ -7,5 +7,7 @@
     <gameinfo players="john dave" results="1 2" st="25/05/2009-10:09:44" et="25/05/2009-10:10:09"/>
     <gameinfo players="john dave" results="2 1" st="08/06/2009-05:31:36" et="08/06/2009-05:32:18"/>
     <gameinfo players="dave john" results="1 2" st="12/07/2009-10:27:33" et="12/07/2009-10:28:16"/>
+    <gameinfo players="dave john" results="2 1" st="14/07/2009-07:25:35" et="14/07/2009-07:26:44"/>
+    <gameinfo players="dave john" results="1 2" st="14/07/2009-07:25:35" et="14/07/2009-07:27:35"/>
   </game>
 </games>

@@ -19,7 +19,6 @@
  */
 package org.jogre.server.data.db;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
@@ -35,6 +34,8 @@ import org.jogre.server.data.ServerDataException;
 import org.jogre.server.data.SnapShot;
 import org.jogre.server.data.User;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Implementation of the IServerData to a local database.
  *
@@ -44,6 +45,13 @@ import org.jogre.server.data.User;
  * @version Beta 0.3
  */
 public class ServerDataDB extends AbstractServerData implements IDatabase {
+  
+  private final ORM orm;
+  
+  public ServerDataDB(ORM orm) {
+    Preconditions.checkNotNull(orm);
+    this.orm = orm;
+  }
 	
 	/**
 	 * Return type as a database.
@@ -67,16 +75,16 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
             return false;
         } else if (serverProperties.isUserValidationUser()) {
         	try {
-        		IBatis iBatis = IBatis.getInstance();
+        		
         		
         		User parameterUser = new User ();
         		parameterUser.setUsername(username);
         		
-        		User resultUser = (User)iBatis.getObject(ST_SELECT_USER, parameterUser);
+        		User resultUser = (User)orm.getObject(ST_SELECT_USER, parameterUser);
         		
         		return resultUser != null;
         	}
-        	catch (IOException ioEx) {
+        	catch (RuntimeException ioEx) {
     			ioEx.printStackTrace();		// should use proper logging at some stage
     			throw new ServerDataException (ioEx.getMessage());
     		}
@@ -103,17 +111,17 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
             return containsUser (username);
         } else if (serverProperties.isUserValidationPassword()) {
         	try {
-        		IBatis iBatis = IBatis.getInstance();
+        		
         		
         		User parameterUser = new User ();
         		parameterUser.setUsername(username);
         		parameterUser.setPassword(password);
         		
-        		User resultUser = (User)iBatis.getObject(ST_SELECT_USER, parameterUser);
+        		User resultUser = (User)orm.getObject(ST_SELECT_USER, parameterUser);
         		
         		return resultUser != null;
         	}
-        	catch (IOException ioEx) {
+        	catch (RuntimeException ioEx) {
     			ioEx.printStackTrace();		// should use proper logging at some stage
     			throw new ServerDataException (ioEx.getMessage());
     		}
@@ -134,10 +142,10 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	public GameOver addGame (GameInfo gameInfo, boolean eloRatings) throws ServerDataException {
 		GameOver gameOver = null;
         try {
-        	IBatis ibatis = IBatis.getInstance();
+        	
             
             // Insert the game info to the database        	
-    		ibatis.update(ST_ADD_GAME_INFO, gameInfo);
+    		orm.update(ST_ADD_GAME_INFO, gameInfo);
 
             // Update the game summaries now on the database
             String    gameKey    = gameInfo.getGameKey();
@@ -186,10 +194,10 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 
             // Update database
             for (int i = 0; i < numPlayers; i++) {
-                ibatis.update(ST_UPDATE_GAME_SUMMARY, gameSummary[i]);
+                orm.update(ST_UPDATE_GAME_SUMMARY, gameSummary[i]);
             }
         }
-        catch (IOException ioEx) {
+        catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();		// should use proper logging at some stage
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -208,9 +216,9 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public GameSummary getGameSummary (String gameKey, String username) throws ServerDataException {
 		try {
-			IBatis ibatis = IBatis.getInstance();
+			
 			GameSummary param = new GameSummary (gameKey, username);		
-			GameSummary gameSummary = (GameSummary)ibatis.getObject(ST_SELECT_GAME_SUMMARY, param);
+			GameSummary gameSummary = (GameSummary)orm.getObject(ST_SELECT_GAME_SUMMARY, param);
 			
 			// Check to see if game summary is null
 			if (gameSummary != null) {
@@ -218,12 +226,12 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 			}
 			else {		 // create new game summary and add to database
 				param.setRating(ServerProperties.getInstance().getStartRating (gameKey));
-				ibatis.update(ST_ADD_GAME_SUMMARY, param);
+				orm.update(ST_ADD_GAME_SUMMARY, param);
 				
 				return param;
 			}
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();		// should use proper logging at some stage
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -238,11 +246,11 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public void updateSnapshot (String gameKey, int numOfUsers, int numOfTables) throws ServerDataException {
 		try {
-			IBatis ibatis = IBatis.getInstance();
+			
 			SnapShot snapShot = new SnapShot (gameKey, numOfUsers, numOfTables);
-			ibatis.update(ST_UPDATE_SNAP_SHOT, snapShot);
+			orm.update(ST_UPDATE_SNAP_SHOT, snapShot);
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();		// should use proper logging at some stage
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -259,15 +267,15 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public void resetSnapshot (Vector gameKeys) throws ServerDataException {
 		try {
-			IBatis ibatis = IBatis.getInstance();
-			ibatis.update(ST_DELETE_ALL_SNAP_SHOT);
+			
+			orm.update(ST_DELETE_ALL_SNAP_SHOT);
 			
 			for (int i = 0; i < gameKeys.size(); i++) {
 				String gameKey = (String)gameKeys.get(i);
-				ibatis.update(ST_ADD_SNAP_SHOT, new SnapShot (gameKey, 0, 0));
+				orm.update(ST_ADD_SNAP_SHOT, new SnapShot (gameKey, 0, 0));
 			}
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();		// should use proper logging at some stage
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -284,9 +292,9 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public List getUsers() throws ServerDataException {
 		try {
-			return IBatis.getInstance().getList(ST_SELECT_ALL_USERS);
+			return orm.getList(ST_SELECT_ALL_USERS);
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -303,9 +311,9 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public List getGameInfos() throws ServerDataException {
 		try {
-			return IBatis.getInstance().getList(ST_SELECT_ALL_GAME_INFOS);
+			return orm.getList(ST_SELECT_ALL_GAME_INFOS);
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -322,9 +330,9 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public List getGameSummarys() throws ServerDataException {
 		try {
-			return IBatis.getInstance().getList(ST_SELECT_ALL_GAME_SUMMARYS);
+			return orm.getList(ST_SELECT_ALL_GAME_SUMMARYS);
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -341,9 +349,9 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public void newUser(User user) throws ServerDataException {
 		try {
-			IBatis.getInstance().update(ST_ADD_USER, user);
+			orm.update(ST_ADD_USER, user);
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -360,9 +368,9 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public void deleteUser(User user) throws ServerDataException {
 		try {
-			IBatis.getInstance().update(ST_DELETE_USER, user);
+			orm.update(ST_DELETE_USER, user);
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();
 			throw new ServerDataException (ioEx.getMessage());
 		}
@@ -379,9 +387,9 @@ public class ServerDataDB extends AbstractServerData implements IDatabase {
 	 */
 	public void updateUser(User user) throws ServerDataException {
 		try {
-			IBatis.getInstance().update(ST_UPDATE_USER, user);
+			orm.update(ST_UPDATE_USER, user);
 		}
-		catch (IOException ioEx) {
+		catch (RuntimeException ioEx) {
 			ioEx.printStackTrace();
 			throw new ServerDataException (ioEx.getMessage());
 		}

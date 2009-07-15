@@ -19,7 +19,10 @@
  */
 package org.jogre.server.data;
 
+import java.io.IOException;
+
 import org.jogre.server.ServerProperties;
+import org.jogre.server.data.db.IBatis;
 import org.jogre.server.data.db.ServerDataDB;
 import org.jogre.server.data.xml.ServerDataXML;
 
@@ -43,17 +46,24 @@ public class ServerDataFactory {
 		String userConnProp = ServerProperties.getInstance().getCurrentServerData();
 		
 		// Depending on value - load correct instance.
-		if (userConnProp.equals (IServerData.XML))
-			return new ServerDataXML ();		// link to local file system
-        else if (userConnProp.equals(IServerData.DATABASE))
-            return new ServerDataDB ();     // link to master server
-        else if (userConnProp.equals(IServerData.JOGRE_DOT_ORG))
-			return new ServerDataDB ();		// link to master server
-		else {
-			System.err.println ("No user connection defined");
-			System.exit (0);		// Exit
-		}		
-		
-		return null;
-	}
+    try {
+      if (userConnProp.equals(IServerData.XML))
+        return new ServerDataXML(); // link to local file system
+      else if (userConnProp.equals(IServerData.DATABASE))
+        return new ServerDataDB(new IBatis()); // link to master server
+      else if (userConnProp
+          .equals(IServerData.JOGRE_DOT_ORG))
+        return new ServerDataDB(new IBatis()); // link to master server
+      else {
+        System.err.println("No user connection defined");
+        System.exit(0); // Exit
+      }
+    } catch (IOException e) {
+      System.err.println("Could not connect to store");
+      e.printStackTrace();
+      System.exit(0); // Exit
+    }
+
+    return null;
+  }
 }

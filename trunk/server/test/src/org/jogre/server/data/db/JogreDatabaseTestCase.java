@@ -53,7 +53,7 @@ public class JogreDatabaseTestCase extends DBTestCase {
 	
     /** Use this connection to perform database setup */
     protected IDatabaseConnection dbunitConn;
-    protected IBatis iBatis;
+    protected ORM iBatis;
     
     private String filename = null; 
     private Properties properties = null;
@@ -133,7 +133,7 @@ public class JogreDatabaseTestCase extends DBTestCase {
         IDatabaseConnection connection = new DatabaseConnection(conn);
         
         // Create iBatis connection (using same properties)
-        this.iBatis = IBatis.getInstance(properties);
+        this.iBatis = new IBatis (properties);
         
         return connection;
     }

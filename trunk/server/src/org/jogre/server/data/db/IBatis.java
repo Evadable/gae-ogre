@@ -37,13 +37,10 @@ import com.ibatis.sqlmap.client.SqlMapClientBuilder;
  * @author  Bob Marks
  * @version Beta 0.3
  */
-public class IBatis {
+public class IBatis implements ORM {
 
 	// Declare constants
 	private static final String DEFAULT_SQLMAP = "org/jogre/server/data/db/SQLMapConf.xml";
-	
-	// Singleton instance
-	private static IBatis instance = null;
 	
 	private SqlMapClient sqlMap;
 		
@@ -52,7 +49,7 @@ public class IBatis {
 	 * default values i.e. this is for use of connecting to a standard JOGRE Server 
 	 * database using the connection values in the server properties ("server.xml").
 	 */
-	private IBatis () throws IOException {
+	public IBatis () throws IOException {
 		// Set up default SQL map		
 		this (IBatis.getJogreIbatisProperites ());
 	}	
@@ -65,7 +62,7 @@ public class IBatis {
 	 *                      "driver", "url", "username" and "password".
 	 * @throws IOException
 	 */
-	private IBatis (Properties properties) throws IOException {
+	public IBatis (Properties properties) throws IOException {
 		// Set up default SQL map		
 		Reader reader = Resources.getResourceAsReader(DEFAULT_SQLMAP);
 		        
@@ -91,55 +88,25 @@ public class IBatis {
 		return ibatisProperties;
 	}
 	
-	/**
-	 * Get instance of IBatis wrapper.
-	 * 
-	 * @return
-	 */
-	public static IBatis getInstance () throws IOException {
-		if (instance == null)
-			instance = new IBatis ();
-		return instance;
-	}
-	
-	/**
-	 * Get instance of IBatis wrapper (this is not part of the singleton).
-	 * 
-	 * @return
-	 */
-	public static IBatis getInstance (Properties props) throws IOException {
-		return new IBatis (props);
-	}
-	
-	/**
-	 * Return a single object with supplied parameter object.
-	 * 
-	 * @param id
-	 * @param parameterObject
-	 * @return
-	 */
+	/* (non-Javadoc)
+   * @see org.jogre.server.data.db.ORM#getObject(java.lang.String, java.lang.Object)
+   */
 	public Object getObject (String id, Object parameterObject) throws SQLException {
 		Object obj = sqlMap.queryForObject (id, parameterObject);		
 		return obj;
 	}
 		
-	/**
-	 * Return object.
-	 * 
-	 * @param id
-	 * @return
-	 * @throws SQLException
-	 */
+	/* (non-Javadoc)
+   * @see org.jogre.server.data.db.ORM#getObject(java.lang.String)
+   */
 	public Object getObject (String id) throws SQLException {
 		Object obj = getObject (id, null);
 		return obj;
 	}
 
-	/**
-     * Return a long value from an SQL map.  Useful for getting primary IDs.
-     * 
-     * @param id                  Statement ID.
-     */
+	/* (non-Javadoc)
+   * @see org.jogre.server.data.db.ORM#getLong(java.lang.String)
+   */
     public long getLong (String id) throws SQLException {
     	// Read long from object.
     	Long autoId = (Long)getObject(id);
@@ -149,44 +116,31 @@ public class IBatis {
     		return 0;
     }
 	
-	/**
-	 * Return list of object with parameter object.
-	 * 
-	 * @param id
-	 * @param parameterObject
-	 * @return
-	 */
+	/* (non-Javadoc)
+   * @see org.jogre.server.data.db.ORM#getList(java.lang.String, java.lang.Object)
+   */
 	public List getList (String id, Object parameterObject) throws SQLException {
 		List list = sqlMap.queryForList(id, parameterObject);		
 		return list;
 	}
 	
-	/**
-	 * Return list of object with no parameter object.
-	 * 
-	 * @param id
-	 * @return
-	 */
+	/* (non-Javadoc)
+   * @see org.jogre.server.data.db.ORM#getList(java.lang.String)
+   */
 	public List getList (String id) throws SQLException {
 		List list = getList (id, null);
 		return list;
 	}
 
-    /**
-     * Update object using parameter object.
-     * 
-     * @param id                  Statement ID.
-     * @param parameterObject     Parameter object.
+    /* (non-Javadoc)
+     * @see org.jogre.server.data.db.ORM#update(java.lang.String, java.lang.Object)
      */
     public void update (String id, Object parameterObject) throws SQLException {
     	sqlMap.update (id, parameterObject);
     }
     
-    /**
-     * Update database with no parameter object.
-     * 
-     * @param id
-     * @throws SQLException
+    /* (non-Javadoc)
+     * @see org.jogre.server.data.db.ORM#update(java.lang.String)
      */
     public void update (String id) throws SQLException {
     	sqlMap.update(id);
