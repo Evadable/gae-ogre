@@ -4,27 +4,45 @@
 // Compile from project root with
 // ./protoc --java_out=./src schema.proto
 
-package javatests;
+package persistence;
 
 option java_package = "org.jogre.server.data";
 option java_outer_classname = "ProtoSchema";
 option optimize_for = SPEED;
 
-// A message that is queued for http delivery
-message OutgoingMessage {
-  required string payload = 1;
-  required int32 ackToken = 2;
+message GameInfo {
+  required int64 id = 1;
+  optional string game_key = 2;
+  optional string players = 3;
+  optional string results = 4;
+  optional int64 start_time = 5;
+  optional int64 end_time = 6;
+  optional string history = 7;
+  optional string score = 8;
 }
 
-// A key/value pair of strings
-message Property {
-  required string key = 1;
-  required string value = 2;
+message GameSummary {
+  required string game_key = 1; 
+  required string username = 2; 
+  optional int32 rating = 3; 
+  optional int32 wins = 4; 
+  optional int32 loses = 5; 
+  optional int32 draws = 6; 
+  optional int32 streak = 7;
 }
 
-// The persistent state of a MessageBus
-message MessageBusState {
-  repeated OutgoingMessage messageQueue = 1;
-  repeated Property connectionProperties = 2;
-  required string randomSecret = 3;
+message Snapshot {
+  required string game_key = 1; 
+  optional int32 num_of_users = 2; 
+  optional int32 num_of_tables = 3;
+}
+
+message User {
+  required string username = 1; 
+  optional string password = 2; 
+  optional int32 security_question = 3; 
+  optional string security_answer = 4; 
+  optional string year_of_birth = 5; 
+  optional string email = 6; 
+  optional bool receive_newsletter = 7; 
 }
