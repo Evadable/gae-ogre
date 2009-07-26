@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import org.jogre.server.ServerProperties;
 import org.jogre.server.data.db.IBatis;
+import org.jogre.server.data.db.PersistenceORM;
 import org.jogre.server.data.db.ServerDataDB;
 import org.jogre.server.data.xml.ServerDataXML;
 
@@ -49,6 +50,8 @@ public class ServerDataFactory {
     try {
       if (userConnProp.equals(IServerData.XML))
         return new ServerDataXML(); // link to local file system
+      else if (userConnProp.equals(IServerData.IN_MEMORY))
+        return new ServerDataDB(PersistenceORM.createInMemoryInstance());
       else if (userConnProp.equals(IServerData.DATABASE))
         return new ServerDataDB(new IBatis()); // link to master server
       else if (userConnProp

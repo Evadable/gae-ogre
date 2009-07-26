@@ -36,6 +36,9 @@ import org.jogre.common.GameOver;
  */
 public interface IServerData {
 
+  /** Property to load an in-memory persistence. */
+  public static final String IN_MEMORY = "memory";
+  
 	/** Property to load a simple data connection to XML. */
 	public static final String XML = "xml";
 	

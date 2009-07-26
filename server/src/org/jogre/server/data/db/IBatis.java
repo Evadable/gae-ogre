@@ -97,26 +97,6 @@ public class IBatis implements ORM {
 	}
 		
 	/* (non-Javadoc)
-   * @see org.jogre.server.data.db.ORM#getObject(java.lang.String)
-   */
-	public Object getObject (String id) throws SQLException {
-		Object obj = getObject (id, null);
-		return obj;
-	}
-
-	/* (non-Javadoc)
-   * @see org.jogre.server.data.db.ORM#getLong(java.lang.String)
-   */
-    public long getLong (String id) throws SQLException {
-    	// Read long from object.
-    	Long autoId = (Long)getObject(id);
-    	if (autoId != null)	
-    		return autoId.longValue();
-    	else
-    		return 0;
-    }
-	
-	/* (non-Javadoc)
    * @see org.jogre.server.data.db.ORM#getList(java.lang.String, java.lang.Object)
    */
 	public List getList (String id, Object parameterObject) throws SQLException {

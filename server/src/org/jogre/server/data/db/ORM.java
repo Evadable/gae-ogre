@@ -22,24 +22,6 @@ public interface ORM {
       Object parameterObject) throws SQLException;
 
   /**
-   * Return object.
-   * 
-   * @param id
-   * @return
-   * @throws SQLException
-   */
-  public abstract Object getObject(String id)
-      throws SQLException;
-
-  /**
-   * Return a long value from an SQL map.  Useful for getting primary IDs.
-   * 
-   * @param id                  Statement ID.
-   */
-  public abstract long getLong(String id)
-      throws SQLException;
-
-  /**
    * Return list of object with parameter object.
    * 
    * @param id
