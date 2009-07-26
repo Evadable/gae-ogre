@@ -72,7 +72,7 @@
     Persistent server data. 
     =============================================================================
     -->
-    <server_data current="xml">
+    <server_data current="memory">
         <!-- XML data source (default) -->
         <xml location="data/xml"/>
         <!-- List of database connections -->
