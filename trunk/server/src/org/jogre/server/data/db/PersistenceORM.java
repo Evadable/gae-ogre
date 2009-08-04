@@ -2,7 +2,6 @@ package org.jogre.server.data.db;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jogre.server.data.ProtoSchema;
@@ -13,10 +12,8 @@ import org.jogre.server.data.ProtoSchema.User;
 
 import com.appenginefan.toolkit.persistence.MapBasedPersistence;
 import com.appenginefan.toolkit.persistence.Persistence;
-import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 
 import static org.jogre.server.data.db.IDatabase.*;
 
@@ -83,21 +80,21 @@ public class PersistenceORM implements ORM {
   public List getList(String id, Object parameterObject)
       throws SQLException {
     checkId(id);
-    // TODO Auto-generated method stub
+    // TODO: is this method ever used?
     return null;
   }
 
   @Override
   public List getList(String id) throws SQLException {
     checkId(id);
-    // TODO Auto-generated method stub
+    // TODO: is this method ever used?
     return null;
   }
 
   @Override
   public Object getObject(String id, Object parameterObject)
       throws SQLException {
-    checkId(id, ST_SELECT_USER);
+    checkId(id, ST_SELECT_USER, ST_SELECT_GAME_SUMMARY);
     if (ST_SELECT_USER.equals(id)) {
       User result = users.get(((org.jogre.server.data.User) parameterObject).getUsername());
       if (result == null) {
@@ -113,31 +110,77 @@ public class PersistenceORM implements ORM {
       asPojo.setYearOfBirth(result.getYearOfBirth());
       return asPojo;
     }
+    if (ST_SELECT_GAME_SUMMARY.equals(id)) {
+      String key = makeKey((org.jogre.server.data.GameSummary) parameterObject);
+      GameSummary summary = summaries.get(key);
+      if (summary == null) {
+        return null;
+      }
+      org.jogre.server.data.GameSummary asPojo = new org.jogre.server.data.GameSummary();
+      asPojo.setDraws(summary.getDraws());
+      asPojo.setGameKey(summary.getGameKey());
+      asPojo.setLoses(summary.getLoses());
+      asPojo.setRating(summary.getRating());
+      asPojo.setStreak(summary.getStreak());
+      asPojo.setUsername(summary.getUsername());
+      asPojo.setWins(summary.getWins());
+      return asPojo;
+    }
     return null;
   }
-
+  
   @Override
   public void update(String id, Object parameterObject)
       throws SQLException {
-    checkId(id, ST_ADD_SNAP_SHOT);
-    if (ST_ADD_SNAP_SHOT.equals(id)) {  // update the snapshot for a given key
+    checkId(id, ST_ADD_SNAP_SHOT, ST_ADD_GAME_SUMMARY, ST_UPDATE_SNAP_SHOT, ST_ADD_GAME_INFO, ST_UPDATE_GAME_SUMMARY);
+    if (ST_ADD_SNAP_SHOT.equals(id) || ST_UPDATE_SNAP_SHOT.equals(id)) {
       final org.jogre.server.data.SnapShot snapshot = 
           (org.jogre.server.data.SnapShot) parameterObject;
       snapshots.mutate(
-          snapshot.getGameKey(), 
-          new Function<ProtoSchema.Snapshot, ProtoSchema.Snapshot>(){
-            @Override
-            public Snapshot apply(Snapshot original) {
-              return ProtoSchema.Snapshot.newBuilder()
+          snapshot.getGameKey(),
+          Functions.constant(
+              ProtoSchema.Snapshot.newBuilder()
                   .setGameKey(snapshot.getGameKey())
                   .setNumOfTables(snapshot.getNumOfTables())
                   .setNumOfUsers(snapshot.getNumOfUsers())
-                  .build();
-            }
-          });
-      
+                  .build()));
+      return;
     }
-    // TODO Auto-generated method stub
+    if (ST_ADD_GAME_SUMMARY.equals(id) || ST_UPDATE_GAME_SUMMARY.equals(id)) {
+      final org.jogre.server.data.GameSummary summary = 
+          (org.jogre.server.data.GameSummary) parameterObject;
+      summaries.mutate(
+          makeKey(summary),
+          Functions.constant(
+              ProtoSchema.GameSummary.newBuilder()
+              .setDraws(summary.getDraws())
+              .setLoses(summary.getLoses())
+              .setRating(summary.getRating())
+              .setStreak(summary.getStreak())
+              .setWins(summary.getWins())
+              .setUsername(summary.getUsername())
+              .setGameKey(summary.getGameKey())
+              .build()));
+      return;
+    }
+    if (ST_ADD_GAME_INFO.equals(id)) {
+      final org.jogre.server.data.GameInfo info = 
+          (org.jogre.server.data.GameInfo) parameterObject;
+      infos.mutate(
+          String.valueOf(info.getId()),
+          Functions.constant(
+              ProtoSchema.GameInfo.newBuilder()
+              .setEndTime(info.getEndTime().getTime())
+              .setGameKey(info.getGameKey())
+              .setHistory(info.getGameHistory())
+              .setId(info.getId())
+              .setPlayers(info.getPlayers())
+              .setResults(info.getResults())
+              .setScore(info.getGameScore())
+              .setStartTime(info.getStartTime().getTime())
+              .build()));
+      return;
+    }
   }
 
   
@@ -145,6 +188,10 @@ public class PersistenceORM implements ORM {
   public void update(String id) throws SQLException {
     checkId(id, ST_DELETE_ALL_SNAP_SHOT);
     LOG.warn("Attempt submitted to clear the entire store, which is not supported!");
+  }
+  
+  private String makeKey(org.jogre.server.data.GameSummary summary) {
+    return summary.getGameKey() + "::" + summary.getUsername();
   }
 
 }
