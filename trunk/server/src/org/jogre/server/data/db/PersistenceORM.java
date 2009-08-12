@@ -2,8 +2,8 @@ package org.jogre.server.data.db;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.jogre.server.data.ProtoSchema;
 import org.jogre.server.data.ProtoSchema.GameInfo;
 import org.jogre.server.data.ProtoSchema.GameSummary;
@@ -187,7 +187,7 @@ public class PersistenceORM implements ORM {
   @Override
   public void update(String id) throws SQLException {
     checkId(id, ST_DELETE_ALL_SNAP_SHOT);
-    LOG.warn("Attempt submitted to clear the entire store, which is not supported!");
+    LOG.warning("Attempt submitted to clear the entire store, which is not supported!");
   }
   
   private String makeKey(org.jogre.server.data.GameSummary summary) {

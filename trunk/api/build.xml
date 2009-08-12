@@ -35,8 +35,12 @@ Ant build script for the Jogre API - Beta 0.3
     <!-- Extra properties -->
     <property name="javadocs.dir" value="${basedir}/javadoc"/>
     
-    <!-- Declare compile, test and test runtime classpaths -->
+    <!-- Set up class path -->
+    <path id="classpath">
+    	<fileset dir="${basedir}/lib" includes="*.jar"/>
+    </path>
     <path id="test.classpath">
+        <path refid="classpath" />
         <pathelement location="${class.dir}"/>
     	<pathelement location="${test.lib}/junit.jar"/>
     </path>
@@ -90,6 +94,7 @@ Ant build script for the Jogre API - Beta 0.3
                target="${build.target}" 
                deprecation="${build.deprecation}">
             <compilerarg line="${build.extraparams}"/>
+            <classpath refid="classpath"/>
         </javac>
 
         <copy todir="${class.dir}">

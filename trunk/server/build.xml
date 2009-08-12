@@ -35,6 +35,7 @@ Ant build script for the Jogre Server - Beta 0.3
     <!-- Set up class path -->
     <path id="classpath">
         <pathelement location="${basedir}/../api/jogre.jar"/>
+    	<fileset dir="${basedir}/../api/lib" includes="*.jar"/>
     	<fileset dir="${basedir}/lib" includes="*.jar"/>
     </path>
     <path id="test.classpath">
