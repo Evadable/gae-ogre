@@ -26,14 +26,6 @@ import java.net.Socket;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.jogre.common.IError;
 import org.jogre.common.IJogre;
 import org.jogre.common.JogreGlobals;
@@ -177,21 +169,22 @@ public class JogreServer extends AbstractGameServer {
    * Run the server using the http protocol
    */
   private void runHttpBased() throws Exception {
-    System.out.println (labels.get("jogre.games.server.listening.on.port") + ": " + serverPort);
-    final WebConnectionList connections = (WebConnectionList) getConnections();
-    final Handler handler =new AbstractHandler()  {
-        @Override
-        public void handle(String target, Request req,
-            HttpServletRequest request,
-            HttpServletResponse response) throws IOException,
-            ServletException {
-          connections.getServer().dispatch(connections, request, response);
-          ((Request)request).setHandled(true);
-        }
-    };
-    Server srv = new Server(serverPort);
-    srv.setHandler(handler);
-    srv.start();
+    throw new UnsupportedOperationException("need to include jetty and comment this method in to make it work!!!");
+//    System.out.println (labels.get("jogre.games.server.listening.on.port") + ": " + serverPort);
+//    final WebConnectionList connections = (WebConnectionList) getConnections();
+//    final org.eclipse.jetty.server.Handler handler =new org.eclipse.jetty.server.handler.AbstractHandler()  {
+//        @Override
+//        public void handle(String target, org.eclipse.jetty.server.Request req,
+//            javax.servlet.http.HttpServletRequest request,
+//            javax.servlet.http.HttpServletResponse response) throws IOException,
+//            javax.servlet.ServletException {
+//          connections.getServer().dispatch(connections, request, response);
+//          ((org.eclipse.jetty.server.Request)request).setHandled(true);
+//        }
+//    };
+//    org.eclipse.jetty.server.Server srv = new org.eclipse.jetty.server.Server(serverPort);
+//    srv.setHandler(handler);
+//    srv.start();
   }
 
   /**
