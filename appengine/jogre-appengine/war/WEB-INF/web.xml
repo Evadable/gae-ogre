@@ -12,13 +12,13 @@
   
   <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.appenginefan.jogre.webapp.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>gameServlet</servlet-name>
+    <servlet-class>com.appenginefan.jogre.webapp.server.GameServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/jogre_appengine/greet</url-pattern>
+    <servlet-name>gameServlet</servlet-name>
+    <url-pattern>/jogre_appengine/jogre</url-pattern>
   </servlet-mapping>
 
 </web-app>
